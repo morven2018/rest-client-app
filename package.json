@@ -16,8 +16,8 @@
     "start": "next start",
     "lint": "eslint --fix .",
     "format:fix": "prettier --write .",
-    "test": "jest --no-coverage",
-    "test:watch": "jest --watch --no-coverage",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "prepare": "husky"
   },
