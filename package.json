@@ -2,11 +2,20 @@
   "name": "rest-client-app",
   "version": "0.1.0",
   "private": true,
+  "description": "Final task: REST Client",
+  "keywords": [
+    "react",
+    "next",
+    "shadcn ui",
+    "tsx",
+    "tailwind"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint --fix .",
+    "format:fix": "prettier --write ."
   },
   "dependencies": {
     "autoprefixer": "^10.4.21",
@@ -30,5 +39,16 @@
     "tailwindcss": "^4.1.12",
     "tw-animate-css": "^1.3.7",
     "typescript": "^5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morven2018/rest-client-app"
+  },
+  "license": "ISC",
+  "author": "morven2018",
+  "contributors": [
+    "Ihar-Batura",
+    "Yuliafire"
+  ],
+  "homepage": "https://github.com/morven2018/rest-client-app"
 }
