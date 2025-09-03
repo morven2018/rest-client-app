@@ -1,7 +1,11 @@
+import { useTranslations } from 'next-intl';
+
 export default function Home() {
+  const t = useTranslations('Header');
+
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <h1>Hello Team</h1>
+      <h1>{t('hello')}</h1>
     </div>
   );
 }
