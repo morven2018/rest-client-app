@@ -1,5 +1,8 @@
 {
   "Header": {
-    "hello": "Hello Team"
+    "hello": "Hello Team",
+    "logoAlt": "REST Client Logo",
+    "login": "Log In",
+    "register": "Register"
   }
 }

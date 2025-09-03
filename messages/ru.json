@@ -1,5 +1,8 @@
 {
   "Header": {
-    "hello": "Привет Команда"
+    "hello": "Привет Команда",
+    "logoAlt": "Логотип REST Client",
+    "login": "Войти",
+    "register": "Регистрация"
   }
 }
