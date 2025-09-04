@@ -15,5 +15,15 @@
     "course": "Выполнено в рамках курса RS React",
     "logoAlt": "Логотип RS School",
     "right": "© Сделано в 2025 году, Все права защищены"
+  },
+  "Tabs": {
+    "login": "Авторизация",
+    "register": "Регистрация",
+    "access-begin-login": "Для использования войдите или",
+    "link-login": " зарегистрирутесь",
+    "access-end-login": ", если у вас нет аккаунта",
+    "access-begin-register": "Для использования",
+    "link-register": "войдите",
+    "access-end-register": " или зарегистрирутесь, если у вас нет аккаунта"
   }
 }

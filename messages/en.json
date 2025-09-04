@@ -15,5 +15,15 @@
     "course": "Done as a part of course RS React",
     "logoAlt": "Logo RS School",
     "right": "© Done 2025, All right reserved"
+  },
+  "Tabs": {
+    "login": "LOG IN",
+    "register": "Register",
+    "access-begin-login": "To get access login or",
+    "link-login": " register",
+    "access-end-login": ", if you have no account",
+    "access-begin-register": "To get access",
+    "link-register": "login",
+    "access-end-register": " or register, if you already have an account"
   }
 }

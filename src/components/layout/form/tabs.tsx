@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from '@/i18n/navigation';
 
@@ -13,40 +14,72 @@ interface TabsDemoProps {
   searchParams: string;
 }
 
-export function FormTab({ searchParams }: Readonly<TabsDemoProps>) {
+export async function FormTab({ searchParams }: Readonly<TabsDemoProps>) {
+  const t = await getTranslations('Tabs');
   return (
-    <div className="flex w-full max-w-sm flex-col gap-6">
-      <Tabs defaultValue={searchParams}>
-        <TabsList>
-          {' '}
+    <div className="flex w-full max-w-md flex-col gap-6 text-center mx-auto my-30">
+      <Tabs
+        defaultValue={searchParams}
+        className="flex flex-col items-center mx-4"
+      >
+        <TabsList className="dark:bg-neutral-500">
           <Link href="/login">
-            <TabsTrigger value="login">LOG IN</TabsTrigger>
+            <TabsTrigger
+              value="login"
+              className="text-violet-950 dark:text-purple-200 dark:data-[state=active]:text-purple-200 dark:data-[state=active]:bg-black"
+            >
+              {t('login')}
+            </TabsTrigger>
           </Link>
           <Link href="/register">
-            <TabsTrigger value="register">Register</TabsTrigger>
+            <TabsTrigger
+              value="register"
+              className="text-violet-950 dark:text-purple-200  dark:data-[state=active]:text-purple-200 dark:data-[state=active]:bg-black"
+            >
+              {t('register')}
+            </TabsTrigger>
           </Link>
         </TabsList>
-        <TabsContent value="login">
+        <TabsContent value="login" className="bg-white dark:bg-black">
           <Card>
             <CardHeader>
-              <CardTitle>LOG IN</CardTitle>
+              <CardTitle className="text-violet-950 dark:text-purple-200">
+                {t('login')}
+              </CardTitle>
             </CardHeader>
             <CardContent></CardContent>
             <CardFooter>
-              To get access login or
-              <Link href="/register">register</Link>, if you have no account
+              <span className="text-center">
+                {t('access-begin-login')}
+                <Link
+                  href="/register"
+                  className="text-violet-950 dark:text-purple-200"
+                >
+                  {t('link-login')}
+                </Link>
+                {t('access-end-login')}
+              </span>
             </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="register">
           <Card>
             <CardHeader>
-              <CardTitle>Register</CardTitle>
+              <CardTitle className="text-violet-950 dark:text-purple-200">
+                {t('register')}
+              </CardTitle>
             </CardHeader>
             <CardFooter>
-              To get access
-              <Link href="/login">login</Link>
-              or register, if you already have an account
+              <span className="text-center">
+                {t('access-begin-register')}
+                <Link
+                  href="/login"
+                  className="text-violet-950 dark:text-purple-200"
+                >
+                  {t('link-register')}
+                </Link>
+                {t('access-end-register')}
+              </span>
             </CardFooter>
           </Card>
         </TabsContent>
