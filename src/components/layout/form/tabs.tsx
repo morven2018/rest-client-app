@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { LoginForm } from './login-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from '@/i18n/navigation';
 
@@ -47,7 +48,9 @@ export async function FormTab({ searchParams }: Readonly<TabsDemoProps>) {
                 {t('login')}
               </CardTitle>
             </CardHeader>
-            <CardContent></CardContent>
+            <CardContent>
+              <LoginForm />
+            </CardContent>
             <CardFooter>
               <span className="text-center">
                 {t('access-begin-login')}
