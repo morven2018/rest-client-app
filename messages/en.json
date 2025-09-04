@@ -38,5 +38,10 @@
     "lowercase": "Password must have 1 lowercase letter",
     "special": "Password must contain at least one special character (e.g., !@#$%^&*)",
     "min": "The password should be at least 8 symbols"
+  },
+  "NotFound": {
+    "title": "This page is not found",
+    "back": "Back",
+    "home": "Home"
   }
 }
