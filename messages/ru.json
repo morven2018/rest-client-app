@@ -3,6 +3,7 @@
     "hello": "Привет Команда",
     "logoAlt": "Логотип REST Client",
     "login": "Войти",
+    "logout": "Выйти",
     "register": "Регистрация"
   }
 }
