@@ -16,6 +16,29 @@
     "logoAlt": "Logo RS School",
     "right": "© Done 2025, All right reserved"
   },
+  "Tabs": {
+    "login": "LOG IN",
+    "register": "Register",
+    "access-begin-login": "To get access login or",
+    "link-login": " register",
+    "access-end-login": ", if you have no account",
+    "access-begin-register": "To get access",
+    "link-register": "login",
+    "access-end-register": " or register, if you already have an account"
+  },
+  "Login": {
+    "btn": "LOG IN",
+    "placeholder": "Enter the password"
+  },
+  "ValidationErrors": {
+    "required": "This field is mandatory",
+    "email": "Input correct email",
+    "digit": "Password must contain at least 1 digit",
+    "uppercase": "Password must have 1 uppercase letter",
+    "lowercase": "Password must have 1 lowercase letter",
+    "special": "Password must contain at least one special character (e.g., !@#$%^&*)",
+    "min": "The password should be at least 8 symbols"
+  },
   "NotFound": {
     "title": "This page is not found",
     "back": "Back",
