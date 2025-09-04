@@ -15,5 +15,10 @@
     "course": "Done as a part of course RS React",
     "logoAlt": "Logo RS School",
     "right": "© Done 2025, All right reserved"
+  },
+  "NotFound": {
+    "title": "This page is not found",
+    "back": "Back",
+    "home": "Home"
   }
 }
