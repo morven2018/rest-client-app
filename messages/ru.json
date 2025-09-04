@@ -5,5 +5,15 @@
     "login": "Войти",
     "logout": "Выйти",
     "register": "Регистрация"
+  },
+  "Footer": {
+    "command": "Наша команда",
+    "pages": "Страницы",
+    "restful": "Клиент",
+    "variables": "Переменные",
+    "history-and-analytics": "История",
+    "course": "Выполнено в рамках курса RS React",
+    "logoAlt": "Логотип RS School",
+    "right": "© Сделано в 2025 году, Все права защищены"
   }
 }

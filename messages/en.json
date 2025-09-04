@@ -5,5 +5,15 @@
     "login": "Log In",
     "logout": "Log Out",
     "register": "Register"
+  },
+  "Footer": {
+    "command": "Our command",
+    "pages": "Pages",
+    "restful": "Rest Client",
+    "variables": "Variables",
+    "history-and-analytics": "History",
+    "course": "Done as a part of course RS React",
+    "logoAlt": "Logo RS School",
+    "right": "© Done 2025, All right reserved"
   }
 }
