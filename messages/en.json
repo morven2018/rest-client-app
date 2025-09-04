@@ -3,6 +3,7 @@
     "hello": "Hello Team",
     "logoAlt": "REST Client Logo",
     "login": "Log In",
+    "logout": "Log Out",
     "register": "Register"
   }
 }
