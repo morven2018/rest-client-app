@@ -36,9 +36,11 @@ export const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <Label htmlFor="email">Email</Label>
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+      <div className="grid gap-3">
+        <Label htmlFor="email" className="text-base">
+          Email
+        </Label>
         <Controller
           name="email"
           control={control}
@@ -56,11 +58,17 @@ export const LoginForm = () => {
             />
           )}
         />
-        {errors.email && <span>{errors.email.message}</span>}
+        {errors.email && (
+          <span className="font-extralight text-red-600 text-left">
+            {errors.email.message}
+          </span>
+        )}
       </div>
 
-      <div className="form-group flex flex-col gap-6">
-        <Label htmlFor="password">Password</Label>
+      <div className="grid gap-3">
+        <Label htmlFor="password" className="text-base">
+          Password
+        </Label>
         <Controller
           name="password"
           control={control}
@@ -78,10 +86,18 @@ export const LoginForm = () => {
             />
           )}
         />
-        {errors.password && <span>{errors.password.message}</span>}
+        {errors.password && (
+          <span className="font-extralight text-red-600 text-left">
+            {errors.password.message}
+          </span>
+        )}
       </div>
 
-      <Button type="submit" disabled={isSubmitting || !isValid}>
+      <Button
+        type="submit"
+        disabled={isSubmitting || !isValid}
+        className="bg-black data-[disabled=true]:bg-gray-300 dark:bg-white dark:data-[disabled=true]:bg-gray-400"
+      >
         {t('btn')}
       </Button>
     </form>
