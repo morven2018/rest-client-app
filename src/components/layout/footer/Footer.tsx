@@ -1,7 +1,7 @@
-import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { Link } from '@/i18n/navigation';
 import { Github } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
 
 const authorsData = [
   {
@@ -67,7 +67,9 @@ export const Footer = () => {
           </div>
 
           <div className="p-2 text-center">
-            <h3 className="text-[18px] font-semibold">{t('course')}</h3>
+            <h3 className="text-[18px] font-semibold max-w-xs">
+              {t('course')}
+            </h3>
             <Link
               href="https://rs.school/courses/reactjs"
               target="_blank"
