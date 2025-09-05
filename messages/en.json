@@ -43,5 +43,11 @@
     "title": "This page is not found",
     "back": "Back",
     "home": "Home"
+  },
+  "logout": {
+    "success": "You have successfully logged out.",
+    "error-with-msg": "An error occurred while logging out. Error:",
+    "error-no-msg": "An unknown error occurred while logging out.",
+    "btn": "RETRY"
   }
 }
