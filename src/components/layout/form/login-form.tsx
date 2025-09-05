@@ -63,7 +63,11 @@ export const LoginForm = () => {
       router.push('/');
     } catch (error) {
       const authErrorInfo = getAuthErrorInfo(error);
-      if (authErrorInfo.isInvalidCredentials) toastError(t('no-user'));
+      if (
+        authErrorInfo.isInvalidCredentials ||
+        /auth\/invalid-credential/.test(authErrorInfo.message)
+      )
+        toastError(t('no-user'));
       else
         toastError(`${t('error')} ${authErrorInfo.message}`, {
           action: {
@@ -79,8 +83,6 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      {authError && <div className="text-red-600 text-center">{authError}</div>}
-
       <div className="grid gap-3">
         <Label htmlFor="email" className="text-base">
           Email
