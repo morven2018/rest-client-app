@@ -28,7 +28,13 @@
   },
   "Login": {
     "btn": "LOG IN",
-    "placeholder": "Enter the password"
+    "placeholder": "Enter the password",
+    "success": "You have successfully logged in.",
+    "logout-btn": "LOG OUT",
+    "no-user": "No user exist with such parameters",
+    "error": "An error occurred while logging in. Error:",
+    "retry-btn": "RETRY",
+    "password": "Password"
   },
   "ValidationErrors": {
     "required": "This field is mandatory",
