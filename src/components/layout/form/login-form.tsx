@@ -6,7 +6,6 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { loginSchema } from './schemas/login-schema';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -146,10 +145,6 @@ export const LoginForm = () => {
       >
         {t('btn')}
       </Button>
-      <Badge>Badge</Badge>
-      <Badge variant="ok">Secondary</Badge>
-      <Badge variant="error">Destructive</Badge>
-      <Badge variant="info">Outline</Badge>
     </form>
   );
 };

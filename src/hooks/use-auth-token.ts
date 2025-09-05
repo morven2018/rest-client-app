@@ -1,7 +1,7 @@
 import { useAuth } from '@/context/auth/auth-context';
 
 export const useAuthToken = () => {
-  const { authToken, currentUser } = useAuth();
+  const { authToken } = useAuth();
 
   const getAuthHeader = () => {
     if (!authToken) return {};
@@ -12,21 +12,13 @@ export const useAuthToken = () => {
     };
   };
 
-  const refreshToken = async (): Promise<string | null> => {
-    if (!currentUser) return null;
-
-    try {
-      const token = await currentUser.getIdToken(true);
-      return token;
-    } catch (error) {
-      console.error('Token refresh error:', error);
-      return null;
-    }
+  const hasValidToken = (): boolean => {
+    return !!authToken;
   };
 
   return {
     authToken,
     getAuthHeader,
-    refreshToken,
+    hasValidToken,
   };
 };
