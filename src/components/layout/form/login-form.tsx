@@ -131,7 +131,7 @@ export const LoginForm = () => {
       <Button
         type="submit"
         disabled={isSubmitting || !isValid}
-        className="bg-black disabled:bg-gray-300"
+        className="bg-black disabled:bg-gray-300 dark:text-white"
       >
         {t('btn')}
       </Button>

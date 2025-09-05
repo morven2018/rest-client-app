@@ -4,7 +4,7 @@ import { useTheme } from 'next-themes';
 import { Toaster as Sonner, ToasterProps, toast } from 'sonner';
 import { Badge } from './badge';
 
-const SHOW_DURATION = 50000;
+const SHOW_DURATION = 500000;
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme();
