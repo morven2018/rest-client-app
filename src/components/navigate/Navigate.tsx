@@ -70,7 +70,7 @@ export const Navigate = () => {
             <Button
               asChild
               variant="outline"
-              className="bg-chart-1 dark:bg-chart-1"
+              className="bg-chart-1 dark:bg-chart-1 dark:hover:bg-neutral-800"
             >
               <Link href="/login">
                 <LogIn />
@@ -81,7 +81,7 @@ export const Navigate = () => {
             <Button
               asChild
               variant="outline"
-              className="bg-chart-1 dark:bg-chart-1"
+              className="bg-chart-1 dark:bg-chart-1 dark:hover:bg-neutral-800"
             >
               <Link href="/register">{t('register')}</Link>
             </Button>
@@ -89,7 +89,7 @@ export const Navigate = () => {
         ) : (
           <Button
             variant="outline"
-            className="bg-chart-1 dark:bg-chart-1 cursor-pointer"
+            className="bg-chart-1 dark:bg-chart-1 cursor-pointer dark:hover:bg-neutral-800"
             onClick={handleLogoutSync}
           >
             <LogOut />
@@ -98,7 +98,7 @@ export const Navigate = () => {
         )}
 
         <Select value={currentLocale} onValueChange={handleLanguageChange}>
-          <SelectTrigger className="w-[80px] bg-chart-1 dark:bg-chart-1 cursor-pointer">
+          <SelectTrigger className="w-[80px] bg-chart-1 dark:bg-chart-1 cursor-pointer dark:hover:bg-neutral-800">
             <SelectValue placeholder="Lang" />
           </SelectTrigger>
           <SelectContent className="min-w-[80px] w-auto dark:bg-chart-1">
@@ -113,7 +113,7 @@ export const Navigate = () => {
 
         <Button
           variant="outline"
-          className="bg-chart-1 dark:bg-chart-1 cursor-pointer"
+          className="bg-chart-1 dark:bg-chart-1 cursor-pointer dark:hover:bg-neutral-800"
           onClick={changeTheme}
         >
           {theme === 'light' ? <Sun /> : <Moon />}
@@ -123,7 +123,7 @@ export const Navigate = () => {
       <div className="md:hidden flex items-center">
         <Button
           variant="outline"
-          className="bg-chart-1 dark:bg-chart-1 cursor-pointer"
+          className="bg-chart-1 dark:bg-chart-1 cursor-pointer dark:hover:bg-neutral-800"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X /> : <Menu />}
@@ -157,28 +157,17 @@ export const Navigate = () => {
                     </Button>
                   </>
                 ) : (
-                  <>
-                    <Button
-                      asChild
-                      variant="outline"
-                      className="bg-chart-1 dark:bg-chart-1"
-                      onClick={closeMenu}
-                    >
-                      <Link href="/dashboard">{t('dashboard')}</Link>
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      className="bg-chart-1 dark:bg-chart-1"
-                      onClick={() => {
-                        handleLogoutSync();
-                        closeMenu();
-                      }}
-                    >
-                      <LogOut />
-                      {t('logout')}
-                    </Button>
-                  </>
+                  <Button
+                    variant="outline"
+                    className="bg-chart-1 dark:bg-chart-1"
+                    onClick={() => {
+                      handleLogoutSync();
+                      closeMenu();
+                    }}
+                  >
+                    <LogOut />
+                    {t('logout')}
+                  </Button>
                 )}
 
                 <Select
