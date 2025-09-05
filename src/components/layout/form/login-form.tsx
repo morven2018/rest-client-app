@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { loginSchema } from './schemas/login-schema';
@@ -20,10 +20,16 @@ export const LoginForm = () => {
   const te = useTranslations('ValidationErrors');
   const { handleLogoutSync } = useLogout();
   const schema = loginSchema(te);
-  const { login } = useAuth();
+  const { login, authToken, currentUser } = useAuth();
   const router = useRouter();
   const [authError, setAuthError] = useState<string>('');
   const { toastError, toastSuccess } = useToast();
+
+  useEffect(() => {
+    if (authToken && currentUser) {
+      router.push('/');
+    }
+  }, [authToken, currentUser, router]);
 
   type LoginFormData = z.infer<typeof schema>;
 
