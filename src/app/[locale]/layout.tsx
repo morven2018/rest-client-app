@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { notFound } from 'next/navigation';
+import { Toaster } from 'sonner';
 import { Footer } from '@/components/layout/footer/Footer';
 import { Header } from '@/components/layout/header/Header';
 import { ThemeProvider } from '@/context/ThemeProvider';
@@ -52,6 +53,7 @@ export default async function LocaleLayout({
               <Header />
               {children}
               <Footer />
+              <Toaster />
             </AuthProvider>
           </ThemeProvider>
         </NextIntlClientProvider>

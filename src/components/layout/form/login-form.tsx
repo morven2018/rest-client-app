@@ -6,11 +6,14 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { loginSchema } from './schemas/login-schema';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
+import { toastError, toastSuccess } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
+import { getAuthErrorInfo } from '@/lib/error-handlers/error-message';
 
 export const LoginForm = () => {
   const t = useTranslations('Login');
@@ -19,7 +22,6 @@ export const LoginForm = () => {
   const { login } = useAuth();
   const router = useRouter();
   const [authError, setAuthError] = useState<string>('');
-  const [successMessage, setSuccessMessage] = useState<string>('');
 
   type LoginFormData = z.infer<typeof schema>;
 
@@ -41,16 +43,38 @@ export const LoginForm = () => {
   const onSubmit = async (data: LoginFormData) => {
     try {
       setAuthError('');
-      setSuccessMessage('');
 
       const token = await login(data.email, data.password);
+      toastSuccess('You have successfully logged in.', {
+        action: {
+          label: 'LOG OUT',
+          onClick: () => {
+            console.log('Logout clicked');
+          },
+        },
+      });
 
       console.log('Auth successful. Token:', token);
 
-      setSuccessMessage('sucsses');
-
       router.push('/');
     } catch (error) {
+      const authErrorInfo = getAuthErrorInfo(error);
+      if (authErrorInfo.isInvalidCredentials)
+        toastError('No user exist with such parameters');
+      else
+        toastError(
+          `An error occurred while logging in. Error: ${authErrorInfo.message}`,
+          {
+            action: {
+              label: 'RETRY',
+              onClick: () => {
+                console.log('Retry clicked');
+                handleSubmit(onSubmit)();
+              },
+            },
+          }
+        );
+
       console.error('Auth error:', error);
       setAuthError('error');
     }
@@ -59,10 +83,6 @@ export const LoginForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       {authError && <div className="text-red-600 text-center">{authError}</div>}
-
-      {successMessage && (
-        <div className="text-green-600 text-center">{successMessage}</div>
-      )}
 
       <div className="grid gap-3">
         <Label htmlFor="email" className="text-base">
@@ -126,6 +146,10 @@ export const LoginForm = () => {
       >
         {t('btn')}
       </Button>
+      <Badge>Badge</Badge>
+      <Badge variant="ok">Secondary</Badge>
+      <Badge variant="error">Destructive</Badge>
+      <Badge variant="info">Outline</Badge>
     </form>
   );
 };
