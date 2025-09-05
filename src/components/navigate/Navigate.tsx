@@ -20,7 +20,7 @@ import {
 export const Navigate = () => {
   const t = useTranslations('Header');
   const { authToken, currentUser } = useAuth();
-  const handleLogout = useLogout();
+  const { handleLogoutSync } = useLogout();
   const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -90,7 +90,7 @@ export const Navigate = () => {
           <Button
             variant="outline"
             className="bg-chart-1 dark:bg-chart-1 cursor-pointer"
-            onClick={handleLogout}
+            onClick={handleLogoutSync}
           >
             <LogOut />
             {t('logout')}
@@ -171,7 +171,7 @@ export const Navigate = () => {
                       variant="outline"
                       className="bg-chart-1 dark:bg-chart-1"
                       onClick={() => {
-                        handleLogout();
+                        handleLogoutSync();
                         closeMenu();
                       }}
                     >
