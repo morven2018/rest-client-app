@@ -1,19 +1,19 @@
-"use client";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import type { z } from "zod";
-import { loginSchema } from "./schemas/login-schema";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { PasswordInput } from "@/components/ui/password-input";
-import { toastError, toastSuccess } from "@/components/ui/sonner";
-import { useAuth } from "@/context/auth/auth-context";
-import { useLogout } from "@/hooks/use-logout";
-import { getAuthErrorInfo } from "@/lib/error-handlers/error-message";
+'use client';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import type { z } from 'zod';
+import { loginSchema } from './schemas/login-schema';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { PasswordInput } from '@/components/ui/password-input';
+import { toastError, toastSuccess } from '@/components/ui/sonner';
+import { useAuth } from '@/context/auth/auth-context';
+import { useLogout } from '@/hooks/use-logout';
+import { getAuthErrorInfo } from '@/lib/error-handlers/error-message';
 
 export const LoginForm = () => {
   const t = useTranslations('Login');
@@ -46,6 +46,7 @@ export const LoginForm = () => {
       setAuthError('');
 
       toastSuccess(t('success'), {
+        action: {
           label: t('logout-btn'),
           onClick: () => handleLogout(),
         },
