@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
-import { toastError, toastSuccess } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { useLogout } from '@/hooks/use-logout';
 import { getAuthErrorInfo } from '@/lib/error-handlers/error-message';
 
@@ -21,6 +21,7 @@ export const LoginForm = () => {
   const schema = loginSchema(te);
   const router = useRouter();
   const [authError, setAuthError] = useState<string>('');
+  const { toastError, toastSuccess } = useToast();
 
   type LoginFormData = z.infer<typeof schema>;
 

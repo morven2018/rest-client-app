@@ -1,13 +1,14 @@
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
-import { toastError, toastSuccess } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 
 export const useLogout = () => {
   const { logout } = useAuth();
   const t = useTranslations('logout');
   const router = useRouter();
+  const { toastError, toastSuccess } = useToast();
 
   const handleLogout = async () => {
     try {
