@@ -1,10 +1,11 @@
 'use client';
 import dateString from '@/lib/date-formatter';
+import { useLocale } from 'next-intl';
 import { useTheme } from 'next-themes';
 import { Toaster as Sonner, ToasterProps, toast } from 'sonner';
 import { Badge } from './badge';
 
-const SHOW_DURATION = 50000;
+const SHOW_DURATION = 2000;
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme();
@@ -33,10 +34,46 @@ export interface ToastOptions {
     onClick: () => void;
   };
   duration?: number;
+  locale?: string;
 }
 
+export const useToast = () => {
+  const locale = useLocale();
+
+  const showToastWithLocale = (
+    message: string,
+    options?: Omit<ToastOptions, 'locale'>
+  ) => {
+    return showToast(message, { ...options, locale });
+  };
+
+  const toastSuccess = (
+    message: string,
+    options?: Omit<ToastOptions, 'type'>
+  ) => showToastWithLocale(message, { ...options, type: 'success' });
+
+  const toastError = (message: string, options?: Omit<ToastOptions, 'type'>) =>
+    showToastWithLocale(message, { ...options, type: 'error' });
+
+  const toastNote = (message: string, options?: Omit<ToastOptions, 'type'>) =>
+    showToastWithLocale(message, { ...options, type: 'note' });
+
+  return {
+    showToast: showToastWithLocale,
+    toastSuccess,
+    toastError,
+    toastNote,
+  };
+};
+
 export const showToast = (message: string, options?: ToastOptions) => {
-  const { type = 'note', additionalMessage, action, duration } = options || {};
+  const {
+    type = 'note',
+    additionalMessage,
+    action,
+    duration,
+    locale = 'en',
+  } = options || {};
 
   const getToastStyles = () => {
     switch (type) {
@@ -77,7 +114,7 @@ export const showToast = (message: string, options?: ToastOptions) => {
             </div>
           )}
           <div className="text-sm text-muted-foreground m-0">
-            {dateString()}
+            {dateString(new Date(), locale)}
           </div>
         </div>
 

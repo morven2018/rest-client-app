@@ -27,7 +27,7 @@ export async function FormTab({ searchParams }: Readonly<TabsDemoProps>) {
           <Link href="/login">
             <TabsTrigger
               value="login"
-              className="text-violet-950 dark:text-purple-200 dark:data-[state=active]:text-purple-200 dark:data-[state=active]:bg-black"
+              className="text-violet-950 dark:text-purple-200 dark:data-[state=active]:text-purple-200 dark:data-[state=active]:bg-black hover:text-black dark:hover:text-white"
             >
               {t('login')}
             </TabsTrigger>
@@ -35,7 +35,7 @@ export async function FormTab({ searchParams }: Readonly<TabsDemoProps>) {
           <Link href="/register">
             <TabsTrigger
               value="register"
-              className="text-violet-950 dark:text-purple-200 dark:data-[state=active]:text-purple-200 dark:data-[state=active]:bg-black"
+              className="text-violet-950 dark:text-purple-200 dark:data-[state=active]:text-purple-200 dark:data-[state=active]:bg-black hover:text-black dark:hover:text-white"
             >
               {t('register')}
             </TabsTrigger>

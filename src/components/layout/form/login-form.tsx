@@ -2,7 +2,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import type { z } from 'zod';
 import { loginSchema } from './schemas/login-schema';
@@ -10,17 +10,26 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
-import { toastError, toastSuccess } from '@/components/ui/sonner';
+import { useToast } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
+import { useLogout } from '@/hooks/use-logout';
 import { getAuthErrorInfo } from '@/lib/error-handlers/error-message';
 
 export const LoginForm = () => {
   const t = useTranslations('Login');
   const te = useTranslations('ValidationErrors');
+  const { handleLogoutSync } = useLogout();
   const schema = loginSchema(te);
-  const { login } = useAuth();
+  const { login, authToken, currentUser } = useAuth();
   const router = useRouter();
   const [authError, setAuthError] = useState<string>('');
+  const { toastError, toastSuccess } = useToast();
+
+  useEffect(() => {
+    if (authToken && currentUser) {
+      router.push('/');
+    }
+  }, [authToken, currentUser, router]);
 
   type LoginFormData = z.infer<typeof schema>;
 
@@ -42,39 +51,28 @@ export const LoginForm = () => {
   const onSubmit = async (data: LoginFormData) => {
     try {
       setAuthError('');
+      await login(data.email, data.password);
 
-      const token = await login(data.email, data.password);
-      toastSuccess('You have successfully logged in.', {
+      toastSuccess(t('success'), {
         action: {
-          label: 'LOG OUT',
-          onClick: () => {
-            console.log('Logout clicked');
-          },
+          label: t('logout-btn'),
+          onClick: () => handleLogoutSync(),
         },
       });
-
-      console.log('Auth successful. Token:', token);
 
       router.push('/');
     } catch (error) {
       const authErrorInfo = getAuthErrorInfo(error);
-      if (authErrorInfo.isInvalidCredentials)
-        toastError('No user exist with such parameters');
+      if (authErrorInfo.isInvalidCredentials) toastError(t('no-user'));
       else
-        toastError(
-          `An error occurred while logging in. Error: ${authErrorInfo.message}`,
-          {
-            action: {
-              label: 'RETRY',
-              onClick: () => {
-                console.log('Retry clicked');
-                handleSubmit(onSubmit)();
-              },
+        toastError(`${t('error')} ${authErrorInfo.message}`, {
+          action: {
+            label: t('retry-btn'),
+            onClick: () => {
+              handleSubmit(onSubmit)();
             },
-          }
-        );
-
-      console.error('Auth error:', error);
+          },
+        });
       setAuthError('error');
     }
   };
@@ -112,7 +110,7 @@ export const LoginForm = () => {
 
       <div className="grid gap-3">
         <Label htmlFor="password" className="text-base">
-          Password
+          {t('password')}
         </Label>
         <Controller
           name="password"
@@ -141,7 +139,7 @@ export const LoginForm = () => {
       <Button
         type="submit"
         disabled={isSubmitting || !isValid}
-        className="bg-black disabled:bg-gray-300"
+        className="bg-black disabled:bg-gray-300 dark:text-white"
       >
         {t('btn')}
       </Button>

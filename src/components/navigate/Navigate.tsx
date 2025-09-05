@@ -1,9 +1,14 @@
 'use client';
-
-import { useTranslations } from 'next-intl';
+import { LogIn, LogOut, Menu, Moon, Sun, X } from 'lucide-react';
+import { useLocale, useTranslations } from 'next-intl';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/context/auth/auth-context';
+import { useLogout } from '@/hooks/use-logout';
+import { useTheme } from '@/hooks/useTheme';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
-import { LogIn, LogOut, Sun, Moon, Menu, X } from 'lucide-react';
+
 import {
   Select,
   SelectContent,
@@ -11,13 +16,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useTheme } from '@/hooks/useTheme';
-import { useSearchParams } from 'next/navigation';
-import { useLocale } from 'next-intl';
-import { useState, useEffect } from 'react';
 
 export const Navigate = () => {
   const t = useTranslations('Header');
+  const { authToken, currentUser } = useAuth();
+  const { handleLogoutSync } = useLogout();
   const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -57,35 +60,42 @@ export const Navigate = () => {
     setIsMenuOpen(false);
   };
 
+  const isAuthenticated = authToken && currentUser;
+
   return (
     <>
       <nav className="hidden md:flex items-center gap-4">
-        <Button
-          asChild
-          variant="outline"
-          className="bg-chart-1 dark:bg-chart-1"
-        >
-          <Link href="/login">
-            <LogIn />
-            {t('login')}
-          </Link>
-        </Button>
+        {!isAuthenticated ? (
+          <>
+            <Button
+              asChild
+              variant="outline"
+              className="bg-chart-1 dark:bg-chart-1"
+            >
+              <Link href="/login">
+                <LogIn />
+                {t('login')}
+              </Link>
+            </Button>
 
-        <Button
-          asChild
-          variant="outline"
-          className="bg-chart-1 dark:bg-chart-1"
-        >
-          <Link href="/register">{t('register')}</Link>
-        </Button>
-
-        <Button
-          variant="outline"
-          className="bg-chart-1 dark:bg-chart-1 cursor-pointer"
-        >
-          <LogOut />
-          {t('logout')}
-        </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="bg-chart-1 dark:bg-chart-1"
+            >
+              <Link href="/register">{t('register')}</Link>
+            </Button>
+          </>
+        ) : (
+          <Button
+            variant="outline"
+            className="bg-chart-1 dark:bg-chart-1 cursor-pointer"
+            onClick={handleLogoutSync}
+          >
+            <LogOut />
+            {t('logout')}
+          </Button>
+        )}
 
         <Select value={currentLocale} onValueChange={handleLanguageChange}>
           <SelectTrigger className="w-[80px] bg-chart-1 dark:bg-chart-1 cursor-pointer">
@@ -123,35 +133,53 @@ export const Navigate = () => {
           <div className="absolute top-30 right-0">
             <div className="container mx-auto px-4 py-4">
               <div className="flex flex-col space-y-3">
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-chart-1 dark:bg-chart-1"
-                  onClick={closeMenu}
-                >
-                  <Link href="/login">
-                    <LogIn />
-                    {t('login')}
-                  </Link>
-                </Button>
+                {!isAuthenticated ? (
+                  <>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="bg-chart-1 dark:bg-chart-1"
+                      onClick={closeMenu}
+                    >
+                      <Link href="/login">
+                        <LogIn />
+                        {t('login')}
+                      </Link>
+                    </Button>
 
-                <Button
-                  asChild
-                  variant="outline"
-                  className="bg-chart-1 dark:bg-chart-1"
-                  onClick={closeMenu}
-                >
-                  <Link href="/register">{t('register')}</Link>
-                </Button>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="bg-chart-1 dark:bg-chart-1"
+                      onClick={closeMenu}
+                    >
+                      <Link href="/register">{t('register')}</Link>
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="bg-chart-1 dark:bg-chart-1"
+                      onClick={closeMenu}
+                    >
+                      <Link href="/dashboard">{t('dashboard')}</Link>
+                    </Button>
 
-                <Button
-                  variant="outline"
-                  className="bg-chart-1 dark:bg-chart-1"
-                  onClick={closeMenu}
-                >
-                  <LogOut />
-                  {t('logout')}
-                </Button>
+                    <Button
+                      variant="outline"
+                      className="bg-chart-1 dark:bg-chart-1"
+                      onClick={() => {
+                        handleLogoutSync();
+                        closeMenu();
+                      }}
+                    >
+                      <LogOut />
+                      {t('logout')}
+                    </Button>
+                  </>
+                )}
 
                 <Select
                   value={currentLocale}
