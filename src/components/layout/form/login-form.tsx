@@ -11,16 +11,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
 import { toastError, toastSuccess } from '@/components/ui/sonner';
-import { useAuth } from '@/context/auth/auth-context';
 import { useLogout } from '@/hooks/use-logout';
 import { getAuthErrorInfo } from '@/lib/error-handlers/error-message';
 
 export const LoginForm = () => {
   const t = useTranslations('Login');
   const te = useTranslations('ValidationErrors');
-  const handleLogout = useLogout();
+  const { handleLogoutSync } = useLogout();
   const schema = loginSchema(te);
-  const { login } = useAuth();
   const router = useRouter();
   const [authError, setAuthError] = useState<string>('');
 
@@ -48,7 +46,7 @@ export const LoginForm = () => {
       toastSuccess(t('success'), {
         action: {
           label: t('logout-btn'),
-          onClick: () => handleLogout(),
+          onClick: () => handleLogoutSync(),
         },
       });
 

@@ -1,5 +1,6 @@
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 import { toastError, toastSuccess } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 
@@ -18,19 +19,28 @@ export const useLogout = () => {
         toastError(`${'error-with-msg'} ${error.message}`, {
           action: {
             label: t('btn'),
-            onClick: () => handleLogout(),
+            onClick: () => handleLogoutSync(),
           },
         });
       } else {
         toastError(t('error-no-msg'), {
           action: {
             label: t('btn'),
-            onClick: () => handleLogout(),
+            onClick: () => handleLogoutSync(),
           },
         });
       }
     }
   };
 
-  return handleLogout;
+  const handleLogoutSync = useCallback((): void => {
+    handleLogout().catch((error) => {
+      console.error('Logout error:', error);
+    });
+  }, [handleLogout]);
+
+  return {
+    handleLogout,
+    handleLogoutSync,
+  };
 };
