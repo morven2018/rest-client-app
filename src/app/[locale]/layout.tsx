@@ -1,12 +1,13 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import { routing } from '@/i18n/routing';
-import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import { notFound } from 'next/navigation';
-import { ThemeProvider } from '@/context/ThemeProvider';
-import { Header } from '@/components/layout/header/Header';
-import { Footer } from '@/components/layout/footer/Footer';
 import '../globals.css';
+import type { Metadata } from 'next';
+import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { notFound } from 'next/navigation';
+import { Footer } from '@/components/layout/footer/Footer';
+import { Header } from '@/components/layout/header/Header';
+import { ThemeProvider } from '@/context/ThemeProvider';
+import { AuthProvider } from '@/context/auth/auth-provider';
+import { routing } from '@/i18n/routing';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -47,9 +48,11 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
-            <Header />
-            {children}
-            <Footer />
+            <AuthProvider>
+              <Header />
+              {children}
+              <Footer />
+            </AuthProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>
