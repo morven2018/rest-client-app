@@ -1,14 +1,9 @@
 'use client';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AuthContext } from './auth-context';
-import { auth, storage } from '@/firebase/config';
-
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from 'firebase/storage';
+import { auth, db } from '@/firebase/config';
+import { convertFileToBase64 } from '@/lib/converter';
 
 import {
   User,
@@ -56,32 +51,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setAuthToken(null);
   };
 
-  const uploadAvatar = useCallback(
-    async (file: File, userId: string): Promise<string> => {
-      try {
-        const storageRef = ref(storage, `avatars/${userId}/${file.name}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        return downloadURL;
-      } catch (error) {
-        console.error('Error uploading avatar:', error);
-        throw error;
-      }
-    },
-    []
-  );
-
-  const deleteAvatar = useCallback(async (avatarUrl: string): Promise<void> => {
-    try {
-      const storageRef = ref(storage, avatarUrl);
-
-      await deleteObject(storageRef);
-    } catch (error) {
-      console.error('Error deleting avatar:', error);
-      throw error;
-    }
-  }, []);
-
   const register = useCallback(
     async (
       email: string,
@@ -89,35 +58,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       username?: string,
       avatarFile?: File
     ): Promise<{ token: string; avatarUrl?: string }> => {
-      try {
-        const userCredential = await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
-        let avatarUrl: string | undefined;
+      const userId = userCredential.user.uid;
 
-        if (avatarFile && userCredential.user) {
-          avatarUrl = await uploadAvatar(avatarFile, userCredential.user.uid);
-        }
+      if (avatarFile) {
+        const avatarBase64 = await convertFileToBase64(avatarFile);
 
-        await updateProfile(userCredential.user, {
-          displayName: username,
-          photoURL: avatarUrl,
+        await setDoc(doc(db, 'userAvatars', userId), {
+          avatar: avatarBase64,
+          createdAt: new Date(),
+          fileName: avatarFile.name,
+          fileType: avatarFile.type,
         });
 
-        const token = await userCredential.user.getIdToken();
-        saveToken(token);
-
-        return { token, avatarUrl };
-      } catch (error) {
-        console.error('Registration error:', error);
-        throw error;
+        await getDoc(doc(db, 'userAvatars', userId));
       }
+
+      await updateProfile(userCredential.user, {
+        displayName: username,
+      });
+
+      const token = await userCredential.user.getIdToken();
+      saveToken(token);
+
+      return { token };
     },
-    [uploadAvatar]
+    []
   );
+
+  const getAvatar = useCallback(async (userId: string): Promise<string> => {
+    try {
+      const docRef = doc(db, 'userAvatars', userId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        return docSnap.data().avatar;
+      }
+      return '';
+    } catch {
+      return '';
+    }
+  }, []);
+
   const login = useCallback(
     async (email: string, password: string): Promise<string> => {
       const userCredential = await signInWithEmailAndPassword(
@@ -184,10 +171,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       authToken,
       login,
       register,
+      getAvatar,
       logout,
       resetPassword,
-      uploadAvatar,
-      deleteAvatar,
       loading,
       isTokenValid,
     }),
@@ -198,9 +184,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       login,
       logout,
       register,
+      getAvatar,
       resetPassword,
-      uploadAvatar,
-      deleteAvatar,
       isTokenValid,
     ]
   );

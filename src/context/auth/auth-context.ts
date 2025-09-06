@@ -17,10 +17,9 @@ export interface AuthContextType {
     username?: string,
     avatarFile?: File
   ) => Promise<{ token: string; avatarUrl?: string }>;
+  getAvatar: (userId: string) => Promise<string | null>;
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
-  uploadAvatar: (file: File, userId: string) => Promise<string>;
-  deleteAvatar: (avatarUrl: string) => Promise<void>;
   loading: boolean;
 }
 export const AuthContext = createContext<AuthContextType>(
