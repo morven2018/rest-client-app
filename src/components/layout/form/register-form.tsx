@@ -1,15 +1,20 @@
 'use client';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Controller, useForm } from 'react-hook-form';
-import type { z } from 'zod';
+import { Controller } from 'react-hook-form';
+import { FormField } from './form-field';
 import { registerSchema } from './schemas/register-schema';
 import { AvatarInput } from '@/components/ui/avatar-input';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PasswordInput } from '@/components/ui/password-input';
 import { useAuth } from '@/context/auth/auth-context';
+import { useAuthForm } from '@/hooks/use-auth-form';
+
+interface RegisterFormData {
+  email: string;
+  password: string;
+  username?: string;
+  avatar?: File;
+}
 
 export const RegisterForm = () => {
   const t = useTranslations('Register');
@@ -17,17 +22,16 @@ export const RegisterForm = () => {
   const schema = registerSchema(te);
   const { register } = useAuth();
 
-  type RegisterFormData = z.infer<typeof schema>;
-
   const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting, isValid },
-    trigger,
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
+    form: {
+      control,
+      handleSubmit,
+      formState: { errors, isSubmitting, isValid },
+      trigger,
+    },
+  } = useAuthForm<RegisterFormData>({
+    schema,
+    redirectOnAuth: false,
     defaultValues: {
       email: '',
       password: '',
@@ -35,7 +39,6 @@ export const RegisterForm = () => {
       avatar: undefined,
     },
   });
-
   const onSubmit = async (data: RegisterFormData) => {
     try {
       console.log(JSON.stringify(data));
@@ -53,86 +56,35 @@ export const RegisterForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      <div className="grid gap-3">
-        <Label htmlFor="email" className="text-base">
-          Email
-        </Label>
-        <Controller
-          name="email"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              type="email"
-              id="email"
-              placeholder="email@example.com"
-              onChange={(e) => {
-                field.onChange(e);
-                trigger('email');
-              }}
-              onBlur={() => trigger('email')}
-            />
-          )}
-        />
-        {errors.email && (
-          <span className="text-red-600 text-left">{errors.email.message}</span>
-        )}
-      </div>
+      <FormField
+        name="email"
+        control={control}
+        label="Email"
+        type="email"
+        placeholder="email@example.com"
+        errors={errors.email}
+        trigger={trigger}
+      />
 
-      <div className="grid gap-3">
-        <Label htmlFor="password" className="text-base">
-          {t('password')}
-        </Label>
-        <Controller
-          name="password"
-          control={control}
-          render={({ field }) => (
-            <PasswordInput
-              {...field}
-              id="password"
-              placeholder={t('placeholder')}
-              onChange={(e) => {
-                field.onChange(e);
-                trigger('password');
-              }}
-              onBlur={() => trigger('password')}
-            />
-          )}
-        />
-        {errors.password && (
-          <span className="text-red-600 text-left">
-            {errors.password.message}
-          </span>
-        )}
-      </div>
+      <FormField
+        name="password"
+        control={control}
+        label={t('password')}
+        type="password"
+        placeholder={t('placeholder')}
+        errors={errors.password}
+        trigger={trigger}
+      />
 
-      <div className="grid gap-3">
-        <Label htmlFor="username" className="text-base">
-          {t('name')}
-        </Label>
-        <Controller
-          name="username"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              type="text"
-              id="username"
-              placeholder={t('name-placeholder')}
-              onChange={(e) => {
-                field.onChange(e);
-                trigger('username');
-              }}
-              onBlur={() => trigger('username')}
-            />
-          )}
-        />
-        {errors.username && (
-          <span className="text-red-600 text-left">
-            {errors.username.message}
-          </span>
-        )}
-      </div>
+      <FormField
+        name="username"
+        control={control}
+        label={t('name')}
+        type="text"
+        placeholder={t('name-placeholder')}
+        errors={errors.username}
+        trigger={trigger}
+      />
 
       <div className="grid gap-3">
         <Label htmlFor="avatar" className="text-base">
@@ -157,6 +109,7 @@ export const RegisterForm = () => {
           </span>
         )}
       </div>
+
       <Button
         type="submit"
         disabled={isSubmitting || !isValid}
