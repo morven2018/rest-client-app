@@ -15,7 +15,7 @@ export const RegisterForm = () => {
   const t = useTranslations('Register');
   const te = useTranslations('ValidationErrors');
   const schema = registerSchema(te);
-  const { register, authToken, currentUser } = useAuth();
+  const { register } = useAuth();
 
   type RegisterFormData = z.infer<typeof schema>;
 
