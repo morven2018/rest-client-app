@@ -23,5 +23,6 @@ export const registerSchema = (t: (key: string) => string) =>
         (file) =>
           !file || (file instanceof File && file.type.startsWith('image/')),
         t('image-only')
-      ),
+      )
+      .refine((file) => !file || file.size <= 2 * 1024 * 1024, t('image-size')),
   });
