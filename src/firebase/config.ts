@@ -1,17 +1,19 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDQAFC879YU9rhiOI0B9fTEdt0TVU4xis8',
-  authDomain: 'rest-client-app-c8844.firebaseapp.com',
-  projectId: 'rest-client-app-c8844',
-  storageBucket: 'rest-client-app-c8844.firebasestorage.app',
-  messagingSenderId: '433521416875',
-  appId: '1:433521416875:web:0d5c0a5fdeaa303f44f5ee',
-  measurementId: 'G-T3KHVLHZ1B',
+  apiKey: process.env.NEXT_API_KEY || '',
+  authDomain:
+    process.env.NEXT_AUTH_DOMAIN || 'rest-client-app-c8844.firebaseapp.com',
+  projectId: process.env.NEXT_PROJECT_ID || 'rest-client-app-c8844',
+  storageBucket:
+    process.env.NEXT_AUTH_DOMAIN || 'rest-client-app-c8844.firebasestorage.app',
+  messagingSenderId: process.env.NEXT_SENDER_ID || '',
+  appId: process.env.NEXT_APP_ID || '',
+  measurementId: process.env.NEXT_MEASUREMENT_ID || '',
 };
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const storage = getStorage(app);
+export const db = getFirestore(app);
