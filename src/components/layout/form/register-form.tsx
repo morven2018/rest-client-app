@@ -9,11 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PasswordInput } from '@/components/ui/password-input';
+import { useAuth } from '@/context/auth/auth-context';
 
 export const RegisterForm = () => {
   const t = useTranslations('Register');
   const te = useTranslations('ValidationErrors');
   const schema = registerSchema(te);
+  const { register, authToken, currentUser } = useAuth();
 
   type RegisterFormData = z.infer<typeof schema>;
 
@@ -37,8 +39,13 @@ export const RegisterForm = () => {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       console.log(JSON.stringify(data));
-
-      console.log('success!');
+      const result = await register(
+        data.email,
+        data.password,
+        data.username,
+        data.avatar
+      );
+      console.log('success!', result);
     } catch (error) {
       console.error(error);
     }

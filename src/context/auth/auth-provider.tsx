@@ -1,7 +1,14 @@
 'use client';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AuthContext } from './auth-context';
-import { auth } from '@/firebase/config';
+import { auth, storage } from '@/firebase/config';
+
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from 'firebase/storage';
 
 import {
   User,
@@ -10,6 +17,7 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from 'firebase/auth';
 
 const AUTH_TOKEN_KEY = 'authToken';
@@ -48,20 +56,68 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setAuthToken(null);
   };
 
-  const register = useCallback(
-    async (email: string, password: string): Promise<string> => {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const token = await userCredential.user.getIdToken();
-      saveToken(token);
-      return token;
+  const uploadAvatar = useCallback(
+    async (file: File, userId: string): Promise<string> => {
+      try {
+        const storageRef = ref(storage, `avatars/${userId}/${file.name}`);
+        const snapshot = await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        return downloadURL;
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+        throw error;
+      }
     },
     []
   );
 
+  const deleteAvatar = useCallback(async (avatarUrl: string): Promise<void> => {
+    try {
+      const storageRef = ref(storage, avatarUrl);
+
+      await deleteObject(storageRef);
+    } catch (error) {
+      console.error('Error deleting avatar:', error);
+      throw error;
+    }
+  }, []);
+
+  const register = useCallback(
+    async (
+      email: string,
+      password: string,
+      username?: string,
+      avatarFile?: File
+    ): Promise<{ token: string; avatarUrl?: string }> => {
+      try {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        let avatarUrl: string | undefined;
+
+        if (avatarFile && userCredential.user) {
+          avatarUrl = await uploadAvatar(avatarFile, userCredential.user.uid);
+        }
+
+        await updateProfile(userCredential.user, {
+          displayName: username,
+          photoURL: avatarUrl,
+        });
+
+        const token = await userCredential.user.getIdToken();
+        saveToken(token);
+
+        return { token, avatarUrl };
+      } catch (error) {
+        console.error('Registration error:', error);
+        throw error;
+      }
+    },
+    [uploadAvatar]
+  );
   const login = useCallback(
     async (email: string, password: string): Promise<string> => {
       const userCredential = await signInWithEmailAndPassword(
@@ -130,6 +186,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       register,
       logout,
       resetPassword,
+      uploadAvatar,
+      deleteAvatar,
       loading,
       isTokenValid,
     }),
@@ -141,10 +199,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       logout,
       register,
       resetPassword,
+      uploadAvatar,
+      deleteAvatar,
       isTokenValid,
     ]
   );
-
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}
