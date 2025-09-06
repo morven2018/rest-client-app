@@ -7,7 +7,7 @@ const firebaseConfig = {
   authDomain:
     process.env.NEXT_PUBLIC_AUTH_DOMAIN ||
     'rest-client-app-c8844.firebaseapp.com',
-  projectId: process.env.NEXT_PUBLIC_ROJECT_ID || 'rest-client-app-c8844',
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID || 'rest-client-app-c8844',
   storageBucket:
     process.env.NEXT_PUBLIC_AUTH_DOMAIN ||
     'rest-client-app-c8844.firebasestorage.app',

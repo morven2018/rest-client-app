@@ -6,8 +6,12 @@ import { registerSchema } from './schemas/register-schema';
 import { AvatarInput } from '@/components/ui/avatar-input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 import { useAuthForm } from '@/hooks/use-auth-form';
+import { useLogout } from '@/hooks/use-logout';
+import { useRouter } from '@/i18n/navigation';
+import { handleRegistrationError } from '@/lib/error-handlers/registration-error-handler';
 
 interface RegisterFormData {
   email: string;
@@ -20,7 +24,10 @@ export const RegisterForm = () => {
   const t = useTranslations('Register');
   const te = useTranslations('ValidationErrors');
   const schema = registerSchema(te);
+  const { toastSuccess, toastError } = useToast();
+  const router = useRouter();
   const { register } = useAuth();
+  const { handleLogoutSync } = useLogout();
 
   const {
     form: {
@@ -41,16 +48,25 @@ export const RegisterForm = () => {
   });
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      console.log(JSON.stringify(data));
-      const result = await register(
-        data.email,
-        data.password,
-        data.username,
-        data.avatar
-      );
-      console.log('success!', result);
-    } catch (error) {
-      console.error(error);
+      await register(data.email, data.password, data.username, data.avatar);
+
+      toastSuccess(t('success'), {
+        action: {
+          label: t('logout-btn'),
+          onClick: () => handleLogoutSync(),
+        },
+      });
+      router.push('/');
+    } catch (err) {
+      const error = handleRegistrationError(err, t);
+      if (error.isEmailInUse) toastError(t('user-exist'));
+      else
+        toastError(`${t('error')} ${error.code}`, {
+          action: {
+            label: t('try-again'),
+            onClick: () => handleSubmit(onSubmit)(),
+          },
+        });
     }
   };
 

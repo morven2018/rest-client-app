@@ -65,15 +65,16 @@
     "btn": "Register",
     "name": "User name",
     "placeholder": "Enter the password",
-    "success": "You have successfully logged in.",
+    "success": "You have successfully registered.",
     "logout-btn": "LOG OUT",
-    "no-user": "No user exist with such parameters",
-    "error": "An error occurred while logging in. Error:",
+    "user-exist": "This email is already used",
+    "error": "An error occurred while register. Error:",
     "retry-btn": "RETRY",
     "password": "Password",
     "avatar": "Avatar",
     "name-placeholder": "Input your name",
     "btn-avatar": "Browse",
-    "avatar-placeholder": "Select picture"
+    "avatar-placeholder": "Select picture",
+    "upload-error": "The problems occur on upload avatar"
   }
 }
