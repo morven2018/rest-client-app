@@ -1,7 +1,9 @@
 'use client';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AuthContext } from './auth-context';
-import { auth } from '@/firebase/config';
+import { auth, db } from '@/firebase/config';
+import { convertFileToBase64 } from '@/lib/converter';
 
 import {
   User,
@@ -10,6 +12,7 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
 } from 'firebase/auth';
 
 const AUTH_TOKEN_KEY = 'authToken';
@@ -49,18 +52,58 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const register = useCallback(
-    async (email: string, password: string): Promise<string> => {
+    async (
+      email: string,
+      password: string,
+      username?: string,
+      avatarFile?: File
+    ): Promise<{ token: string; avatarUrl?: string }> => {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
+
+      const userId = userCredential.user.uid;
+
+      if (avatarFile) {
+        const avatarBase64 = await convertFileToBase64(avatarFile);
+
+        await setDoc(doc(db, 'userAvatars', userId), {
+          avatar: avatarBase64,
+          createdAt: new Date(),
+          fileName: avatarFile.name,
+          fileType: avatarFile.type,
+        });
+
+        await getDoc(doc(db, 'userAvatars', userId));
+      }
+
+      await updateProfile(userCredential.user, {
+        displayName: username || `User_${userId.slice(-5)}`,
+      });
+
       const token = await userCredential.user.getIdToken();
       saveToken(token);
-      return token;
+
+      return { token };
     },
     []
   );
+
+  const getAvatar = useCallback(async (userId: string): Promise<string> => {
+    try {
+      const docRef = doc(db, 'userAvatars', userId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        return docSnap.data().avatar;
+      }
+      return '';
+    } catch {
+      return '';
+    }
+  }, []);
 
   const login = useCallback(
     async (email: string, password: string): Promise<string> => {
@@ -128,6 +171,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       authToken,
       login,
       register,
+      getAvatar,
       logout,
       resetPassword,
       loading,
@@ -140,11 +184,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       login,
       logout,
       register,
+      getAvatar,
       resetPassword,
       isTokenValid,
     ]
   );
-
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

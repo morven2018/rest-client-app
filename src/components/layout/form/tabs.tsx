@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { LoginForm } from './login-form';
+import { RegisterForm } from './register-form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Link } from '@/i18n/navigation';
 
@@ -72,6 +73,9 @@ export async function FormTab({ searchParams }: Readonly<TabsDemoProps>) {
                 {t('register')}
               </CardTitle>
             </CardHeader>
+            <CardContent>
+              <RegisterForm />
+            </CardContent>
             <CardFooter>
               <span className="text-center">
                 {t('access-begin-register')}

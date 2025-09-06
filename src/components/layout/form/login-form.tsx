@@ -1,47 +1,39 @@
 'use client';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import type { z } from 'zod';
+import { FormField } from './form-field';
 import { loginSchema } from './schemas/login-schema';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { PasswordInput } from '@/components/ui/password-input';
-import { useToast } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
+import { useAuthForm } from '@/hooks/use-auth-form';
 import { useLogout } from '@/hooks/use-logout';
 import { getAuthErrorInfo } from '@/lib/error-handlers/error-message';
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 export const LoginForm = () => {
   const t = useTranslations('Login');
   const te = useTranslations('ValidationErrors');
   const { handleLogoutSync } = useLogout();
   const schema = loginSchema(te);
-  const { login, authToken, currentUser } = useAuth();
-  const router = useRouter();
-  const [authError, setAuthError] = useState<string>('');
-  const { toastError, toastSuccess } = useToast();
-
-  useEffect(() => {
-    if (authToken && currentUser) {
-      router.push('/');
-    }
-  }, [authToken, currentUser, router]);
-
-  type LoginFormData = z.infer<typeof schema>;
+  const { login } = useAuth();
 
   const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting, isValid },
-    trigger,
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
+    form: {
+      control,
+      handleSubmit,
+      formState: { errors, isSubmitting, isValid },
+      trigger,
+    },
+    setAuthError,
+    clearAuthError,
+    toastSuccess,
+    toastError,
+    router,
+  } = useAuthForm<LoginFormData>({
+    schema,
     defaultValues: {
       email: '',
       password: '',
@@ -83,60 +75,27 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      <div className="grid gap-3">
-        <Label htmlFor="email" className="text-base">
-          Email
-        </Label>
-        <Controller
-          name="email"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              type="email"
-              id="email"
-              placeholder="email@example.com"
-              onChange={(e) => {
-                field.onChange(e);
-                trigger('email');
-                setAuthError('');
-              }}
-              onBlur={() => trigger('email')}
-            />
-          )}
-        />
-        {errors.email && (
-          <span className="text-red-600 text-left">{errors.email.message}</span>
-        )}
-      </div>
+      <FormField
+        name="email"
+        control={control}
+        label="Email"
+        type="email"
+        placeholder="email@example.com"
+        errors={errors.email}
+        onFieldChange={clearAuthError}
+        trigger={trigger}
+      />
 
-      <div className="grid gap-3">
-        <Label htmlFor="password" className="text-base">
-          {t('password')}
-        </Label>
-        <Controller
-          name="password"
-          control={control}
-          render={({ field }) => (
-            <PasswordInput
-              {...field}
-              id="password"
-              placeholder={t('placeholder')}
-              onChange={(e) => {
-                field.onChange(e);
-                trigger('password');
-                setAuthError('');
-              }}
-              onBlur={() => trigger('password')}
-            />
-          )}
-        />
-        {errors.password && (
-          <span className="text-red-600 text-left">
-            {errors.password.message}
-          </span>
-        )}
-      </div>
+      <FormField
+        name="password"
+        control={control}
+        label={t('password')}
+        type="password"
+        placeholder={t('placeholder')}
+        errors={errors.password}
+        onFieldChange={clearAuthError}
+        trigger={trigger}
+      />
 
       <Button
         type="submit"
