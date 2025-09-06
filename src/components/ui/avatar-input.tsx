@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,6 +14,7 @@ export function AvatarInput({
 }: Readonly<AvatarInputProps>) {
   const [fileName, setFileName] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations('Register');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -47,7 +49,7 @@ export function AvatarInput({
       />
 
       <Button type="button" variant="outline" onClick={handleButtonClick}>
-        Browse
+        {t('btn-avatar')}
       </Button>
     </div>
   );
