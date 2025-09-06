@@ -80,7 +80,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       }
 
       await updateProfile(userCredential.user, {
-        displayName: username,
+        displayName: username || `User_${userId.slice(-5)}`,
       });
 
       const token = await userCredential.user.getIdToken();
