@@ -14,7 +14,8 @@
     "history-and-analytics": "История",
     "course": "Выполнено в рамках курса RS React",
     "logoAlt": "Логотип RS School",
-    "right": "© 2025, Все права защищены"
+    "right-year": "© 2025",
+    "right": "Все права защищены."
   },
   "Tabs": {
     "login": "Авторизация",
