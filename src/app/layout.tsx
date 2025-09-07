@@ -1,4 +1,3 @@
-// import ErrorBoundary from '@/components/layout';
 import { ThemeProvider } from '@/context/ThemeProvider';
 
 export default function RootLayout({
