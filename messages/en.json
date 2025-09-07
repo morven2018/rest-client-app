@@ -7,14 +7,15 @@
     "register": "Register"
   },
   "Footer": {
-    "command": "Our command",
+    "command": "Our team",
     "pages": "Pages",
     "restful": "Rest Client",
     "variables": "Variables",
     "history-and-analytics": "History",
     "course": "This project was developed as part of the RS School React course",
     "logoAlt": "Logo RS School",
-    "right": "© 2025, All rights reserved"
+    "right-year": "© 2025",
+    "right": "All rights reserved."
   },
   "Tabs": {
     "login": "LOG IN",
