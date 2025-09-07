@@ -50,6 +50,7 @@ export const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-foreground hover:text-primary transition-colors"
+                  data-testid="github-icon"
                 >
                   <Github />
                 </Link>
@@ -83,6 +84,7 @@ export const Footer = () => {
                 height={104}
                 priority
                 className="mx-auto"
+                data-testid="rss-logo"
               />
             </Link>
           </div>
