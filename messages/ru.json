@@ -40,5 +40,13 @@
     "title": "Эта страница не найдена",
     "back": "Назад",
     "home": "Дом"
+  },
+  "RestClient": {
+    "buttonSend": "ОТПРАВИТЬ",
+    "headersTitle": "Заголовки",
+    "buttonAddHeader": "Добавить Заголовок",
+    "noHeadersText": "Заголовок не добавлен ещё",
+    "headerKey": "Ключ заголовка",
+    "headerValue": "Значение"
   }
 }

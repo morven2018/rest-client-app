@@ -43,5 +43,13 @@
     "title": "This page is not found",
     "back": "Back",
     "home": "Home"
+  },
+  "RestClient": {
+    "buttonSend": "SEND",
+    "headersTitle": "Headers",
+    "buttonAddHeader": "Add Header",
+    "noHeadersText": "There is no header added before",
+    "headerKey": "Header key",
+    "headerValue": "Value"
   }
 }
