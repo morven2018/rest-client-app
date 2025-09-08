@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Badge Component Snapshot asChild should match snapshot 1`] = `
+<div>
+  <span
+    class="inline-flex items-center justify-center rounded-lg border-transparent text-white border px-4 py-0.5 bg-gray-400"
+    data-slot="badge"
+    data-testid="slot-component"
+  >
+    Slot
+  </span>
+</div>
+`;
+
+exports[`Badge Component Snapshot default variant should match snapshot 1`] = `
+<div>
+  <span
+    class="inline-flex items-center justify-center rounded-lg border-transparent text-white border px-4 py-0.5 bg-gray-400"
+    data-slot="badge"
+  >
+    Default
+  </span>
+</div>
+`;
+
+exports[`Badge Component Snapshot info variant should match snapshot 1`] = `
+<div>
+  <span
+    class="inline-flex items-center justify-center rounded-lg border-transparent text-white border px-4 py-0.5 bg-indigo-600"
+    data-slot="badge"
+  >
+    <svg
+      class="size-4"
+      data-testid="loader-icon"
+    />
+    Loading
+  </span>
+</div>
+`;
+
+exports[`Badge Component Snapshot with custom className should match snapshot 1`] = `
+<div>
+  <span
+    class="inline-flex items-center justify-center rounded-lg border-transparent text-white border px-4 py-0.5 bg-gray-400 mt-4"
+    data-slot="badge"
+  >
+    Custom
+  </span>
+</div>
+`;
