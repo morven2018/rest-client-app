@@ -15,23 +15,6 @@ exports[`Label Component Snapshot should match snapshot with additional props 1`
 </div>
 `;
 
-exports[`Label Component Snapshot should match snapshot with complex children 1`] = `
-<div>
-  <label
-    class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-    data-slot="label"
-    data-testid="label-root"
-  >
-    <span
-      class="icon"
-    >
-      ⭐
-    </span>
-    Starred Item
-  </label>
-</div>
-`;
-
 exports[`Label Component Snapshot should match snapshot with custom className 1`] = `
 <div>
   <label
