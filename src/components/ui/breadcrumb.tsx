@@ -81,8 +81,15 @@ function BreadcrumbSeparator({
           viewBox="0 0 16 18"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          className="text-neutral-500"
         >
-          <line x1="8.5" y1="0.567963" x2="8.5" y2="17.568" stroke="#E5E5E5" />
+          <line
+            x1="8.5"
+            y1="0.567963"
+            x2="8.5"
+            y2="17.568"
+            stroke="currentColor"
+          />
         </svg>
       )}
     </li>

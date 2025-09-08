@@ -2,7 +2,7 @@
 import { Home } from 'lucide-react';
 import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
-import { usePathname } from '@/i18n/navigation';
+import { Link, usePathname } from '@/i18n/navigation';
 
 import {
   Breadcrumb,
@@ -15,24 +15,23 @@ import {
 export default function CustomBreadcrumb() {
   const pathname = usePathname();
   const [isClient, setIsClient] = useState(false);
-  const locale = useLocale();
   const links = isClient ? pathname.split('/').filter(Boolean) : [];
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
-  const getLocalizedPath = (segmentIndex: number): string => {
-    const pathSegments = links.slice(0, segmentIndex + 1);
-    return `/${locale}/${pathSegments.join('/')}`;
-  };
-
   return (
-    <Breadcrumb>
+    <Breadcrumb className="px-4 py-2">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href={`/${locale}`}>
-            <Home width="20px" />
+          <BreadcrumbLink
+            asChild
+            className="text-neutral-800 dark:text-neutral-100"
+          >
+            <Link href={`/`}>
+              <Home width="20px" />
+            </Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
 
@@ -41,10 +40,12 @@ export default function CustomBreadcrumb() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink
-                href={getLocalizedPath(0)}
-                className={`${links.length < 2 && 'text-violet-900'}`}
+                asChild
+                className={`${links.length < 2 ? 'text-violet-900 dark:text-violet-500' : 'text-neutral-800 dark:text-neutral-100'}`}
               >
-                {links[0].replace(links[0][0], links[0][0].toUpperCase())}
+                <Link href={`/${links[0]}`}>
+                  {links[0].replace(links[0][0], links[0][0].toUpperCase())}
+                </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
           </>
@@ -55,10 +56,12 @@ export default function CustomBreadcrumb() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink
-                href={getLocalizedPath(1)}
-                className={'text-violet-900'}
+                asChild
+                className={'text-violet-900 dark:text-violet-500'}
               >
-                {links[1].replace(links[1][0], links[1][0].toUpperCase())}
+                <Link href={pathname}>
+                  {links[1].replace(links[1][0], links[1][0].toUpperCase())}
+                </Link>
               </BreadcrumbLink>
             </BreadcrumbItem>
           </>
