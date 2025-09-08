@@ -1,6 +1,5 @@
 'use client';
 import { Home } from 'lucide-react';
-import { useLocale } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { Link, usePathname } from '@/i18n/navigation';
 
