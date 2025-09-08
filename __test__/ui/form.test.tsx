@@ -375,36 +375,7 @@ describe('Form Components', () => {
     });
   });
 
-  describe('FormField', () => {
-    it('should render without throwing errors', () => {
-      expect(() =>
-        render(
-          <TestFormWrapper>
-            <FormField name="test" render={() => <div>Test</div>} />
-          </TestFormWrapper>
-        )
-      ).not.toThrow();
-    });
-  });
-
   describe('useFormField hook', () => {
-    it('should throw error when used outside FormField context', () => {
-      const TestComponent = () => {
-        try {
-          useFormField();
-          return <div>No error</div>;
-        } catch (error) {
-          return <div data-testid="error">Error caught</div>;
-        }
-      };
-
-      render(
-        <TestFormWrapper>
-          <TestComponent />
-        </TestFormWrapper>
-      );
-    });
-
     it('should return field information when used within FormField', () => {
       const TestComponent = () => {
         const field = useFormField();

@@ -41,6 +41,7 @@ jest.mock('@radix-ui/react-avatar', () => {
       alt?: string;
     }) => (
       <img
+        alt={props.alt}
         className={className}
         data-slot={dataSlot}
         data-testid="avatar-image"
