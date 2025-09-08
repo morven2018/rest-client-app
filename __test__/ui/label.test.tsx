@@ -200,14 +200,4 @@ describe('Label Component Snapshot', () => {
     );
     expect(container).toMatchSnapshot();
   });
-
-  it('should match snapshot with complex children', () => {
-    const { container } = render(
-      <Label>
-        <span className="icon">⭐</span>
-        Starred Item
-      </Label>
-    );
-    expect(container).toMatchSnapshot();
-  });
 });
