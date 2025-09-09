@@ -68,11 +68,14 @@ export default function SectionCode() {
               </Button>
             </div>
           </AccordionTrigger>
-          <AccordionContent className="px-4 py-2">
+          <AccordionContent className="py-2">
             <Button className="block mb-4 ml-auto cursor-pointer">
               <ClipboardList />
             </Button>
-            <Textarea placeholder="curl https://jsonplaceholder.typicode.com/posts/1" />
+            <Textarea
+              placeholder="curl https://jsonplaceholder.typicode.com/posts/1"
+              className="min-h-25"
+            />
           </AccordionContent>
         </AccordionItem>
       </Accordion>

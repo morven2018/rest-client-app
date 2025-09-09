@@ -3,6 +3,8 @@
 import SectionRequestField from '@/components/rest/SectionRequestField';
 import SectionHeaders from '@/components/rest/SectionHeaders';
 import SectionCode from '@/components/rest/SectionCode';
+import SectionBody from '@/components/rest/SectionBody';
+import SectionResponse from '@/components/rest/SectionResponse';
 
 export default function RestfulPage() {
   return (
@@ -17,6 +19,12 @@ export default function RestfulPage() {
           </section>
           <section className="px-6">
             <SectionCode />
+          </section>
+          <section className="px-6">
+            <SectionBody />
+          </section>
+          <section className="px-6">
+            <SectionResponse />
           </section>
         </div>
       </div>
