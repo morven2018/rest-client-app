@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-export default function RequestField() {
+export default function SectionRequestField() {
   const [method, setMethod] = useState('GET');
   const [url, setUrl] = useState('');
   const t = useTranslations('RestClient');
@@ -31,7 +31,7 @@ export default function RequestField() {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-2 p-[20px] rounded-lg bg-request-field-bg">
+    <div className="flex flex-col sm:flex-row gap-2 p-5 rounded-lg bg-request-field-bg">
       <Select value={method} onValueChange={handleMethodChange}>
         <SelectTrigger
           className="w-[200px] md:w-[100px] lg:w-[200px] cursor-pointer"

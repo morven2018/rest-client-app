@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import HeadersTable from './HeadersTable';
 
-export default function HeadersBlock() {
+export default function SectionHeaders() {
   const [headers, setHeaders] = useState<{ key: string; value: string }[]>([]);
 
   const t = useTranslations('RestClient');
