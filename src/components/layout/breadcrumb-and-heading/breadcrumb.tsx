@@ -8,6 +8,7 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
+  BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
 
@@ -38,14 +39,24 @@ export default function CustomBreadcrumb() {
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink
-                asChild
-                className={`${links.length < 2 ? 'text-violet-900 dark:text-violet-500' : 'text-neutral-800 dark:text-neutral-100'}`}
-              >
-                <Link href={`/${links[0]}`}>
+              {links.length < 2 && (
+                <BreadcrumbPage
+                  className={'text-violet-900 dark:text-violet-500'}
+                >
                   {links[0].replace(links[0][0], links[0][0].toUpperCase())}
-                </Link>
-              </BreadcrumbLink>
+                </BreadcrumbPage>
+              )}
+
+              {links.length >= 2 && (
+                <BreadcrumbLink
+                  asChild
+                  className={'text-neutral-800 dark:text-neutral-100'}
+                >
+                  <Link href={`/${links[0]}`}>
+                    {links[0].replace(links[0][0], links[0][0].toUpperCase())}
+                  </Link>
+                </BreadcrumbLink>
+              )}
             </BreadcrumbItem>
           </>
         )}
@@ -54,14 +65,11 @@ export default function CustomBreadcrumb() {
           <>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink
-                asChild
+              <BreadcrumbPage
                 className={'text-violet-900 dark:text-violet-500'}
               >
-                <Link href={pathname}>
-                  {links[1].replace(links[1][0], links[1][0].toUpperCase())}
-                </Link>
-              </BreadcrumbLink>
+                {links[1].replace(links[1][0], links[1][0].toUpperCase())}
+              </BreadcrumbPage>
             </BreadcrumbItem>
           </>
         )}
