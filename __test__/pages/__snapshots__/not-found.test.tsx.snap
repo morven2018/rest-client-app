@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`NotFound Page Snapshot should match snapshot 1`] = `
+<div>
+  <main>
+    <h2>
+      Oooops!
+    </h2>
+    <h2>
+      This page is not found
+    </h2>
+    <a
+      href="/"
+    >
+      Home
+    </a>
+  </main>
+</div>
+`;

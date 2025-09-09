@@ -1,10 +1,8 @@
 'use client';
-
-import { Link } from '@/i18n/navigation';
-import { Button } from '@/components/ui/button';
-import { RotateCcw, House } from 'lucide-react';
+import { House, RotateCcw } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { useRouter } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { Link, useRouter } from '@/i18n/navigation';
 
 export default function NotFound() {
   const t = useTranslations('NotFound');
