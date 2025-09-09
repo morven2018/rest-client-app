@@ -78,12 +78,11 @@
     "avatar-placeholder": "Выберите изображение",
     "upload-error": "Возникала проблема при загрузке аватара"
   },
-<<<<<<< HEAD
   "Sidebar": {
     "rest": "REST клиент",
     "history": "История и анализ",
     "variables": "Переменные"
-=======
+  },
   "RestClient": {
     "buttonSend": "ОТПРАВИТЬ",
     "headersTitle": "Заголовки",
@@ -95,6 +94,5 @@
     "codeButton": "Создать код",
     "bodyTitle": "Тело",
     "responseTitle": "Ответ"
->>>>>>> origin/develop
   }
 }

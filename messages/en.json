@@ -78,12 +78,11 @@
     "avatar-placeholder": "Select picture",
     "upload-error": "The problems occur on upload avatar"
   },
-<<<<<<< HEAD
   "Sidebar": {
     "rest": "REST Client",
     "history": "History and analysis",
     "variables": "Variables"
-=======
+  },
   "RestClient": {
     "buttonSend": "SEND",
     "headersTitle": "Headers",
@@ -95,6 +94,5 @@
     "codeButton": "Generate code",
     "bodyTitle": "Body",
     "responseTitle": "Response"
->>>>>>> origin/develop
   }
 }
