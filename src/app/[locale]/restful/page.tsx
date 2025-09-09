@@ -1,7 +1,33 @@
+'use client';
+
+import SectionRequestField from '@/components/rest/SectionRequestField';
+import SectionHeaders from '@/components/rest/SectionHeaders';
+import SectionCode from '@/components/rest/SectionCode';
+import SectionBody from '@/components/rest/SectionBody';
+import SectionResponse from '@/components/rest/SectionResponse';
+
 export default function RestfulPage() {
   return (
-    <main>
-      <div>This is Restful page</div>
+    <main className="w-full">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-[17px]">
+        <div className="flex flex-col gap-6 py-4">
+          <section className="px-6">
+            <SectionRequestField />
+          </section>
+          <section className="flex flex-col gap-4 px-6 py-5 border-t border-t-black">
+            <SectionHeaders />
+          </section>
+          <section className="px-6">
+            <SectionCode />
+          </section>
+          <section className="px-6">
+            <SectionBody />
+          </section>
+          <section className="px-6">
+            <SectionResponse />
+          </section>
+        </div>
+      </div>
     </main>
   );
 }
