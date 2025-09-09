@@ -1,7 +1,11 @@
+import CustomSidebar from '@/components/layout/sidebar/sidebar';
+
 export default function VariablesPage() {
   return (
     <main>
-      <div>This is Variables page</div>
+      <CustomSidebar>
+        <div>This is Variables page</div>
+      </CustomSidebar>
     </main>
   );
 }

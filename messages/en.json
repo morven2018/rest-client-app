@@ -77,5 +77,10 @@
     "btn-avatar": "Browse",
     "avatar-placeholder": "Select picture",
     "upload-error": "The problems occur on upload avatar"
+  },
+  "Sidebar": {
+    "rest": "REST Client",
+    "history": "History and analysis",
+    "variables": "Variables"
   }
 }
