@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`Popover Components Snapshot Complete Popover should match snapshot 1`] = `
+<div>
+  <div
+    data-slot="popover"
+    data-testid="popover-root"
+  >
+    <button
+      data-slot="popover-trigger"
+      data-testid="popover-trigger"
+    >
+      Open
+    </button>
+    <div
+      data-testid="popover-portal"
+    >
+      <div
+        class="bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-md border p-4 shadow-md outline-hidden"
+        data-align="center"
+        data-side-offset="4"
+        data-slot="popover-content"
+        data-testid="popover-content"
+      >
+        Content
+      </div>
+    </div>
+    <div
+      data-slot="popover-anchor"
+      data-testid="popover-anchor"
+    >
+      Anchor
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Popover Components Snapshot Popover should match snapshot 1`] = `
+<div>
+  <div
+    data-slot="popover"
+    data-testid="popover-root"
+  >
+    Test
+  </div>
+</div>
+`;
+
+exports[`Popover Components Snapshot PopoverAnchor should match snapshot 1`] = `
+<div>
+  <div
+    data-slot="popover-anchor"
+    data-testid="popover-anchor"
+  >
+    Anchor
+  </div>
+</div>
+`;
+
+exports[`Popover Components Snapshot PopoverContent should match snapshot 1`] = `
+<div>
+  <div
+    data-testid="popover-portal"
+  >
+    <div
+      class="bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-md border p-4 shadow-md outline-hidden"
+      data-align="center"
+      data-side-offset="4"
+      data-slot="popover-content"
+      data-testid="popover-content"
+    >
+      Content
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Popover Components Snapshot PopoverTrigger should match snapshot 1`] = `
+<div>
+  <button
+    data-slot="popover-trigger"
+    data-testid="popover-trigger"
+  >
+    Trigger
+  </button>
+</div>
+`;
