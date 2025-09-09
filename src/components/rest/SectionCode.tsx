@@ -38,47 +38,45 @@ export default function SectionCode() {
   };
 
   return (
-    <>
-      <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
-          <AccordionTrigger>
-            {t('codeTitle')}
-            <div className="flex flex-col gap-2 w-full sm:justify-end sm:flex-row">
-              <Select value={generator} onValueChange={handleGeneratorChange}>
-                <SelectTrigger
-                  className="w-[200px] cursor-pointer"
-                  aria-label="Code generators Selector"
-                >
-                  <SelectValue placeholder="Code generator" />
-                </SelectTrigger>
-                <SelectContent>
-                  {generators.map((generator) => (
-                    <SelectItem
-                      key={generator}
-                      value={generator}
-                      className="cursor-pointer"
-                    >
-                      {generator}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Button className="w-[200px] cursor-pointer">
-                {t('codeButton')}
-              </Button>
-            </div>
-          </AccordionTrigger>
-          <AccordionContent className="py-2">
-            <Button className="block mb-4 ml-auto cursor-pointer">
-              <ClipboardList />
+    <Accordion type="single" collapsible>
+      <AccordionItem value="item-1">
+        <AccordionTrigger>
+          {t('codeTitle')}
+          <div className="flex flex-col gap-2 w-full sm:justify-end sm:flex-row">
+            <Select value={generator} onValueChange={handleGeneratorChange}>
+              <SelectTrigger
+                className="w-[200px] cursor-pointer"
+                aria-label="Code generators Selector"
+              >
+                <SelectValue placeholder="Code generator" />
+              </SelectTrigger>
+              <SelectContent>
+                {generators.map((generator) => (
+                  <SelectItem
+                    key={generator}
+                    value={generator}
+                    className="cursor-pointer"
+                  >
+                    {generator}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Button className="w-[200px] cursor-pointer">
+              {t('codeButton')}
             </Button>
-            <Textarea
-              placeholder="curl https://jsonplaceholder.typicode.com/posts/1"
-              className="min-h-25"
-            />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </>
+          </div>
+        </AccordionTrigger>
+        <AccordionContent className="py-2">
+          <Button className="block mb-4 ml-auto cursor-pointer">
+            <ClipboardList />
+          </Button>
+          <Textarea
+            placeholder="curl https://jsonplaceholder.typicode.com/posts/1"
+            className="min-h-25"
+          />
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }

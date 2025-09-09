@@ -12,9 +12,13 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 interface HeadersTableProps {
-  headers: { key: string; value: string }[];
-  onRemove: (index: number) => void;
-  onUpdate: (index: number, field: 'key' | 'value', value: string) => void;
+  readonly headers: { key: string; value: string }[];
+  readonly onRemove: (index: number) => void;
+  readonly onUpdate: (
+    index: number,
+    field: 'key' | 'value',
+    value: string
+  ) => void;
 }
 
 export default function HeadersTable({
