@@ -4,7 +4,6 @@ import NavMenu from './nav-menu';
 import {
   Sidebar,
   SidebarContent,
-  SidebarMenuSub,
   SidebarProvider,
 } from '@/components/ui/sidebar';
 
@@ -18,9 +17,7 @@ export default function CustomSidebar({
         <SidebarProvider>
           <Sidebar collapsible="icon" {...props} className="h-min">
             <SidebarContent>
-              <SidebarMenuSub>
-                <NavMenu />
-              </SidebarMenuSub>
+              <NavMenu />
             </SidebarContent>
           </Sidebar>
         </SidebarProvider>

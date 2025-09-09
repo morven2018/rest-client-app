@@ -1,9 +1,15 @@
-import { BookOpen, Settings2, SquareTerminal } from 'lucide-react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useEnvVariables } from '@/hooks/use-env-variables';
 import { Link, useRouter } from '@/i18n/navigation';
+
+import {
+  ChevronDown,
+  ChevronRight,
+  BookOpen,
+  Settings2,
+  SquareTerminal,
+} from 'lucide-react';
 
 import {
   SidebarMenuSub,
@@ -33,7 +39,6 @@ export default function NavMenu() {
 
     router.push(`/variables/${newEnvName}`);
   };
-
   return (
     <>
       <SidebarMenuItem>
@@ -70,7 +75,7 @@ export default function NavMenu() {
 
         {isVariablesExpanded && (
           <SidebarMenuSub>
-            {envList.length === 0 &&
+            {!!envList.length &&
               envList.map((env) => (
                 <SidebarMenuSubItem key={env}>
                   <SidebarMenuSubButton asChild>
