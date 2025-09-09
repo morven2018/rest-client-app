@@ -1,12 +1,15 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import { routing } from '@/i18n/routing';
-import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import { notFound } from 'next/navigation';
-import { ThemeProvider } from '@/context/ThemeProvider';
-import { Header } from '@/components/layout/header/Header';
-import { Footer } from '@/components/layout/footer/Footer';
 import '../globals.css';
+import type { Metadata } from 'next';
+import { NextIntlClientProvider, hasLocale } from 'next-intl';
+import { Geist, Geist_Mono } from 'next/font/google';
+import { notFound } from 'next/navigation';
+import { Toaster } from 'sonner';
+import { Footer } from '@/components/layout/footer/Footer';
+import { Header } from '@/components/layout/header/Header';
+import { ThemeProvider } from '@/context/ThemeProvider';
+import { AuthProvider } from '@/context/auth/auth-provider';
+import { Link } from '@/i18n/navigation';
+import { routing } from '@/i18n/routing';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -47,9 +50,23 @@ export default async function LocaleLayout({
       >
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
-            <Header />
-            {children}
-            <Footer />
+            <AuthProvider>
+              <Header />
+              {children}
+              <ul>
+                <li>
+                  <Link href="/variables">variables</Link>
+                </li>
+                <li>
+                  <Link href="/variables/45">45</Link>
+                </li>
+                <li>
+                  <Link href="/">home</Link>
+                </li>
+              </ul>
+              <Footer />
+              <Toaster />
+            </AuthProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

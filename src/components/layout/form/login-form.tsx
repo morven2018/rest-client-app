@@ -1,102 +1,106 @@
 'use client';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslations } from 'next-intl';
-import { Controller, useForm } from 'react-hook-form';
-import type { z } from 'zod';
+import { FormField } from './form-field';
 import { loginSchema } from './schemas/login-schema';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { PasswordInput } from '@/components/ui/password-input';
+import { useAuth } from '@/context/auth/auth-context';
+import { useAuthForm } from '@/hooks/use-auth-form';
+import { useLogout } from '@/hooks/use-logout';
+import { getAuthErrorInfo } from '@/lib/error-handlers/error-message';
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 export const LoginForm = () => {
   const t = useTranslations('Login');
   const te = useTranslations('ValidationErrors');
+  const { handleLogoutSync } = useLogout();
   const schema = loginSchema(te);
-
-  type LoginFormData = z.infer<typeof schema>;
+  const { login } = useAuth();
 
   const {
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting, isValid },
-    trigger,
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(schema),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
+    form: {
+      control,
+      handleSubmit,
+      formState: { errors, isSubmitting, isValid },
+      trigger,
+    },
+    setAuthError,
+    clearAuthError,
+    toastSuccess,
+    toastError,
+    router,
+  } = useAuthForm<LoginFormData>({
+    schema,
     defaultValues: {
       email: '',
       password: '',
     },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log(data);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      setAuthError('');
+      await login(data.email, data.password);
+
+      toastSuccess(t('success'), {
+        action: {
+          label: t('logout-btn'),
+          onClick: () => handleLogoutSync(),
+        },
+      });
+
+      router.push('/');
+    } catch (error) {
+      const authErrorInfo = getAuthErrorInfo(error);
+      if (
+        authErrorInfo.isInvalidCredentials ||
+        /auth\/invalid-credential/.test(authErrorInfo.message)
+      )
+        toastError(t('no-user'));
+      else
+        toastError(`${t('error')} ${authErrorInfo.message}`, {
+          action: {
+            label: t('retry-btn'),
+            onClick: () => {
+              handleSubmit(onSubmit)();
+            },
+          },
+        });
+      setAuthError('error');
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-      <div className="grid gap-3">
-        <Label htmlFor="email" className="text-base">
-          Email
-        </Label>
-        <Controller
-          name="email"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              type="email"
-              id="email"
-              placeholder="email@example.com"
-              onChange={(e) => {
-                field.onChange(e);
-                trigger('email');
-              }}
-              onBlur={() => trigger('email')}
-            />
-          )}
-        />
-        {errors.email && (
-          <span className="font-extralight text-red-600 text-left">
-            {errors.email.message}
-          </span>
-        )}
-      </div>
+      <FormField
+        name="email"
+        control={control}
+        label="Email"
+        type="email"
+        placeholder="email@example.com"
+        errors={errors.email}
+        onFieldChange={clearAuthError}
+        trigger={trigger}
+      />
 
-      <div className="grid gap-3">
-        <Label htmlFor="password" className="text-base">
-          Password
-        </Label>
-        <Controller
-          name="password"
-          control={control}
-          render={({ field }) => (
-            <PasswordInput
-              {...field}
-              id="password"
-              autoComplete="new-password"
-              placeholder={t('placeholder')}
-              onChange={(e) => {
-                field.onChange(e);
-                trigger('password');
-              }}
-              onBlur={() => trigger('password')}
-            />
-          )}
-        />
-        {errors.password && (
-          <span className="font-extralight text-red-600 text-left">
-            {errors.password.message}
-          </span>
-        )}
-      </div>
+      <FormField
+        name="password"
+        control={control}
+        label={t('password')}
+        type="password"
+        placeholder={t('placeholder')}
+        errors={errors.password}
+        onFieldChange={clearAuthError}
+        trigger={trigger}
+      />
 
       <Button
         type="submit"
         disabled={isSubmitting || !isValid}
-        className="bg-black data-[disabled=true]:bg-gray-300 dark:bg-white dark:data-[disabled=true]:bg-gray-400"
+        className="bg-black disabled:bg-gray-300 dark:text-white"
       >
         {t('btn')}
       </Button>

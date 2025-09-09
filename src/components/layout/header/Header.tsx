@@ -18,6 +18,7 @@ export const Header = () => {
                 width={110}
                 height={90}
                 priority
+                data-testid="header-logo"
               />
             </Link>
           </h1>

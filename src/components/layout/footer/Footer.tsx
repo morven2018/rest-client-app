@@ -37,7 +37,7 @@ export const Footer = () => {
   const t = useTranslations('Footer');
 
   return (
-    <footer className="bg-chart-2 w-full">
+    <footer className="bg-chart-2 w-full pt-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-[17px]">
         <div className="flex flex-wrap justify-center lg:justify-around gap-6 md:gap-8">
           <div className="p-2">
@@ -50,6 +50,7 @@ export const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-foreground hover:text-primary transition-colors"
+                  data-testid="github-icon"
                 >
                   <Github />
                 </Link>
@@ -83,11 +84,15 @@ export const Footer = () => {
                 height={104}
                 priority
                 className="mx-auto"
+                data-testid="rss-logo"
               />
             </Link>
           </div>
         </div>
-        <div className="p-2 mt-3 text-center">{t('right')}</div>
+        <div className="p-2 mt-3 text-center flex flex-col items-center">
+          <span>{t('right-year')}</span>
+          <span>{t('right')}</span>
+        </div>
       </div>
     </footer>
   );
