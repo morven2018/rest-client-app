@@ -52,6 +52,8 @@
     "headerKey": "Header key",
     "headerValue": "Value",
     "codeTitle": "Code",
-    "codeButton": "Generate code"
+    "codeButton": "Generate code",
+    "bodyTitle": "Body",
+    "responseTitle": "Response"
   }
 }

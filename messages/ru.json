@@ -45,10 +45,12 @@
     "buttonSend": "ОТПРАВИТЬ",
     "headersTitle": "Заголовки",
     "buttonAddHeader": "Добавить Заголовок",
-    "noHeadersText": "Заголовок не добавлен ещё",
+    "noHeadersText": "Заголовок ещё не добавлен",
     "headerKey": "Ключ заголовка",
     "headerValue": "Значение",
     "codeTitle": "Код",
-    "codeButton": "Создать код"
+    "codeButton": "Создать код",
+    "bodyTitle": "Тело",
+    "responseTitle": "Ответ"
   }
 }
