@@ -41,7 +41,10 @@ export default function HeadersTable({
         {headers.map((header, index) => (
           <TableRow key={index}>
             <TableCell className="px-2 py-3">
-              <Button onClick={() => onRemove(index)}>
+              <Button
+                className="cursor-pointer"
+                onClick={() => onRemove(index)}
+              >
                 <Trash className="w-7 h-7" />
               </Button>
             </TableCell>
