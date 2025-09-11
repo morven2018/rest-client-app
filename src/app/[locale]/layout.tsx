@@ -8,7 +8,6 @@ import { Footer } from '@/components/layout/footer/Footer';
 import { Header } from '@/components/layout/header/Header';
 import { ThemeProvider } from '@/context/ThemeProvider';
 import { AuthProvider } from '@/context/auth/auth-provider';
-import { Link } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
 
 const geistSans = Geist({
@@ -44,32 +43,15 @@ export default async function LocaleLayout({
   const messages = (await import(`../../../messages/${locale}.json`)).default;
 
   return (
-    <html lang={locale}>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>
-            <AuthProvider>
-              <Header />
-              {children}
-              <ul>
-                <li>
-                  <Link href="/variables">variables</Link>
-                </li>
-                <li>
-                  <Link href="/variables/45">45</Link>
-                </li>
-                <li>
-                  <Link href="/">home</Link>
-                </li>
-              </ul>
-              <Footer />
-              <Toaster />
-            </AuthProvider>
-          </ThemeProvider>
-        </NextIntlClientProvider>
-      </body>
-    </html>
+    <NextIntlClientProvider messages={messages}>
+      <ThemeProvider>
+        <AuthProvider>
+          <Header />
+          {children}
+          <Footer />
+          <Toaster />
+        </AuthProvider>
+      </ThemeProvider>
+    </NextIntlClientProvider>
   );
 }
