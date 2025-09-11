@@ -1,8 +1,8 @@
-import React from 'react';
-import yuliaImage from '../../../public/team-img/junior.jpg';
-import igorImage from '../../../public/team-img/Igor.jpg';
-import alenaImage from '../../../public/team-img/Alena.jpg';
 import Image, { StaticImageData } from 'next/image';
+import React from 'react';
+import alenaImage from '../../../public/team-img/Alena.jpg';
+import igorImage from '../../../public/team-img/Igor.jpg';
+import yuliaImage from '../../../public/team-img/junior.jpg';
 
 interface TeamMember {
   name: string;
@@ -85,11 +85,6 @@ const TeamMembers = () => {
     },
   ];
 
-  const handleGitHubClick = (url: string, event: React.MouseEvent) => {
-    event.stopPropagation();
-    window.open(url, '_blank', 'noopener, noreferrer');
-  };
-
   return (
     <div className="w-full bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 text-center mb-8">
@@ -98,7 +93,7 @@ const TeamMembers = () => {
       <div className="w-full mx-auto space-y-4">
         {teamMembers.map((member, index) => (
           <div
-            key={index}
+            key={member.name}
             className="max-w-[1440px] mx-auto flex flex-col md:flex-row bg-gradient-to-r from-[#1C2024] to-[#8B8D98] rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
           >
             <div className="md:w-1/3 p-6 flex flex-col items-center justify-center">
@@ -114,7 +109,6 @@ const TeamMembers = () => {
                 <div className="flex items-center justify-center space-x-2 mb-2">
                   <a
                     href={member.gitHubUrl}
-                    onClick={(e) => handleGitHubClick(member.gitHubUrl, e)}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={`Visit ${member.name}'s GitHub profile`}
