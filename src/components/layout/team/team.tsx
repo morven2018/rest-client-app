@@ -1,8 +1,8 @@
 import Image, { StaticImageData } from 'next/image';
 import React from 'react';
-import alenaImage from '../../../public/team-img/Alena.jpg';
-import igorImage from '../../../public/team-img/Igor.jpg';
-import yuliaImage from '../../../public/team-img/junior.jpg';
+import alenaImage from '../../../../public/team-img/Alena.jpg';
+import igorImage from '../../../../public/team-img/Igor.jpg';
+import yuliaImage from '../../../../public/team-img/junior.jpg';
 
 interface TeamMember {
   name: string;
