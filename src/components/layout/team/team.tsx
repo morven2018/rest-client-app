@@ -91,7 +91,7 @@ const TeamMembers = () => {
         Our Team
       </h2>
       <div className="w-full mx-auto space-y-4">
-        {teamMembers.map((member, index) => (
+        {teamMembers.map((member) => (
           <div
             key={member.name}
             className="max-w-[1440px] mx-auto flex flex-col md:flex-row bg-gradient-to-r from-[#1C2024] to-[#8B8D98] rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
@@ -144,7 +144,7 @@ const TeamMembers = () => {
                 </h3>
                 <div className="text-gray-600 dark:text-gray-300 text-sm space-y-2 text-left">
                   {member.bio.map((line, i) => (
-                    <p key={i}>{line}</p>
+                    <p key={line}>{line.substring(0, 20)}</p>
                   ))}
                 </div>
               </div>
@@ -155,7 +155,10 @@ const TeamMembers = () => {
                 </h3>
                 <ul className="text-gray-600 dark:text-gray-300 text-sm space-y-2">
                   {member.contributions.map((contribution, i) => (
-                    <li key={i} className="flex items-start text-left">
+                    <li
+                      key={contribution.substring(0, 20)}
+                      className="flex items-start text-left"
+                    >
                       <span className="text-green-500 mr-2 mt-1">✓</span>
                       <span>{contribution}</span>
                     </li>
