@@ -32,22 +32,14 @@ export default function HeadersTable({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-11" />
           <TableHead>{t('headerKey')}</TableHead>
           <TableHead>{t('headerValue')}</TableHead>
+          <TableHead className="w-11" />
         </TableRow>
       </TableHeader>
       <TableBody>
         {headers.map((header, index) => (
           <TableRow key={index}>
-            <TableCell className="px-2 py-3">
-              <Button
-                className="cursor-pointer"
-                onClick={() => onRemove(index)}
-              >
-                <Trash className="w-7 h-7" />
-              </Button>
-            </TableCell>
             <TableCell>
               <Input
                 value={header.key}
@@ -61,6 +53,14 @@ export default function HeadersTable({
                 onChange={(e) => onUpdate(index, 'value', e.target.value)}
                 placeholder="value"
               />
+            </TableCell>
+            <TableCell className="px-2 py-3">
+              <Button
+                className="cursor-pointer"
+                onClick={() => onRemove(index)}
+              >
+                <Trash className="w-7 h-7" />
+              </Button>
             </TableCell>
           </TableRow>
         ))}

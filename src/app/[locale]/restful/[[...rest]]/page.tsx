@@ -126,21 +126,13 @@ export default function RestfulPage() {
             requestData={requestData}
             onRequestDataChange={handleRequestDataChange}
           />
-
           <SectionHeaders
             headers={requestData.headers}
             onHeadersChange={(headers) => handleRequestDataChange({ headers })}
           />
-
-          <section className="px-6">
-            <SectionCode />
-          </section>
-          <section className="px-6">
-            <SectionBody />
-          </section>
-          <section className="px-6">
-            <SectionResponse />
-          </section>
+          <SectionCode />
+          <SectionBody />
+          <SectionResponse />
         </div>
       </div>
     </main>

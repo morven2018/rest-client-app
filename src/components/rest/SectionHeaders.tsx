@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import HeadersTable from './HeadersTable';
 import { useTranslations } from 'next-intl';
 import type { Header } from '@/app/[locale]/restful/[[...rest]]/page';
+import { Plus } from 'lucide-react';
 
 interface SectionHeadersProps {
   headers: Header[];
@@ -41,7 +42,7 @@ export default function SectionHeaders({
           onClick={addHeader}
           className="cursor-pointer"
         >
-          {t('buttonAddHeader')}
+          <Plus />
         </Button>
       </div>
       <div>
