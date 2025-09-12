@@ -1,5 +1,6 @@
 'use client';
 import NavMenu from './nav-menu';
+import { UserMenu } from './user-menu';
 
 import {
   Sidebar,
@@ -18,6 +19,7 @@ export default function CustomSidebar({
           <Sidebar collapsible="icon" {...props} className="h-min">
             <SidebarContent>
               <NavMenu />
+              <UserMenu />
             </SidebarContent>
           </Sidebar>
         </SidebarProvider>

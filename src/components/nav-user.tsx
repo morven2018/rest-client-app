@@ -1,4 +1,5 @@
-'use client';
+"use client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import {
   BadgeCheck,
@@ -9,7 +10,6 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,13 +28,13 @@ import {
 
 export function NavUser({
   user,
-}: {
+}: Readonly<{
   user: {
     name: string;
     email: string;
     avatar: string;
   };
-}) {
+}>) {
   const { isMobile } = useSidebar();
 
   return (

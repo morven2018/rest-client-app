@@ -94,5 +94,16 @@
     "codeButton": "Generate code",
     "bodyTitle": "Body",
     "responseTitle": "Response"
+  },
+  "user-menu": {
+    "update": "Update account",
+    "logout": "Log out"
+  },
+  "update": {
+    "name-placeholder": "User name",
+    "avatar-placeholder": "Load avatar...",
+    "btn": "Update",
+    "name": "User name",
+    "avatar": "Avatar"
   }
 }
