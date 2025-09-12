@@ -85,11 +85,16 @@ function SidebarProvider({
         event.preventDefault();
         toggleSidebar();
       }
+
+      if (event.key === 'Escape' && open) {
+        event.preventDefault();
+        setOpen(false);
+      }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [toggleSidebar]);
+  }, [toggleSidebar, open, setOpen]);
 
   const state: 'expanded' | 'collapsed' = open ? 'expanded' : 'collapsed';
 
@@ -132,7 +137,6 @@ function SidebarProvider({
     </SidebarContext.Provider>
   );
 }
-
 function Sidebar({
   side = 'left',
   variant = 'sidebar',
@@ -145,16 +149,17 @@ function Sidebar({
   variant?: 'sidebar' | 'floating' | 'inset';
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
-  const { state } = useSidebar();
+  const { state, setOpen } = useSidebar();
 
   if (collapsible === 'none') {
     return (
       <div
         data-slot="sidebar"
         className={cn(
-          'bg-sidebar text-sidebar-foreground flex h-full w-(--sidebar-width) flex-col',
+          'bg-sidebar text-sidebar-foreground flex h-full flex-col',
           className
         )}
+        style={{ width: 'var(--sidebar-width)' }}
         {...props}
       >
         {children}
@@ -163,52 +168,62 @@ function Sidebar({
   }
 
   return (
-    <div
-      className="group peer text-sidebar-foreground"
-      data-state={state}
-      data-collapsible={state === 'collapsed' ? collapsible : ''}
-      data-variant={variant}
-      data-side={side}
-      data-slot="sidebar"
-    >
+    <>
       <div
-        data-slot="sidebar-gap"
         className={cn(
-          'relative w-(--sidebar-width) bg-transparent transition-[width] duration-200 ease-linear',
-          'group-data-[collapsible=offcanvas]:w-0',
-          'group-data-[side=right]:rotate-180',
-          variant === 'floating' || variant === 'inset'
-            ? 'group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4)))]'
-            : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon)'
+          'hidden min-[900px]:block relative transition-all duration-200 ease-linear',
+          state === 'expanded'
+            ? 'w-[var(--sidebar-width)]'
+            : 'w-[var(--sidebar-width-icon)]'
         )}
       />
+
+      <div
+        className={cn(
+          'fixed top-[var(--header-height)] left-0 z-40 h-[calc(100vh-var(--header-height)-var(--footer-height))] w-5',
+          'max-[900px]:block min-[900px]:hidden',
+          'opacity-0 hover:opacity-100 transition-opacity'
+        )}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      />
+
       <div
         data-slot="sidebar-container"
         className={cn(
-          'fixed top-[var(--header-height)] z-10 hidden w-(--sidebar-width) transition-[left,right,width] duration-200 ease-linear md:flex',
+          'fixed top-[var(--header-height)] transition-all duration-200 ease-linear',
+
           'h-[calc(100vh-var(--header-height)-var(--footer-height))]',
-          side === 'left'
-            ? 'left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)]'
-            : 'right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)]',
-          variant === 'floating' || variant === 'inset'
-            ? 'p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]'
-            : 'group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l',
+          'min-[900px]:w-[var(--sidebar-width)] min-[900px]:left-0',
+
+          'max-[900px]:w-[var(--sidebar-width)] max-[900px]:left-0 max-[900px]:transform',
+          'max-[900px]:data-[state=collapsed]:translate-x-[-100%]',
+          'max-[900px]:data-[state=expanded]:translate-x-0 max-[900px]:data-[state=expanded]:z-50',
+
+          variant === 'floating' &&
+            'rounded-r-lg border border-sidebar-border shadow-sm',
+          variant === 'inset' && 'p-2',
+          'border-r',
+
           className
         )}
+        data-state={state}
+        data-collapsible={state === 'collapsed' ? collapsible : ''}
+        data-variant={variant}
+        data-side={side}
         {...props}
       >
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm"
+          className="bg-sidebar flex h-full w-full flex-col"
         >
           {children}
         </div>
       </div>
-    </div>
+    </>
   );
 }
-
 function SidebarTrigger({
   className,
   onClick,

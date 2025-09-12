@@ -13,7 +13,7 @@ export default function CustomSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   return (
     <div className="flex flex-row min-h-100">
-      <div className="bg-red-500 relative">
+      <div>
         <SidebarProvider>
           <Sidebar collapsible="icon" {...props} className="h-min">
             <SidebarContent>

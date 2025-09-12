@@ -129,6 +129,9 @@
   top: var(--header-height);
   height: calc(100vh - var(--header-height) - var(--footer-height));
   z-index: 40;
+  transition:
+    width 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 @media (max-width: 900px) {
@@ -142,15 +145,17 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   }
 
+  /* Скрываем текст и элементы в свернутом состоянии */
   [data-slot='sidebar-container'] [data-sidebar='group-label'],
   [data-slot='sidebar-container'] [data-sidebar='menu-button'] span,
   [data-slot='sidebar-container'] [data-sidebar='menu-badge'],
   [data-slot='sidebar-container'] [data-sidebar='group-action'] {
     opacity: 0;
-    transition: opacity 150ms ease-in-out;
+    transition: opacity 0.15s ease-in-out;
     pointer-events: none;
   }
 
+  /* Показываем при наведении */
   [data-slot='sidebar']:hover [data-sidebar='group-label'],
   [data-slot='sidebar']:hover [data-sidebar='menu-button'] span,
   [data-slot='sidebar']:hover [data-sidebar='menu-badge'],
@@ -160,11 +165,13 @@
   }
 }
 
+/* Для экранов от 901px (десктоп) */
 @media (min-width: 901px) {
   [data-slot='sidebar-container'] {
     width: var(--sidebar-width) !important;
   }
 
+  /* Только для icon-режима на десктопе */
   [data-collapsible='icon'] [data-slot='sidebar-container'] {
     width: var(--sidebar-width-icon) !important;
   }
@@ -173,8 +180,6 @@
     [data-slot='sidebar']:hover
     [data-slot='sidebar-container'] {
     width: var(--sidebar-width) !important;
-    z-index: 50;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   }
 
   [data-collapsible='icon'] [data-sidebar='group-label'],
@@ -182,7 +187,7 @@
   [data-collapsible='icon'] [data-sidebar='menu-badge'],
   [data-collapsible='icon'] [data-sidebar='group-action'] {
     opacity: 0;
-    transition: opacity 150ms ease-in-out;
+    transition: opacity 0.15s ease-in-out;
     pointer-events: none;
   }
 

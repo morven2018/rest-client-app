@@ -4,9 +4,9 @@ import Heading from '@/components/layout/breadcrumb-and-heading/heading';
 export default function VariablesPage() {
   return (
     <main>
-      <CustomSidebar>
+      <CustomSidebar className="min-h-150">
         <Heading>
-          <div>This is Variables page</div>
+          <div className="min-h-150">This is Variables page</div>
         </Heading>
       </CustomSidebar>
     </main>

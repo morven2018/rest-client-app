@@ -1,5 +1,6 @@
+'use client';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useEnvVariables } from '@/hooks/use-env-variables';
 import { Link, useRouter } from '@/i18n/navigation';
 
@@ -22,9 +23,27 @@ import {
 export default function NavMenu() {
   const { getEnv, addEnv } = useEnvVariables();
   const [isVariablesExpanded, setIsVariablesExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const envList = getEnv();
   const t = useTranslations('Sidebar');
   const router = useRouter();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile && isVariablesExpanded) {
+      setIsVariablesExpanded(false);
+    }
+  }, [isMobile, isVariablesExpanded]);
 
   const handleAddEnv = () => {
     let newEnvName = 'new-environment';
@@ -39,11 +58,20 @@ export default function NavMenu() {
 
     router.push(`/variables/${newEnvName}`);
   };
+
+  const handleVariablesClick = () => {
+    if (window.innerWidth < 900) {
+      router.push('/variables');
+    } else {
+      setIsVariablesExpanded(!isVariablesExpanded);
+    }
+  };
+
   return (
     <>
       <SidebarMenuItem>
         <SidebarMenuButton asChild>
-          <Link href="/restful">
+          <Link href="/restful" title={t('rest')}>
             <SquareTerminal />
             <span>{t('rest')}</span>
           </Link>
@@ -52,7 +80,7 @@ export default function NavMenu() {
 
       <SidebarMenuItem>
         <SidebarMenuButton asChild>
-          <Link href="/history-and-analytics">
+          <Link href="/history-and-analytics" title={t('history')}>
             <BookOpen />
             <span>{t('history')}</span>
           </Link>
@@ -62,7 +90,8 @@ export default function NavMenu() {
       <SidebarMenuItem>
         <SidebarMenuButton
           isActive={isVariablesExpanded}
-          onClick={() => setIsVariablesExpanded(!isVariablesExpanded)}
+          onClick={handleVariablesClick}
+          title={t('variables')}
         >
           <Settings2 />
           <span>{t('variables')}</span>
