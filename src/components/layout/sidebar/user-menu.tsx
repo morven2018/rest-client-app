@@ -1,12 +1,12 @@
-"use client";
-import { LogOut, Settings, User } from "lucide-react";
-import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
-import { UpdateAccountForm } from "../form/update-account-form";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useAuth } from "@/context/auth/auth-context";
-import { useLogout } from "@/hooks/use-logout";
-import { Link } from "@/i18n/navigation";
+'use client';
+import { LogOut, Settings, User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import { UpdateAccountForm } from '../form/update-account-form';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuth } from '@/context/auth/auth-context';
+import { useLogout } from '@/hooks/use-logout';
+import { Link } from '@/i18n/navigation';
 
 import {
   Dialog,
@@ -85,7 +85,7 @@ export function UserMenu() {
     return (
       <div className="flex items-center justify-center w-11.5">
         <div className="flex flex-col items-center gap-4">
-          <Link href="/profile">
+          <Link href="/profile" title={t('profile')}>
             <Avatar className="h-8 w-8 rounded-lg">
               {avatarUrl ? (
                 <AvatarImage

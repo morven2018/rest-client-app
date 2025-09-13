@@ -97,7 +97,8 @@
   },
   "user-menu": {
     "update": "Update account",
-    "logout": "Log out"
+    "logout": "Log out",
+    "profile": "Update account"
   },
   "update": {
     "name-placeholder": "User name",
