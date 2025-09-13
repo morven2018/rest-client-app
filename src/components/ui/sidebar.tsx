@@ -126,7 +126,7 @@ function SidebarProvider({
             } as React.CSSProperties
           }
           className={cn(
-            'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-0 w-full',
+            'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-0',
             className
           )}
           {...props}
@@ -168,32 +168,12 @@ function Sidebar({
   }
 
   return (
-    <>
-      <div
-        className={cn(
-          'hidden min-[900px]:block relative transition-all duration-200 ease-linear',
-          state === 'expanded'
-            ? 'w-[var(--sidebar-width)]'
-            : 'w-[var(--sidebar-width-icon)]'
-        )}
-      />
-
-      <div
-        className={cn(
-          'fixed top-[var(--header-height)] left-0 z-40 h-[calc(100vh-var(--header-height)-var(--footer-height))] w-5',
-          'max-[900px]:block min-[900px]:hidden',
-          'opacity-0 hover:opacity-100 transition-opacity'
-        )}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
-      />
-
+    <div className="sticky top-24">
       <div
         data-slot="sidebar-container"
         className={cn(
-          'fixed top-[var(--header-height)] transition-all duration-200 ease-linear',
+          'transition-all duration-200 ease-linear  h-full',
 
-          'h-[calc(100vh-var(--header-height)-var(--footer-height))]',
           'min-[900px]:w-[var(--sidebar-width)] min-[900px]:left-0',
 
           'max-[900px]:w-[var(--sidebar-width)] max-[900px]:left-0 max-[900px]:transform',
@@ -216,12 +196,12 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="bg-sidebar flex h-full w-full flex-col"
+          className="bg-sidebar flex h-auto w-full flex-col"
         >
           {children}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 function SidebarTrigger({
@@ -345,7 +325,7 @@ function SidebarContent({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="sidebar-content"
       data-sidebar="content"
       className={cn(
-        'flex min-h-0 flex-1 flex-col gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
+        'flex flex-col h-auto gap-2 overflow-auto group-data-[collapsible=icon]:overflow-hidden',
         className
       )}
       {...props}

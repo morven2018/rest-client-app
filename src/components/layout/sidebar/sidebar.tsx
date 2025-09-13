@@ -13,17 +13,20 @@ export default function CustomSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <div className="flex flex-row min-h-100">
-      <div>
-        <SidebarProvider>
-          <Sidebar collapsible="icon" {...props} className="h-min">
-            <SidebarContent>
-              <NavMenu />
-              <UserMenu />
-            </SidebarContent>
-          </Sidebar>
-        </SidebarProvider>
-      </div>
+    <div className="flex min-h-screen">
+      <SidebarProvider>
+        <Sidebar
+          collapsible="icon"
+          {...props}
+          className="h-screen sticky top-0"
+        >
+          <SidebarContent className="flex flex-col h-full">
+            <NavMenu />
+
+            <UserMenu />
+          </SidebarContent>
+        </Sidebar>
+      </SidebarProvider>
       <div className="flex-1">{children}</div>
     </div>
   );
