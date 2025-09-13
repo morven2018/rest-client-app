@@ -83,7 +83,7 @@ export function UserMenu() {
 
   if (isMobile) {
     return (
-      <div className="flex items-center justify-between w-fill">
+      <div className="flex items-center justify-center w-11.5">
         <div className="flex flex-col items-center gap-2">
           <Link href="/profile">
             <Avatar className="h-8 w-8 rounded-lg">
@@ -102,7 +102,7 @@ export function UserMenu() {
 
           <button
             onClick={handleLogout}
-            className="p-2 hover:bg-accent rounded-lg transition-colors"
+            className="p-2 hover:bg-violet-950 rounded-lg transition-colors bg-black text-white dark:text-black dark:bg-white dark:hover:text-violet-900"
             title={t('logout')}
           >
             <LogOut className="h-4 w-4" />

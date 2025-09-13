@@ -19,7 +19,7 @@ import {
 const SIDEBAR_COOKIE_NAME = 'sidebar_state';
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
 const SIDEBAR_WIDTH = '16rem';
-const SIDEBAR_WIDTH_ICON = '3rem';
+const SIDEBAR_WIDTH_ICON = '5rem';
 const SIDEBAR_KEYBOARD_SHORTCUT = 'b';
 
 type SidebarContextProps = {
@@ -196,7 +196,7 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="bg-sidebar flex h-auto w-full flex-col"
+          className="bg-sidebar flex h-auto w-full flex-col border border-neutral-200 rounded-lg dark:bg-neutral-600 dark:border-gray-400 p-2"
         >
           {children}
         </div>
