@@ -35,6 +35,18 @@ export function UserMenu() {
   const { handleLogout } = useLogout();
   const [avatarUrl, setAvatarUrl] = useState<string>('');
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const fetchAvatar = async () => {
@@ -68,6 +80,37 @@ export function UserMenu() {
 
   const displayName = currentUser.displayName || currentUser.email || 'User';
   const email = currentUser.email || '';
+
+  if (isMobile) {
+    return (
+      <div className="flex items-center justify-between w-fill">
+        <div className="flex flex-col items-center gap-2">
+          <Link href="/profile">
+            <Avatar className="h-8 w-8 rounded-lg">
+              {avatarUrl ? (
+                <AvatarImage
+                  src={avatarUrl.replaceAll('"', '')}
+                  alt={displayName}
+                />
+              ) : (
+                <AvatarFallback className="rounded-lg">
+                  <User className="h-4 w-4" />
+                </AvatarFallback>
+              )}
+            </Avatar>
+          </Link>
+
+          <button
+            onClick={handleLogout}
+            className="p-2 hover:bg-accent rounded-lg transition-colors"
+            title={t('logout')}
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

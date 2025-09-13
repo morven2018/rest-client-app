@@ -23,7 +23,9 @@ export default function CustomSidebar({
           <SidebarContent className="flex flex-col h-full">
             <NavMenu />
 
-            <UserMenu />
+            <div>
+              <UserMenu />
+            </div>
           </SidebarContent>
         </Sidebar>
       </SidebarProvider>

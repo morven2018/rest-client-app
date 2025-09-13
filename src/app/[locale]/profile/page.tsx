@@ -15,7 +15,7 @@ export default function ProfilePage() {
 
   return (
     <AuthWrapper>
-      <div className="container mx-auto py-8 max-w-md">
+      <main className="container mx-auto py-8 max-w-md">
         <div className="flex items-center mb-6">
           <Button variant="ghost" size="icon" asChild>
             <Link href="/">
@@ -25,7 +25,7 @@ export default function ProfilePage() {
           <h1 className="text-2xl font-bold ml-2">{'title'}</h1>
           <UpdateAccountForm onSuccess={handleSuccess} />
         </div>
-      </div>
+      </main>
     </AuthWrapper>
   );
 }
