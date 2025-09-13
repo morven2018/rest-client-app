@@ -21,7 +21,9 @@ export interface AuthContextType {
   logout: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
   loading: boolean;
+  getTimeSinceSignUp: () => number;
 }
+
 export const AuthContext = createContext<AuthContextType>(
   {} as AuthContextType
 );
