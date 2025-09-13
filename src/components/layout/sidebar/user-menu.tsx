@@ -1,5 +1,4 @@
 'use client';
-import ReactDOM from 'react-dom';
 import { LogOut, Settings, User } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
@@ -7,6 +6,7 @@ import { UpdateAccountForm } from '../form/update-account-form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/context/auth/auth-context';
 import { useLogout } from '@/hooks/use-logout';
+import { Link } from '@/i18n/navigation';
 
 import {
   Dialog,
@@ -53,6 +53,14 @@ export function UserMenu() {
 
     fetchAvatar();
   }, [currentUser, getAvatar]);
+
+  const handleDialogOpen = () => {
+    setIsUpdateDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsUpdateDialogOpen(false);
+  };
 
   if (!currentUser) {
     return null;
@@ -119,9 +127,11 @@ export function UserMenu() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setIsUpdateDialogOpen(true)}>
-                <Settings className="mr-2 h-4 w-4" />
-                {t('update')}
+              <DropdownMenuItem asChild>
+                <Link href="/profile">
+                  <Settings className="mr-2 h-4 w-4" />
+                  {t('update')}
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>
@@ -133,23 +143,23 @@ export function UserMenu() {
         </SidebarMenuItem>
       </SidebarMenu>
 
-      {isUpdateDialogOpen &&
-        ReactDOM.createPortal(
-          <Dialog
-            open={isUpdateDialogOpen}
-            onOpenChange={setIsUpdateDialogOpen}
-          >
-            <DialogContent className="max-w-md mx-auto">
-              <DialogTitle>{t('update')}</DialogTitle>
-              <DialogDescription>'updateDescription'</DialogDescription>
+      <Dialog
+        open={isUpdateDialogOpen}
+        onOpenChange={(open) =>
+          open ? handleDialogOpen() : handleDialogClose()
+        }
+      >
+        <DialogContent className="max-w-md mx-auto">
+          <DialogTitle>{t('update')}</DialogTitle>
+          <DialogDescription>updateDescription</DialogDescription>
 
-              <UpdateAccountForm
-                onSuccess={() => setIsUpdateDialogOpen(false)}
-              />
-            </DialogContent>
-          </Dialog>,
-          document.body
-        )}
+          <UpdateAccountForm
+            onSuccess={() => {
+              setIsUpdateDialogOpen(false);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
