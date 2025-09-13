@@ -108,7 +108,7 @@ export default function NavMenu() {
         <Link
           href="/variables"
           title={t('variables')}
-          className={`p-2 flex self-center ${isVariablesActive ? 'text-violet-700 dark:text-violet-200' : ''}`}
+          className={`p-2 flex self-center ${isVariablesActive || pathname.includes('variable') ? 'text-violet-700 dark:text-violet-200' : ''}`}
         >
           <Settings2 width="16" />
         </Link>
@@ -169,9 +169,9 @@ export default function NavMenu() {
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
                 onClick={handleAddEnv}
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+                className="flex items-center gap-2 bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-800 dark:hover:bg-neutral-900"
               >
-                New Environment
+                + New Environment
               </SidebarMenuSubButton>
             </SidebarMenuSubItem>
           </SidebarMenuSub>
