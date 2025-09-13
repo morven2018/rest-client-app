@@ -1,9 +1,20 @@
 'use client';
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { RequestDocument, RequestsContext } from './requests-context';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useAuth } from '@/context/auth/auth-context';
 import { db } from '@/firebase/config';
-import { RequestData, useRequestHistory } from '@/hooks/use-request';
+import { useRequestHistory } from '@/hooks/use-request';
+
+import {
+  RequestDocument,
+  RequestsContext,
+  RequestsContextType,
+} from './requests-context';
 
 import {
   collection,
@@ -18,21 +29,6 @@ import {
   QueryDocumentSnapshot,
   doc,
 } from 'firebase/firestore';
-
-export interface Request {
-  method: RequestData['method'];
-  path: string;
-  url_with_vars: string;
-  status: RequestData['status'];
-  code: number;
-  duration: number;
-  requestWeight: string;
-  responseWeight: string;
-  response: string;
-  headers: Record<string, string>;
-  body?: string;
-  variables?: Record<string, Record<string, string>>;
-}
 
 interface RequestsProviderProps {
   children: ReactNode;
@@ -53,18 +49,11 @@ export const RequestsProvider: React.FC<RequestsProviderProps> = ({
   const [hasMore, setHasMore] = useState(true);
 
   const {
-    saveApiRequest: originalSaveApiRequest,
+    saveApiRequest,
     updateRequest,
     updateRequestStatus,
     updateRequestResponse,
   } = useRequestHistory();
-
-  const saveApiRequest = useCallback(
-    async (request: Request): Promise<string | null> => {
-      return originalSaveApiRequest(request);
-    },
-    [originalSaveApiRequest]
-  );
 
   const getRequests = useCallback(
     async (itemsPerPage: number = 20) => {
@@ -205,7 +194,7 @@ export const RequestsProvider: React.FC<RequestsProviderProps> = ({
   );
 
   const getRequestsByStatus = useCallback(
-    async (status: RequestData['status'], itemsPerPage: number = 20) => {
+    async (status: string, itemsPerPage: number = 20) => {
       if (!currentUser) {
         setError('User not authenticated');
         return [];
@@ -251,7 +240,7 @@ export const RequestsProvider: React.FC<RequestsProviderProps> = ({
   );
 
   const getRequestsByMethod = useCallback(
-    async (method: RequestData['method'], itemsPerPage: number = 20) => {
+    async (method: string, itemsPerPage: number = 20) => {
       if (!currentUser) {
         setError('User not authenticated');
         return [];
@@ -312,24 +301,44 @@ export const RequestsProvider: React.FC<RequestsProviderProps> = ({
     }
   }, [currentUser, getRequests, requests.length]);
 
-  const value = {
-    requests,
-    currentRequest,
-    loading,
-    error,
-    hasMore,
-    saveApiRequest,
-    updateRequest,
-    updateRequestStatus,
-    updateRequestResponse,
-    getRequests,
-    getRequestById,
-    loadMoreRequests,
-    getRequestsByStatus,
-    getRequestsByMethod,
-    clearRequests,
-    refetch,
-  };
+  const value: RequestsContextType = useMemo(
+    () => ({
+      requests,
+      currentRequest,
+      loading,
+      error,
+      hasMore,
+      saveApiRequest,
+      updateRequest,
+      updateRequestStatus,
+      updateRequestResponse,
+      getRequests,
+      getRequestById,
+      loadMoreRequests,
+      getRequestsByStatus,
+      getRequestsByMethod,
+      clearRequests,
+      refetch,
+    }),
+    [
+      requests,
+      currentRequest,
+      loading,
+      error,
+      hasMore,
+      saveApiRequest,
+      updateRequest,
+      updateRequestStatus,
+      updateRequestResponse,
+      getRequests,
+      getRequestById,
+      loadMoreRequests,
+      getRequestsByStatus,
+      getRequestsByMethod,
+      clearRequests,
+      refetch,
+    ]
+  );
 
   return (
     <RequestsContext.Provider value={value}>

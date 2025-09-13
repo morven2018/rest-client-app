@@ -24,7 +24,7 @@ export interface Request {
   variables?: Record<string, Record<string, string>>;
 }
 
-interface RequestsContextType {
+export interface RequestsContextType {
   requests: RequestDocument[];
   currentRequest: RequestDocument | null;
   loading: boolean;
