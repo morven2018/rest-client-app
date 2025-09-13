@@ -53,12 +53,9 @@ export interface RequestsContextType {
   getRequests: (itemsPerPage?: number) => Promise<RequestDocument[]>;
   getRequestById: (requestId: string) => Promise<RequestDocument | null>;
   loadMoreRequests: (itemsPerPage?: number) => Promise<RequestDocument[]>;
-  getRequestsByStatus: (
-    status: RequestData['status'],
-    itemsPerPage?: number
-  ) => Promise<RequestDocument[]>;
-  getRequestsByMethod: (
-    method: RequestData['method'],
+  getRequestsWithFilter: (
+    field: string,
+    value: string,
     itemsPerPage?: number
   ) => Promise<RequestDocument[]>;
 

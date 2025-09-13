@@ -1,4 +1,8 @@
 'use client';
+import { useAuth } from '@/context/auth/auth-context';
+import { db } from '@/firebase/config';
+import { useRequestHistory } from '@/hooks/use-request';
+
 import React, {
   ReactNode,
   useCallback,
@@ -6,9 +10,6 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { useAuth } from '@/context/auth/auth-context';
-import { db } from '@/firebase/config';
-import { useRequestHistory } from '@/hooks/use-request';
 
 import {
   RequestDocument,
@@ -193,8 +194,8 @@ export const RequestsProvider: React.FC<RequestsProviderProps> = ({
     [currentUser]
   );
 
-  const getRequestsByStatus = useCallback(
-    async (status: string, itemsPerPage: number = 20) => {
+  const getRequestsWithFilter = useCallback(
+    async (field: string, value: string, itemsPerPage: number = 20) => {
       if (!currentUser) {
         setError('User not authenticated');
         return [];
@@ -212,7 +213,7 @@ export const RequestsProvider: React.FC<RequestsProviderProps> = ({
         );
         const q = query(
           requestsRef,
-          where('status', '==', status),
+          where(field, '==', value),
           orderBy('createdAt', 'desc'),
           limit(itemsPerPage)
         );
@@ -229,53 +230,7 @@ export const RequestsProvider: React.FC<RequestsProviderProps> = ({
         const errorMessage =
           err instanceof Error
             ? err.message
-            : 'Failed to fetch requests by status';
-        setError(errorMessage);
-        return [];
-      } finally {
-        setLoading(false);
-      }
-    },
-    [currentUser]
-  );
-
-  const getRequestsByMethod = useCallback(
-    async (method: string, itemsPerPage: number = 20) => {
-      if (!currentUser) {
-        setError('User not authenticated');
-        return [];
-      }
-
-      setLoading(true);
-      setError(null);
-
-      try {
-        const requestsRef = collection(
-          db,
-          'users',
-          currentUser.uid,
-          'requests'
-        );
-        const q = query(
-          requestsRef,
-          where('method', '==', method),
-          orderBy('createdAt', 'desc'),
-          limit(itemsPerPage)
-        );
-
-        const querySnapshot = await getDocs(q);
-        const requestsData: RequestDocument[] = [];
-
-        querySnapshot.forEach((doc) => {
-          requestsData.push({ id: doc.id, ...doc.data() } as RequestDocument);
-        });
-
-        return requestsData;
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error
-            ? err.message
-            : 'Failed to fetch requests by method';
+            : `Failed to fetch requests by ${field}`;
         setError(errorMessage);
         return [];
       } finally {
@@ -315,8 +270,7 @@ export const RequestsProvider: React.FC<RequestsProviderProps> = ({
       getRequests,
       getRequestById,
       loadMoreRequests,
-      getRequestsByStatus,
-      getRequestsByMethod,
+      getRequestsWithFilter,
       clearRequests,
       refetch,
     }),
@@ -333,8 +287,7 @@ export const RequestsProvider: React.FC<RequestsProviderProps> = ({
       getRequests,
       getRequestById,
       loadMoreRequests,
-      getRequestsByStatus,
-      getRequestsByMethod,
+      getRequestsWithFilter,
       clearRequests,
       refetch,
     ]
