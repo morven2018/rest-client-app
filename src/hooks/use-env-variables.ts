@@ -12,7 +12,6 @@ export const useEnvVariables = () => {
   const [variables, setVariables] = useState<VariablesData>({});
   const [loading, setLoading] = useState(true);
 
-  // Загрузка данных из LocalStorage
   useEffect(() => {
     const loadFromStorage = () => {
       try {
@@ -29,25 +28,20 @@ export const useEnvVariables = () => {
 
     loadFromStorage();
   }, []);
-
-  // Сохранение в LocalStorage при изменении
   useEffect(() => {
     if (!loading) {
       localStorage.setItem('variables', JSON.stringify(variables));
     }
   }, [variables, loading]);
 
-  // Получить все окружения
   const getEnv = (): string[] => {
     return Object.keys(variables);
   };
 
-  // Получить переменные конкретного окружения
   const getEnvVariables = (envName: string): EnvVariables => {
     return variables[envName] || {};
   };
 
-  // Добавить новое окружение
   const addEnv = (envName: string, initialVariables: EnvVariables = {}) => {
     setVariables((prev) => ({
       ...prev,
@@ -55,7 +49,6 @@ export const useEnvVariables = () => {
     }));
   };
 
-  // Удалить окружение целиком
   const removeEnv = (envName: string) => {
     setVariables((prev) => {
       const newVars = { ...prev };
@@ -64,7 +57,6 @@ export const useEnvVariables = () => {
     });
   };
 
-  // Добавить/изменить переменную в окружении
   const setVariable = (envName: string, varName: string, value: string) => {
     setVariables((prev) => ({
       ...prev,
@@ -75,7 +67,6 @@ export const useEnvVariables = () => {
     }));
   };
 
-  // Удалить переменную из окружения
   const removeVariable = (envName: string, varName: string) => {
     setVariables((prev) => {
       if (!prev[envName]) return prev;
@@ -90,7 +81,6 @@ export const useEnvVariables = () => {
     });
   };
 
-  // Переименовать окружение
   const renameEnv = (oldName: string, newName: string) => {
     setVariables((prev) => {
       if (!prev[oldName]) return prev;
@@ -103,7 +93,6 @@ export const useEnvVariables = () => {
     });
   };
 
-  // Очистить все переменные окружения
   const clearEnv = (envName: string) => {
     setVariables((prev) => ({
       ...prev,
@@ -111,12 +100,10 @@ export const useEnvVariables = () => {
     }));
   };
 
-  // Проверить существует ли окружение
   const environmentExists = (envName: string): boolean => {
     return envName in variables;
   };
 
-  // Проверить существует ли переменная в окружении
   const variableExists = (envName: string, varName: string): boolean => {
     return variables[envName]?.[varName] !== undefined;
   };

@@ -145,7 +145,6 @@
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
   }
 
-  /* Скрываем текст и элементы в свернутом состоянии */
   [data-slot='sidebar-container'] [data-sidebar='group-label'],
   [data-slot='sidebar-container'] [data-sidebar='menu-button'] span,
   [data-slot='sidebar-container'] [data-sidebar='menu-badge'],
@@ -155,7 +154,6 @@
     pointer-events: none;
   }
 
-  /* Показываем при наведении */
   [data-slot='sidebar']:hover [data-sidebar='group-label'],
   [data-slot='sidebar']:hover [data-sidebar='menu-button'] span,
   [data-slot='sidebar']:hover [data-sidebar='menu-badge'],
@@ -165,13 +163,11 @@
   }
 }
 
-/* Для экранов от 901px (десктоп) */
 @media (min-width: 901px) {
   [data-slot='sidebar-container'] {
     width: var(--sidebar-width) !important;
   }
 
-  /* Только для icon-режима на десктопе */
   [data-collapsible='icon'] [data-slot='sidebar-container'] {
     width: var(--sidebar-width-icon) !important;
   }

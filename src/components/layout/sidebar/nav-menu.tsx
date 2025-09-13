@@ -60,12 +60,42 @@ export default function NavMenu() {
   };
 
   const handleVariablesClick = () => {
-    if (window.innerWidth < 900) {
+    if (isMobile) {
       router.push('/variables');
     } else {
       setIsVariablesExpanded(!isVariablesExpanded);
     }
   };
+
+  if (isMobile) {
+    return (
+      <>
+        <Link
+          href="/restful"
+          title={t('rest')}
+          className="p-2 flex self-center"
+        >
+          <SquareTerminal width="16" />
+        </Link>
+
+        <Link
+          href="/history-and-analytics"
+          title={t('history')}
+          className="p-2 flex self-center"
+        >
+          <BookOpen width="16" />
+        </Link>
+
+        <Link
+          href="/variables"
+          title={t('variables')}
+          className="p-2 flex self-center"
+        >
+          <Settings2 width="16" />
+        </Link>
+      </>
+    );
+  }
 
   return (
     <>
