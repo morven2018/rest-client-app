@@ -107,5 +107,9 @@
     "name": "User name",
     "avatar": "Avatar"
   },
-  "profile": { "success": "success" }
+  "profile": {
+    "success": "success",
+    "title": "Update Info",
+    "home-btn": "To home page"
+  }
 }

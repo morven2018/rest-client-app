@@ -107,5 +107,9 @@
     "name": "Имя",
     "avatar": "Аватар"
   },
-  "profile": { "success": "success" }
+  "profile": {
+    "success": "success",
+    "title": "Обновить данные",
+    "home-btn": "На домашнюю страницу"
+  }
 }
