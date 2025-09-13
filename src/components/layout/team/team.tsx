@@ -154,7 +154,7 @@ const TeamMembers = () => {
                   Contributions
                 </h3>
                 <ul className="text-gray-600 dark:text-gray-300 text-sm space-y-2">
-                  {member.contributions.map((contribution, i) => (
+                  {member.contributions.map((contribution) => (
                     <li
                       key={contribution.substring(0, 20)}
                       className="flex items-start text-left"

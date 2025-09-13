@@ -10,11 +10,6 @@ import { toastError } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 import { useAuthForm } from '@/hooks/use-auth-form';
 
-interface UpdateAccountFormData {
-  username?: string;
-  avatar?: File;
-}
-
 interface UpdateAccountFormProps {
   onSuccess?: () => void;
 }

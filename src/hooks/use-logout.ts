@@ -10,7 +10,7 @@ export const useLogout = () => {
   const router = useRouter();
   const { toastError, toastSuccess } = useToast();
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await logout();
       toastSuccess(t('success'));
@@ -32,7 +32,7 @@ export const useLogout = () => {
         });
       }
     }
-  };
+  });
 
   const handleLogoutSync = useCallback((): void => {
     handleLogout().catch((error) => {

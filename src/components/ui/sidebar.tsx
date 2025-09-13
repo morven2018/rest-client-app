@@ -149,7 +149,7 @@ function Sidebar({
   variant?: 'sidebar' | 'floating' | 'inset';
   collapsible?: 'offcanvas' | 'icon' | 'none';
 }) {
-  const { state, setOpen } = useSidebar();
+  const { state } = useSidebar();
 
   if (collapsible === 'none') {
     return (
