@@ -2,7 +2,7 @@
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import { useEnvVariables } from '@/hooks/use-env-variables';
-import { Link, useRouter } from '@/i18n/navigation';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
 
 import {
   ChevronDown,
@@ -27,6 +27,7 @@ export default function NavMenu() {
   const envList = getEnv();
   const t = useTranslations('Sidebar');
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -38,6 +39,12 @@ export default function NavMenu() {
 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
+
+  useEffect(() => {
+    if (pathname.startsWith('/variables/')) {
+      setIsVariablesExpanded(true);
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (isMobile && isVariablesExpanded) {
@@ -67,13 +74,25 @@ export default function NavMenu() {
     }
   };
 
+  const isActivePath = (path: string) => {
+    return pathname === path || pathname.startsWith(path + '/');
+  };
+
+  const isActiveEnv = (env: string) => {
+    const decodedPathname = decodeURIComponent(pathname);
+    const expectedPath = `/variables/${env}`;
+    return decodedPathname === expectedPath;
+  };
+
+  const isVariablesActive = pathname === '/variables';
+
   if (isMobile) {
     return (
       <>
         <Link
           href="/restful"
           title={t('rest')}
-          className="p-2 flex self-center"
+          className={`p-2 flex self-center ${isActivePath('/restful') ? 'text-violet-700 dark:text-violet-200' : ''}`}
         >
           <SquareTerminal width="16" />
         </Link>
@@ -81,7 +100,7 @@ export default function NavMenu() {
         <Link
           href="/history-and-analytics"
           title={t('history')}
-          className="p-2 flex self-center"
+          className={`p-2 flex self-center ${isActivePath('/history-and-analytics') ? 'text-violet-700 dark:text-violet-200' : ''}`}
         >
           <BookOpen width="16" />
         </Link>
@@ -89,7 +108,7 @@ export default function NavMenu() {
         <Link
           href="/variables"
           title={t('variables')}
-          className="p-2 flex self-center"
+          className={`p-2 flex self-center ${isVariablesActive ? 'text-violet-700 dark:text-violet-200' : ''}`}
         >
           <Settings2 width="16" />
         </Link>
@@ -100,7 +119,7 @@ export default function NavMenu() {
   return (
     <>
       <SidebarMenuItem>
-        <SidebarMenuButton asChild>
+        <SidebarMenuButton asChild isActive={isActivePath('/restful')}>
           <Link href="/restful" title={t('rest')}>
             <SquareTerminal />
             <span>{t('rest')}</span>
@@ -109,7 +128,10 @@ export default function NavMenu() {
       </SidebarMenuItem>
 
       <SidebarMenuItem>
-        <SidebarMenuButton asChild>
+        <SidebarMenuButton
+          asChild
+          isActive={isActivePath('/history-and-analytics')}
+        >
           <Link href="/history-and-analytics" title={t('history')}>
             <BookOpen />
             <span>{t('history')}</span>
@@ -119,7 +141,7 @@ export default function NavMenu() {
 
       <SidebarMenuItem>
         <SidebarMenuButton
-          isActive={isVariablesExpanded}
+          isActive={isVariablesActive}
           onClick={handleVariablesClick}
           title={t('variables')}
         >
@@ -137,7 +159,7 @@ export default function NavMenu() {
             {!!envList.length &&
               envList.map((env) => (
                 <SidebarMenuSubItem key={env}>
-                  <SidebarMenuSubButton asChild>
+                  <SidebarMenuSubButton asChild isActive={isActiveEnv(env)}>
                     <Link href={`/variables/${env}`}>
                       <span>{env}</span>
                     </Link>
@@ -147,7 +169,7 @@ export default function NavMenu() {
             <SidebarMenuSubItem>
               <SidebarMenuSubButton
                 onClick={handleAddEnv}
-                className="flex items-center gap-2 text-blue-600 hover:text-blue-700"
+                className="flex items-center gap-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
               >
                 New Environment
               </SidebarMenuSubButton>
