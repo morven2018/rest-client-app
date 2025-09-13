@@ -70,7 +70,7 @@
     "logout-btn": "Выйти",
     "user-exist": "Этот email уже используется",
     "error": "При регимистрации возникла ошибка. Ошибка:",
-    "retry-btn": "Повторить",
+    "try-again": "Повторить",
     "password": "Пароль",
     "avatar": "Аватар",
     "name-placeholder": "Введите Ваше имя",
@@ -105,5 +105,6 @@
     "btn": "Update",
     "name": "User name",
     "avatar": "Avatar"
-  }
+  },
+  "profile": { "success": "success" }
 }
