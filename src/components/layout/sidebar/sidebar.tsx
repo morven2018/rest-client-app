@@ -14,7 +14,7 @@ export default function CustomSidebar({
 }: React.ComponentProps<typeof Sidebar>) {
   return (
     <div className="flex min-h-screen">
-      <div className="p-4 bg-red-500 relative">
+      <div className="p-4 relative">
         <SidebarProvider>
           <Sidebar
             collapsible="icon"
