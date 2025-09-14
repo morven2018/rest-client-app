@@ -96,9 +96,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         displayName: username || `User_${userId.slice(-5)}`,
       });
 
-      await updateProfile(userCredential.user, {
-        displayName: username || `User_${userId.slice(-5)}`,
-      });
+      await updateProfile(username || `User_${userId.slice(-5)}`);
 
       setUserRegistrationDate(registrationDate);
 
