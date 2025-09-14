@@ -32,6 +32,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userRegistrationDate, setUserRegistrationDate] = useState<Date | null>(
+    null
+  );
 
   const isTokenValid = useCallback((token: string): boolean => {
     try {
@@ -73,6 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       );
 
       const userId = userCredential.user.uid;
+      const registrationDate = new Date();
 
       if (avatarFile) {
         const avatarBase64 = await convertFileToBase64(avatarFile);
@@ -87,9 +91,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         await getDoc(doc(db, 'userAvatars', userId));
       }
 
-      await updateFirebaseProfile(userCredential.user, {
+      await setDoc(doc(db, 'userMetadata', userId), {
+        registrationDate,
         displayName: username || `User_${userId.slice(-5)}`,
       });
+
+      await updateProfile(userCredential.user, {
+        displayName: username || `User_${userId.slice(-5)}`,
+      });
+
+      setUserRegistrationDate(registrationDate);
 
       const token = await userCredential.user.getIdToken();
       saveToken(token);
@@ -186,6 +197,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [authToken, isTokenValid, logout]);
 
+  const getTimeSinceSignUp = useCallback((): number => {
+    if (!userRegistrationDate) return 0;
+    const now = new Date();
+    return now.getTime() - userRegistrationDate.getTime();
+  }, [userRegistrationDate]);
+
   useEffect(() => {
     const storedToken = localStorage.getItem(AUTH_TOKEN_KEY);
     if (storedToken && isTokenValid(storedToken)) {
@@ -229,6 +246,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       resetPassword,
       loading,
       isTokenValid,
+      getTimeSinceSignUp,
     }),
     [
       currentUser,
@@ -241,6 +259,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       updateProfile,
       resetPassword,
       isTokenValid,
+      getTimeSinceSignUp,
     ]
   );
 
