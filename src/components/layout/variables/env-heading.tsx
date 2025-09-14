@@ -13,25 +13,34 @@ export default function EnvHeading() {
   const pathname = usePathname();
   const links = pathname.split('/').filter(Boolean);
   const router = useRouter();
+
+  // Декодируем имя из URL сразу
+  const currentEnvName = links[1] ? decodeURIComponent(links[1]) : '';
   const [value, setValue] = useState(
-    formatBreadcrumbName(links[1] || 'New environment')
+    formatBreadcrumbName(currentEnvName || 'New environment')
   );
+
   const { environmentExists, addEnv, renameEnv } = useEnvVariables();
-  const envExists = environmentExists(formatBreadcrumbName(links[1]));
+  const envExists = environmentExists(currentEnvName);
+
   const t = useTranslations('variables');
 
   const handleAddEnvironment = () => {
+    // В localStorage храним обычное имя
     addEnv(value, {});
-    const newPath = `/variables/${value}`;
+    // В URL кодируем только для перехода
+    const newPath = `/variables/${encodeURIComponent(value)}`;
     router.push(newPath);
   };
 
   const handleUpdateEnvironment = () => {
-    const oldValue = formatBreadcrumbName(links[1]);
-    const newPath = `/variables/${value}`;
-    router.push(newPath);
-    console.log(oldValue, value);
-    renameEnv(oldValue, value);
+    if (value !== currentEnvName) {
+      // Переименовываем в localStorage
+      renameEnv(currentEnvName, value);
+      // Обновляем URL с закодированным именем
+      const newPath = `/variables/${encodeURIComponent(value)}`;
+      router.push(newPath);
+    }
   };
 
   return (
@@ -43,6 +52,15 @@ export default function EnvHeading() {
           value={value}
           className="max-w-64 flex flex-1 px-3 py-2 border border-neutral-200 dark:border-neutral-600 rounded-md bg-gray-50 text-lg"
           onChange={(e) => setValue(e.target.value)}
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              if (envExists) {
+                handleUpdateEnvironment();
+              } else {
+                handleAddEnvironment();
+              }
+            }
+          }}
         />
         {envExists && (
           <Button
@@ -55,7 +73,7 @@ export default function EnvHeading() {
             <RefreshCw className="h-4 w-4 max-[380px]:w-3 max-[380px]:h-3 " />
           </Button>
         )}
-        {!envExists && (
+        {!envExists && currentEnvName && (
           <Button
             onClick={handleAddEnvironment}
             size="icon"

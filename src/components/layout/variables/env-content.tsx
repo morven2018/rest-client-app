@@ -10,42 +10,92 @@ import { usePathname } from '@/i18n/navigation';
 export default function EnvironmentVariablesList() {
   const pathname = usePathname();
   const links = pathname.split('/').filter(Boolean);
-  const currentEnvName = links[1] || '';
 
-  const {
-    getEnvVariables,
-    setVariable,
-    removeVariable,
-    addEnv,
-    environmentExists,
-  } = useEnvVariables();
+  const currentEnvName = links[1] ? decodeURIComponent(links[1]) : '';
+
+  const { setVariable, removeVariable } = useEnvVariables();
 
   const [variables, setVariables] = useState<Record<string, string>>({});
   const [selectedVars, setSelectedVars] = useState<Set<string>>(new Set());
   const [isAllSelected, setIsAllSelected] = useState(false);
   const [sortBy, setSortBy] = useState<'name' | 'value'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const inputRefs = useRef<Map<string, HTMLInputElement>>(new Map());
+  const [focusedInput, setFocusedInput] = useState<{
+    type: 'name' | 'value';
+    varName: string;
+  } | null>(null);
+  const inputRefs = useRef<
+    Map<
+      string,
+      { name: HTMLInputElement | null; value: HTMLInputElement | null }
+    >
+  >(new Map());
+
+  const initializeInputRef = useCallback((varName: string) => {
+    if (!inputRefs.current.has(varName)) {
+      inputRefs.current.set(varName, { name: null, value: null });
+    }
+  }, []);
 
   const setInputRef = useCallback(
-    (varName: string) => (el: HTMLInputElement | null) => {
-      if (el) {
-        inputRefs.current.set(varName, el);
-      } else {
-        inputRefs.current.delete(varName);
-      }
-    },
+    (varName: string, type: 'name' | 'value') =>
+      (el: HTMLInputElement | null) => {
+        if (el) {
+          if (!inputRefs.current.has(varName)) {
+            inputRefs.current.set(varName, { name: null, value: null });
+          }
+          const refs = inputRefs.current.get(varName)!;
+          if (type === 'name') {
+            refs.name = el;
+          } else {
+            refs.value = el;
+          }
+        }
+      },
     []
   );
 
   useEffect(() => {
+    if (focusedInput) {
+      const refs = inputRefs.current.get(focusedInput.varName);
+      if (refs) {
+        const inputElement =
+          focusedInput.type === 'name' ? refs.name : refs.value;
+        if (inputElement) {
+          setTimeout(() => {
+            inputElement.focus();
+            const length = inputElement.value.length;
+            inputElement.setSelectionRange(length, length);
+          }, 0);
+        }
+      }
+    }
+  }, [variables, focusedInput]);
+
+  const loadVariablesDirectly = useCallback(() => {
     if (currentEnvName) {
-      const envVariables = getEnvVariables(currentEnvName);
-      setVariables(envVariables);
+      try {
+        const stored = localStorage.getItem('variables');
+        if (stored) {
+          const allVariables = JSON.parse(stored);
+          const envVariables = allVariables[currentEnvName] || {};
+          setVariables(envVariables);
+          Object.keys(envVariables).forEach(initializeInputRef);
+        } else {
+          setVariables({});
+        }
+      } catch (error) {
+        console.error('Error loading variables from localStorage:', error);
+        setVariables({});
+      }
       setSelectedVars(new Set());
       setIsAllSelected(false);
     }
-  }, [currentEnvName]);
+  }, [currentEnvName, initializeInputRef]);
+
+  useEffect(() => {
+    loadVariablesDirectly();
+  }, [loadVariablesDirectly]);
 
   useEffect(() => {
     setIsAllSelected(
@@ -56,7 +106,6 @@ export default function EnvironmentVariablesList() {
 
   const sortedVariables = useCallback(() => {
     const entries = Object.entries(variables);
-
     return entries.sort(([aName, aValue], [bName, bValue]) => {
       let aCompare, bCompare;
 
@@ -101,6 +150,7 @@ export default function EnvironmentVariablesList() {
         }
 
         const oldValue = variables[oldName];
+        const wasFocused = focusedInput?.varName === oldName;
 
         removeVariable(currentEnvName, oldName);
         setVariable(currentEnvName, newName, oldValue);
@@ -120,9 +170,19 @@ export default function EnvironmentVariablesList() {
           }
           return newSelected;
         });
+
+        const oldRefs = inputRefs.current.get(oldName);
+        if (oldRefs) {
+          inputRefs.current.set(newName, oldRefs);
+          inputRefs.current.delete(oldName);
+        }
+
+        if (wasFocused) {
+          setFocusedInput({ type: 'name', varName: newName });
+        }
       }
     },
-    [currentEnvName, variables, removeVariable, setVariable]
+    [currentEnvName, variables, removeVariable, setVariable, focusedInput]
   );
 
   const handleDeleteVariable = useCallback(
@@ -139,6 +199,7 @@ export default function EnvironmentVariablesList() {
           newSelected.delete(varName);
           return newSelected;
         });
+        inputRefs.current.delete(varName);
       }
     },
     [currentEnvName, removeVariable]
@@ -146,37 +207,44 @@ export default function EnvironmentVariablesList() {
 
   const handleAddVariable = useCallback(() => {
     if (currentEnvName) {
-      if (!environmentExists(currentEnvName)) {
-        addEnv(currentEnvName, {});
-      }
-
-      const newVarName = '';
+      const newVarName = `variable_${Object.keys(variables).length + 1}`;
       const newValue = '';
 
       setVariable(currentEnvName, newVarName, newValue);
       setVariables((prev) => ({ ...prev, [newVarName]: newValue }));
-    }
-  }, [currentEnvName, environmentExists, addEnv, setVariable, variables]);
+      initializeInputRef(newVarName);
 
-  const handleSelectAll = useCallback(() => {
-    if (isAllSelected) {
-      setSelectedVars(new Set());
-    } else {
-      setSelectedVars(new Set(Object.keys(variables)));
+      setTimeout(() => {
+        setFocusedInput({ type: 'name', varName: newVarName });
+      }, 0);
     }
-  }, [isAllSelected, variables]);
+  }, [currentEnvName, setVariable, variables, initializeInputRef]);
 
-  const handleSelectVariable = useCallback((varName: string) => {
-    setSelectedVars((prev) => {
-      const newSelected = new Set(prev);
-      if (newSelected.has(varName)) {
-        newSelected.delete(varName);
+  const handleSelectAll = useCallback(
+    (checked: boolean) => {
+      if (checked) {
+        setSelectedVars(new Set(Object.keys(variables)));
       } else {
-        newSelected.add(varName);
+        setSelectedVars(new Set());
       }
-      return newSelected;
-    });
-  }, []);
+    },
+    [variables]
+  );
+
+  const handleSelectVariable = useCallback(
+    (varName: string, checked: boolean) => {
+      setSelectedVars((prev) => {
+        const newSelected = new Set(prev);
+        if (checked) {
+          newSelected.add(varName);
+        } else {
+          newSelected.delete(varName);
+        }
+        return newSelected;
+      });
+    },
+    []
+  );
 
   const handleRemoveSelected = useCallback(() => {
     if (currentEnvName && selectedVars.size > 0) {
@@ -184,6 +252,7 @@ export default function EnvironmentVariablesList() {
 
       varsToDelete.forEach((varName) => {
         removeVariable(currentEnvName, varName);
+        inputRefs.current.delete(varName);
       });
 
       setVariables((prev) => {
@@ -195,6 +264,14 @@ export default function EnvironmentVariablesList() {
       setSelectedVars(new Set());
     }
   }, [currentEnvName, selectedVars, removeVariable]);
+
+  const handleFocus = useCallback((varName: string, type: 'name' | 'value') => {
+    setFocusedInput({ varName, type });
+  }, []);
+
+  const handleBlur = useCallback(() => {
+    setFocusedInput(null);
+  }, []);
 
   if (!currentEnvName) {
     return <div>Select an environment to view variables</div>;
@@ -217,6 +294,7 @@ export default function EnvironmentVariablesList() {
           </Button>
         )}
       </div>
+
       <div className="grid grid-cols-[50px_1fr_1fr_80px] gap-2 items-center p-3 bg-muted rounded-lg">
         <div className="flex justify-center">
           <Checkbox
@@ -237,40 +315,54 @@ export default function EnvironmentVariablesList() {
           )}
         </button>
 
-        <div className="flex items-center gap-2 font-semibold text-left hover:bg-muted-foreground/10 p-2 rounded">
+        <button
+          onClick={() => handleSort('value')}
+          className="flex items-center gap-2 font-semibold text-left hover:bg-muted-foreground/10 p-2 rounded"
+        >
           <span>Value</span>
-        </div>
+          <ArrowUpDown className="h-4 w-4" />
+          {sortBy === 'value' && (
+            <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
+          )}
+        </button>
       </div>
 
       <div className="space-y-2">
-        {sortedVariables().map(([varName, varValue]) => (
+        {sortedVariables().map(([varName, varValue], index) => (
           <div
             key={varName}
-            className="grid grid-cols-[50px_1fr_1fr_80px] gap-2 items-center p-3 border rounded-lg"
+            className={`grid grid-cols-[50px_1fr_1fr_80px] gap-2 items-center p-3 border rounded-lg ${index % 2 === 0 ? 'bg-violet-50' : ''}`}
           >
             <div className="flex justify-center">
               <Checkbox
                 checked={selectedVars.has(varName)}
-                onCheckedChange={() => handleSelectVariable(varName)}
+                onCheckedChange={(checked) =>
+                  handleSelectVariable(varName, checked === true)
+                }
                 className="h-4 w-4"
               />
             </div>
 
             <Input
-              ref={setInputRef(varName)}
+              ref={setInputRef(varName, 'name')}
               value={varName}
               onChange={(e) =>
                 handleVariableNameChange(varName, e.target.value)
               }
+              onFocus={() => handleFocus(varName, 'name')}
+              onBlur={handleBlur}
               className="font-mono text-sm"
               placeholder="Variable name"
             />
 
             <Input
+              ref={setInputRef(varName, 'value')}
               value={varValue}
               onChange={(e) =>
                 handleVariableValueChange(varName, e.target.value)
               }
+              onFocus={() => handleFocus(varName, 'value')}
+              onBlur={handleBlur}
               className="font-mono text-sm"
               placeholder="Value"
             />
