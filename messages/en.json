@@ -114,6 +114,7 @@
   },
   "variables": {
     "update": "Update name of environment",
-    "add": "Add new environment"
+    "add": "Add new environment",
+    "title": "Variables"
   }
 }
