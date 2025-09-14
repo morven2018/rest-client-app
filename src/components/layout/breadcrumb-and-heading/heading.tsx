@@ -8,7 +8,7 @@ interface HeadingProps {
 export default function Heading({ children }: Readonly<HeadingProps>) {
   const pathname = usePathname();
   return (
-    <div>
+    <div className="p-5 mt-6 max-[450px]:px-0">
       <CustomBreadcrumb pathname={pathname} />
       {children}
     </div>

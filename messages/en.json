@@ -111,5 +111,9 @@
     "success": "success",
     "title": "Update Info",
     "home-btn": "To home page"
+  },
+  "variables": {
+    "update": "Update name of environment",
+    "add": "Add new environment"
   }
 }

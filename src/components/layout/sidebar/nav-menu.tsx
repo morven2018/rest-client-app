@@ -53,11 +53,11 @@ export default function NavMenu() {
   }, [isMobile, isVariablesExpanded]);
 
   const handleAddEnv = () => {
-    let newEnvName = 'new-environment';
+    let newEnvName = 'New Environment';
     let counter = 1;
 
     while (envList.includes(newEnvName)) {
-      newEnvName = `new-environment ${counter}`;
+      newEnvName = `New environment ${counter}`;
       counter++;
     }
 
