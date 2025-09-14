@@ -2,6 +2,7 @@
 import { ArrowUpDown, Plus, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { useEnvVariables } from '@/hooks/use-env-variables';
 import { usePathname } from '@/i18n/navigation';
@@ -24,7 +25,18 @@ export default function EnvironmentVariablesList() {
   const [isAllSelected, setIsAllSelected] = useState(false);
   const [sortBy, setSortBy] = useState<'name' | 'value'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  const inputRefs = useRef<Map<string, HTMLInputElement>>(new Map());
+
+  const setInputRef = useCallback(
+    (varName: string) => (el: HTMLInputElement | null) => {
+      if (el) {
+        inputRefs.current.set(varName, el);
+      } else {
+        inputRefs.current.delete(varName);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     if (currentEnvName) {
@@ -138,7 +150,7 @@ export default function EnvironmentVariablesList() {
         addEnv(currentEnvName, {});
       }
 
-      const newVarName = `VAR_${Object.keys(variables).length + 1}`;
+      const newVarName = '';
       const newValue = '';
 
       setVariable(currentEnvName, newVarName, newValue);
@@ -207,10 +219,9 @@ export default function EnvironmentVariablesList() {
       </div>
       <div className="grid grid-cols-[50px_1fr_1fr_80px] gap-2 items-center p-3 bg-muted rounded-lg">
         <div className="flex justify-center">
-          <input
-            type="checkbox"
+          <Checkbox
             checked={isAllSelected}
-            onChange={handleSelectAll}
+            onCheckedChange={handleSelectAll}
             className="h-4 w-4"
           />
         </div>
@@ -238,16 +249,15 @@ export default function EnvironmentVariablesList() {
             className="grid grid-cols-[50px_1fr_1fr_80px] gap-2 items-center p-3 border rounded-lg"
           >
             <div className="flex justify-center">
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={selectedVars.has(varName)}
-                onChange={() => handleSelectVariable(varName)}
+                onCheckedChange={() => handleSelectVariable(varName)}
                 className="h-4 w-4"
               />
             </div>
 
             <Input
-              ref={(el) => (inputRefs.current[varName] = el)}
+              ref={setInputRef(varName)}
               value={varName}
               onChange={(e) =>
                 handleVariableNameChange(varName, e.target.value)
