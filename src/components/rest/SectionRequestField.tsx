@@ -13,11 +13,15 @@ import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
 interface SectionRequestFieldProps {
   requestData: RequestData;
   onRequestDataChange: (data: Partial<RequestData>) => void;
+  onSendRequest: () => void;
+  isLoading?: boolean;
 }
 
 export default function SectionRequestField({
   requestData,
   onRequestDataChange,
+  onSendRequest,
+  isLoading = false,
 }: SectionRequestFieldProps) {
   const t = useTranslations('RestClient');
 
@@ -32,7 +36,13 @@ export default function SectionRequestField({
   };
 
   const handleSend = () => {
-    console.log('Sending request:', requestData);
+    if (!requestData.url.trim()) return;
+    try {
+      new URL(requestData.url);
+      onSendRequest();
+    } catch (error) {
+      console.error('Invalid URL:', error);
+    }
   };
 
   return (
@@ -67,6 +77,7 @@ export default function SectionRequestField({
         <Button
           variant="outline"
           onClick={handleSend}
+          disabled={isLoading || !requestData.url.trim()}
           className="bg-request-button-bg cursor-pointer"
         >
           {t('buttonSend')}
