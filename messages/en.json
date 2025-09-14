@@ -89,6 +89,8 @@
     "codeButton": "Generate code",
     "bodyTitle": "Body",
     "responseTitle": "Response",
-    "codeNoUrl": "Please enter a valid URL."
+    "codeNoUrl": "Please enter a valid URL.",
+    "bodyJSON": "JSON",
+    "bodyText": "Text"
   }
 }
