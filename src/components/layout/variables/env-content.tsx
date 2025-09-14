@@ -220,31 +220,29 @@ export default function EnvironmentVariablesList() {
     }
   }, [currentEnvName, setVariable, variables, initializeInputRef]);
 
-  const handleSelectAll = useCallback(
-    (checked: boolean) => {
-      if (checked) {
-        setSelectedVars(new Set(Object.keys(variables)));
-      } else {
-        setSelectedVars(new Set());
-      }
-    },
-    [variables]
-  );
+  const handleSelectAll = useCallback(() => {
+    setSelectedVars(new Set(Object.keys(variables)));
+  }, [variables]);
 
-  const handleSelectVariable = useCallback(
-    (varName: string, checked: boolean) => {
-      setSelectedVars((prev) => {
-        const newSelected = new Set(prev);
-        if (checked) {
-          newSelected.add(varName);
-        } else {
-          newSelected.delete(varName);
-        }
-        return newSelected;
-      });
-    },
-    []
-  );
+  const handleDeselectAll = useCallback(() => {
+    setSelectedVars(new Set());
+  }, []);
+
+  const handleSelectVariable = useCallback((varName: string) => {
+    setSelectedVars((prev) => {
+      const newSelected = new Set(prev);
+      newSelected.add(varName);
+      return newSelected;
+    });
+  }, []);
+
+  const handleDeselectVariable = useCallback((varName: string) => {
+    setSelectedVars((prev) => {
+      const newSelected = new Set(prev);
+      newSelected.delete(varName);
+      return newSelected;
+    });
+  }, []);
 
   const handleRemoveSelected = useCallback(() => {
     if (currentEnvName && selectedVars.size > 0) {
@@ -279,6 +277,11 @@ export default function EnvironmentVariablesList() {
 
   return (
     <div className="space-y-4">
+      <div className="text-sm text-gray-500 p-2 bg-gray-100 rounded">
+        Environment: <strong>{currentEnvName}</strong> | Variables:{' '}
+        <strong>{Object.keys(variables).length}</strong>
+      </div>
+
       <div className="flex flex-row gap-4 w-full justify-end">
         <Button onClick={handleAddVariable} className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
@@ -299,7 +302,13 @@ export default function EnvironmentVariablesList() {
         <div className="flex justify-center">
           <Checkbox
             checked={isAllSelected}
-            onCheckedChange={handleSelectAll}
+            onCheckedChange={(checked) => {
+              if (checked) {
+                handleSelectAll();
+              } else {
+                handleDeselectAll();
+              }
+            }}
             className="h-4 w-4"
           />
         </div>
@@ -325,6 +334,8 @@ export default function EnvironmentVariablesList() {
             <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
           )}
         </button>
+
+        <div className="font-semibold text-center">Actions</div>
       </div>
 
       <div className="space-y-2">
@@ -336,9 +347,13 @@ export default function EnvironmentVariablesList() {
             <div className="flex justify-center">
               <Checkbox
                 checked={selectedVars.has(varName)}
-                onCheckedChange={(checked) =>
-                  handleSelectVariable(varName, checked === true)
-                }
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    handleSelectVariable(varName);
+                  } else {
+                    handleDeselectVariable(varName);
+                  }
+                }}
                 className="h-4 w-4"
               />
             </div>

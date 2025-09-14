@@ -14,7 +14,6 @@ export default function EnvHeading() {
   const links = pathname.split('/').filter(Boolean);
   const router = useRouter();
 
-  // Декодируем имя из URL сразу
   const currentEnvName = links[1] ? decodeURIComponent(links[1]) : '';
   const [value, setValue] = useState(
     formatBreadcrumbName(currentEnvName || 'New environment')
@@ -26,18 +25,14 @@ export default function EnvHeading() {
   const t = useTranslations('variables');
 
   const handleAddEnvironment = () => {
-    // В localStorage храним обычное имя
     addEnv(value, {});
-    // В URL кодируем только для перехода
     const newPath = `/variables/${encodeURIComponent(value)}`;
     router.push(newPath);
   };
 
   const handleUpdateEnvironment = () => {
     if (value !== currentEnvName) {
-      // Переименовываем в localStorage
       renameEnv(currentEnvName, value);
-      // Обновляем URL с закодированным именем
       const newPath = `/variables/${encodeURIComponent(value)}`;
       router.push(newPath);
     }
