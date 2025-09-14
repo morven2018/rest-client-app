@@ -18,14 +18,6 @@ import {
 const AUTH_TOKEN_KEY = 'authToken';
 const CHECK_FREQUENCY = 30000;
 
-interface UpdateProfileData {
-  username?: string;
-  avatar?: File;
-  email?: string;
-  password?: string;
-  currentPassword?: string;
-}
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
