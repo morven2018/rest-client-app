@@ -70,13 +70,18 @@
     "logout-btn": "Выйти",
     "user-exist": "Этот email уже используется",
     "error": "При регимистрации возникла ошибка. Ошибка:",
-    "retry-btn": "Повторить",
+    "try-again": "Повторить",
     "password": "Пароль",
     "avatar": "Аватар",
     "name-placeholder": "Введите Ваше имя",
     "btn-avatar": "Загрузить",
     "avatar-placeholder": "Выберите изображение",
     "upload-error": "Возникала проблема при загрузке аватара"
+  },
+  "Sidebar": {
+    "rest": "REST клиент",
+    "history": "История и анализ",
+    "variables": "Переменные"
   },
   "RestClient": {
     "buttonSend": "ОТПРАВИТЬ",
@@ -89,5 +94,22 @@
     "codeButton": "Создать код",
     "bodyTitle": "Тело",
     "responseTitle": "Ответ"
+  },
+  "user-menu": {
+    "update": "Обновить данные",
+    "logout": "Выйти",
+    "profile": "Обновить данные"
+  },
+  "update": {
+    "name-placeholder": "Введите Ваше имя",
+    "avatar-placeholder": "Загрузите аватар ...",
+    "btn": "Обновить",
+    "name": "Имя",
+    "avatar": "Аватар"
+  },
+  "profile": {
+    "success": "success",
+    "title": "Обновить данные",
+    "home-btn": "На домашнюю страницу"
   }
 }

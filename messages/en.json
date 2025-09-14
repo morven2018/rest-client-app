@@ -70,13 +70,18 @@
     "logout-btn": "LOG OUT",
     "user-exist": "This email is already used",
     "error": "An error occurred while register. Error:",
-    "retry-btn": "RETRY",
+    "try-again": "RETRY",
     "password": "Password",
     "avatar": "Avatar",
     "name-placeholder": "Input your name",
     "btn-avatar": "Browse",
     "avatar-placeholder": "Select picture",
     "upload-error": "The problems occur on upload avatar"
+  },
+  "Sidebar": {
+    "rest": "REST Client",
+    "history": "History and analysis",
+    "variables": "Variables"
   },
   "RestClient": {
     "buttonSend": "SEND",
@@ -89,5 +94,22 @@
     "codeButton": "Generate code",
     "bodyTitle": "Body",
     "responseTitle": "Response"
+  },
+  "user-menu": {
+    "update": "Update account",
+    "logout": "Log out",
+    "profile": "Update account"
+  },
+  "update": {
+    "name-placeholder": "User name",
+    "avatar-placeholder": "Load avatar...",
+    "btn": "Update",
+    "name": "User name",
+    "avatar": "Avatar"
+  },
+  "profile": {
+    "success": "success",
+    "title": "Update Info",
+    "home-btn": "To home page"
   }
 }

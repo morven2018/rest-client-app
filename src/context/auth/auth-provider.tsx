@@ -12,11 +12,19 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-  updateProfile,
+  updateProfile as updateFirebaseProfile,
 } from 'firebase/auth';
 
 const AUTH_TOKEN_KEY = 'authToken';
 const CHECK_FREQUENCY = 30000;
+
+interface UpdateProfileData {
+  username?: string;
+  avatar?: File;
+  email?: string;
+  password?: string;
+  currentPassword?: string;
+}
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -139,6 +147,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     await sendPasswordResetEmail(auth, email);
   }, []);
 
+  const updateProfile = useCallback(
+    async (username?: string, avatarFile?: File): Promise<void> => {
+      if (!currentUser) {
+        throw new Error('No user is currently logged in');
+      }
+
+      try {
+        const updates: { displayName?: string; photoURL?: string } = {};
+
+        if (username) {
+          updates.displayName = username;
+        }
+
+        if (avatarFile) {
+          const avatarBase64 = await convertFileToBase64(avatarFile);
+          await setDoc(doc(db, 'userAvatars', currentUser.uid), {
+            avatar: avatarBase64,
+            updatedAt: new Date(),
+            fileName: avatarFile.name,
+            fileType: avatarFile.type,
+          });
+
+          updates.photoURL = `data:${avatarFile.type};base64,${avatarBase64}`;
+        }
+
+        if (Object.keys(updates).length > 0) {
+          await updateFirebaseProfile(currentUser, updates);
+        }
+
+        setCurrentUser({
+          ...currentUser,
+          ...updates,
+        });
+
+        const newToken = await currentUser.getIdToken();
+        saveToken(newToken);
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        throw new Error('Failed to update profile');
+      }
+    },
+    [currentUser]
+  );
+
   const forceLogoutIfTokenExpired = useCallback(async () => {
     if (authToken && !isTokenValid(authToken)) {
       await logout();
@@ -189,6 +241,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       login,
       register,
       getAvatar,
+      updateProfile,
       logout,
       resetPassword,
       loading,
@@ -203,11 +256,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       logout,
       register,
       getAvatar,
+      updateProfile,
       resetPassword,
       isTokenValid,
       getTimeSinceSignUp,
     ]
   );
+
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

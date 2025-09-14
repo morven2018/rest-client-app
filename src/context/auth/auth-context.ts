@@ -22,6 +22,8 @@ export interface AuthContextType {
   resetPassword: (email: string) => Promise<void>;
   loading: boolean;
   getTimeSinceSignUp: () => number;
+  isTokenValid: (token: string) => boolean;
+  updateProfile: (username?: string, avatarFile?: File) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType>(
