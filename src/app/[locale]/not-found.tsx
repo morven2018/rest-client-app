@@ -13,7 +13,7 @@ export default function NotFound() {
   };
 
   return (
-    <main className=" w-full">
+    <main className="w-full">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-[15px] bg-not-found min-h-[500px]">
         <h2 className="p-2 text-center text-[26px] font-semibold mt-[80px] mb-[40px] md:mt-[160px] md:mb-[70px]">
           {t('title')}
