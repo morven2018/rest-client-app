@@ -2,7 +2,6 @@
 import EnvButtons from './env-buttons';
 import EnvTable from './env-table';
 import NoVariables from './no-variables';
-import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useEnvVariables } from '@/hooks/use-env-variables';
 import { usePathname } from '@/i18n/navigation';
@@ -236,7 +235,7 @@ export default function EnvironmentVariablesContent() {
         setFocusedInput({ type: 'name', varName: newVarName });
       }, 0);
     }
-  }, [currentEnvName, setVariable, initializeInputRef]);
+  }, [currentEnvName, setVariable, initializeInputRef, variables]);
 
   const handleSelectAll = useCallback(() => {
     setSelectedVars(new Set(Object.keys(variables)));

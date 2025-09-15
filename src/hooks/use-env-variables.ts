@@ -98,7 +98,6 @@ export const useEnvVariables = () => {
 
   const renameEnv = (oldName: string, newName: string) => {
     const currentData = getCurrentFromStorage();
-    console.log(JSON.stringify(currentData));
     if (!currentData[oldName]) return;
 
     const newVars = { ...currentData };
