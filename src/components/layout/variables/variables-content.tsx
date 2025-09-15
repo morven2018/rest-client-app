@@ -145,7 +145,7 @@ const Card = ({
   };
 
   return (
-    <div
+    <button
       onClick={handleCardClick}
       className="w-60 flex flex-col gap-4 p-4 bg-neutral-200 rounded-lg dark:bg-neutral-600 mb-5"
     >
@@ -170,7 +170,7 @@ const Card = ({
       >
         {t('delete-env')}
       </Button>
-    </div>
+    </button>
   );
 };
 
