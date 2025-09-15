@@ -78,7 +78,7 @@ export default function EnvTable({
                 onDeselectAll();
               }
             }}
-            className="h-4 w-4 border-none bg-white"
+            className="h-4 w-4 border-none bg-white dark:bg-white"
           />
         </div>
 
@@ -100,7 +100,7 @@ export default function EnvTable({
         {variables.map(({ name, value }, index) => (
           <div
             key={name}
-            className={`grid grid-cols-[30px_1fr_1fr_40px] gap-2 items-center py-2 ${index % 2 === 0 ? 'bg-violet-50' : 'bg-white'}`}
+            className={`grid grid-cols-[30px_1fr_1fr_40px] gap-2 items-center py-2 ${index % 2 === 0 ? 'bg-violet-50' : 'bg-white'} ${index + 1 === variables.length ? 'rounded-b-lg' : ''}`}
           >
             <div className="flex justify-center">
               <Checkbox
@@ -112,7 +112,7 @@ export default function EnvTable({
                     onDeselectVariable(name);
                   }
                 }}
-                className="h-4 w-4"
+                className="h-4 w-4 dark:border-neutral-400"
               />
             </div>
 
