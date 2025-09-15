@@ -31,7 +31,9 @@ export default function CustomSidebar({
           </Sidebar>
         </SidebarProvider>
       </div>
-      <div className="flex-1">{children}</div>
+      <div className="flex-1 bg-neutral-100 dark:bg-zinc-950 rounded-lg my-4 mr-4">
+        {children}
+      </div>
     </div>
   );
 }

@@ -269,11 +269,13 @@ export default function EnvironmentVariablesContent() {
 
   return (
     <>
-      <EnvButtons
-        selectedCount={selectedVars.size}
-        onAddVariable={handleAddVariable}
-        onRemoveSelected={handleRemoveSelected}
-      />
+      {hasVariables && (
+        <EnvButtons
+          selectedCount={selectedVars.size}
+          onAddVariable={handleAddVariable}
+          onRemoveSelected={handleRemoveSelected}
+        />
+      )}
       {hasVariables ? (
         <EnvTable
           variables={tableVariables}

@@ -66,7 +66,7 @@ export default function EnvTable({
   );
 
   return (
-    <div className="rounded-md px-6 max-[500px]:pl-1">
+    <div className="rounded-md px-6 max-[500px]:pl-1 py-3">
       <div className="grid grid-cols-[30px_1fr_1fr_40px] gap-1 py-2 items-center bg-purple-900 text-white rounded-t-md">
         <div className="flex justify-center">
           <Checkbox

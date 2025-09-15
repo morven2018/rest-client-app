@@ -14,7 +14,7 @@ export default function EnvButtons({
   onRemoveSelected,
 }: Readonly<EnvButtonsProps>) {
   return (
-    <div className="flex flex-row gap-4 w-full justify-end my-4 px-6 max-[500px]:pl-1 text-sm">
+    <div className="flex flex-row gap-4 w-full justify-end my-4 px-6 max-[500px]:pl-1 text-sm py-3">
       <Button
         onClick={onAddVariable}
         className="flex items-center gap-2  bg-violet-800 hover:bg-violet-900 dark:bg-neutral-50 text-white dark:text-violet-800 dark:hover:bg-violet-200"
