@@ -53,16 +53,21 @@ export const useEnvVariables = () => {
   };
 
   const addEnv = (envName: string, initialVariables: EnvVariables = {}) => {
-    setVariables((prev) => ({
-      ...prev,
-      [envName]: initialVariables,
-    }));
+    setVariables((prev) => {
+      const newVars = {
+        ...prev,
+        [envName]: initialVariables,
+      };
+      saveToStorage(newVars);
+      return newVars;
+    });
   };
 
   const removeEnv = (envName: string) => {
     setVariables((prev) => {
       const newVars = { ...prev };
       delete newVars[envName];
+      saveToStorage(newVars);
       return newVars;
     });
   };

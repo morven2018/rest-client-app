@@ -1,29 +1,27 @@
 'use client';
-import { ArrowUpDown, Plus, Trash2 } from 'lucide-react';
+import EnvButtons from './env-buttons';
+import EnvTable from './env-table';
+import NoVariables from './no-variables';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
 import { useEnvVariables } from '@/hooks/use-env-variables';
 import { usePathname } from '@/i18n/navigation';
 
-export default function EnvironmentVariablesList() {
+export default function EnvironmentVariablesContent() {
   const pathname = usePathname();
   const links = pathname.split('/').filter(Boolean);
-
   const currentEnvName = links[1] ? decodeURIComponent(links[1]) : '';
 
   const { setVariable, removeVariable } = useEnvVariables();
 
   const [variables, setVariables] = useState<Record<string, string>>({});
   const [selectedVars, setSelectedVars] = useState<Set<string>>(new Set());
-  const [isAllSelected, setIsAllSelected] = useState(false);
   const [sortBy, setSortBy] = useState<'name' | 'value'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [focusedInput, setFocusedInput] = useState<{
     type: 'name' | 'value';
     varName: string;
   } | null>(null);
+
   const inputRefs = useRef<
     Map<
       string,
@@ -89,20 +87,12 @@ export default function EnvironmentVariablesList() {
         setVariables({});
       }
       setSelectedVars(new Set());
-      setIsAllSelected(false);
     }
   }, [currentEnvName, initializeInputRef]);
 
   useEffect(() => {
     loadVariablesDirectly();
   }, [loadVariablesDirectly]);
-
-  useEffect(() => {
-    setIsAllSelected(
-      selectedVars.size > 0 &&
-        selectedVars.size === Object.keys(variables).length
-    );
-  }, [selectedVars, variables]);
 
   const sortedVariables = useCallback(() => {
     const entries = Object.entries(variables);
@@ -271,136 +261,41 @@ export default function EnvironmentVariablesList() {
     setFocusedInput(null);
   }, []);
 
-  if (!currentEnvName) {
-    return <div>Select an environment to view variables</div>;
-  }
+  const hasVariables = Object.keys(variables).length > 0;
+  const tableVariables = sortedVariables().map(([name, value]) => ({
+    name,
+    value,
+  }));
 
   return (
-    <div className="space-y-4">
-      <div className="text-sm text-gray-500 p-2 bg-gray-100 rounded">
-        Environment: <strong>{currentEnvName}</strong> | Variables:{' '}
-        <strong>{Object.keys(variables).length}</strong>
-      </div>
-
-      <div className="flex flex-row gap-4 w-full justify-end">
-        <Button onClick={handleAddVariable} className="flex items-center gap-2">
-          <Plus className="h-4 w-4" />
-          Add Variable
-        </Button>
-        {selectedVars.size > 0 && (
-          <Button
-            onClick={handleRemoveSelected}
-            className="flex items-center gap-2"
-          >
-            <Trash2 className="h-4 w-4" />
-            Remove selected ({selectedVars.size})
-          </Button>
-        )}
-      </div>
-
-      <div className="grid grid-cols-[50px_1fr_1fr_80px] gap-2 items-center p-3 bg-muted rounded-lg">
-        <div className="flex justify-center">
-          <Checkbox
-            checked={isAllSelected}
-            onCheckedChange={(checked) => {
-              if (checked) {
-                handleSelectAll();
-              } else {
-                handleDeselectAll();
-              }
-            }}
-            className="h-4 w-4"
-          />
-        </div>
-
-        <button
-          onClick={() => handleSort('name')}
-          className="flex items-center gap-2 font-semibold text-left hover:bg-muted-foreground/10 p-2 rounded"
-        >
-          <span>Variable</span>
-          <ArrowUpDown className="h-4 w-4" />
-          {sortBy === 'name' && (
-            <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
-          )}
-        </button>
-
-        <button
-          onClick={() => handleSort('value')}
-          className="flex items-center gap-2 font-semibold text-left hover:bg-muted-foreground/10 p-2 rounded"
-        >
-          <span>Value</span>
-          <ArrowUpDown className="h-4 w-4" />
-          {sortBy === 'value' && (
-            <span className="text-xs">{sortOrder === 'asc' ? '↑' : '↓'}</span>
-          )}
-        </button>
-
-        <div className="font-semibold text-center">Actions</div>
-      </div>
-
-      <div className="space-y-2">
-        {sortedVariables().map(([varName, varValue], index) => (
-          <div
-            key={varName}
-            className={`grid grid-cols-[50px_1fr_1fr_80px] gap-2 items-center p-3 border rounded-lg ${index % 2 === 0 ? 'bg-violet-50' : ''}`}
-          >
-            <div className="flex justify-center">
-              <Checkbox
-                checked={selectedVars.has(varName)}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    handleSelectVariable(varName);
-                  } else {
-                    handleDeselectVariable(varName);
-                  }
-                }}
-                className="h-4 w-4"
-              />
-            </div>
-
-            <Input
-              ref={setInputRef(varName, 'name')}
-              value={varName}
-              onChange={(e) =>
-                handleVariableNameChange(varName, e.target.value)
-              }
-              onFocus={() => handleFocus(varName, 'name')}
-              onBlur={handleBlur}
-              className="font-mono text-sm"
-              placeholder="Variable name"
-            />
-
-            <Input
-              ref={setInputRef(varName, 'value')}
-              value={varValue}
-              onChange={(e) =>
-                handleVariableValueChange(varName, e.target.value)
-              }
-              onFocus={() => handleFocus(varName, 'value')}
-              onBlur={handleBlur}
-              className="font-mono text-sm"
-              placeholder="Value"
-            />
-
-            <div className="flex justify-center">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => handleDeleteVariable(varName)}
-                className="h-8 w-8"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {Object.keys(variables).length === 0 && (
-        <div className="text-center py-8 text-muted-foreground">
-          No variables yet. Click "Add Variable" to create your first variable.
-        </div>
+    <>
+      <EnvButtons
+        hasVariables={hasVariables}
+        selectedCount={selectedVars.size}
+        onAddVariable={handleAddVariable}
+        onRemoveSelected={handleRemoveSelected}
+      />
+      {hasVariables ? (
+        <EnvTable
+          variables={tableVariables}
+          selectedVars={selectedVars}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSort={handleSort}
+          onSelectAll={handleSelectAll}
+          onDeselectAll={handleDeselectAll}
+          onSelectVariable={handleSelectVariable}
+          onDeselectVariable={handleDeselectVariable}
+          onNameChange={handleVariableNameChange}
+          onValueChange={handleVariableValueChange}
+          onDeleteVariable={handleDeleteVariable}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          setInputRef={setInputRef}
+        />
+      ) : (
+        <NoVariables onAddVariable={handleAddVariable} />
       )}
-    </div>
+    </>
   );
 }
