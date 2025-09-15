@@ -2,6 +2,7 @@
 import EnvButtons from './env-buttons';
 import EnvTable from './env-table';
 import NoVariables from './no-variables';
+import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useEnvVariables } from '@/hooks/use-env-variables';
 import { usePathname } from '@/i18n/navigation';
@@ -14,7 +15,14 @@ export default function EnvironmentVariablesContent() {
   const { setVariable, removeVariable } = useEnvVariables();
 
   const [variables, setVariables] = useState<Record<string, string>>({});
-  const [selectedVars, setSelectedVars] = useState<Set<string>>(new Set());
+  const [selectedVars, setSelectedVars] = useState<Set<string>>(() => {
+    if (typeof window !== 'undefined' && currentEnvName) {
+      const envSelectedKey = `selectedVariables_${currentEnvName}`;
+      const saved = localStorage.getItem(envSelectedKey);
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    }
+    return new Set();
+  });
   const [sortBy, setSortBy] = useState<'name' | 'value'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [focusedInput, setFocusedInput] = useState<{
@@ -28,6 +36,16 @@ export default function EnvironmentVariablesContent() {
       { name: HTMLInputElement | null; value: HTMLInputElement | null }
     >
   >(new Map());
+
+  useEffect(() => {
+    if (currentEnvName) {
+      const envSelectedKey = `selectedVariables_${currentEnvName}`;
+      localStorage.setItem(
+        envSelectedKey,
+        JSON.stringify(Array.from(selectedVars))
+      );
+    }
+  }, [selectedVars, currentEnvName]);
 
   const initializeInputRef = useCallback((varName: string) => {
     if (!inputRefs.current.has(varName)) {
@@ -68,7 +86,7 @@ export default function EnvironmentVariablesContent() {
         }
       }
     }
-  }, [variables, focusedInput]);
+  }, [focusedInput]);
 
   const loadVariablesDirectly = useCallback(() => {
     if (currentEnvName) {
@@ -79,20 +97,30 @@ export default function EnvironmentVariablesContent() {
           const envVariables = allVariables[currentEnvName] || {};
           setVariables(envVariables);
           Object.keys(envVariables).forEach(initializeInputRef);
+
+          setSelectedVars((prev) => {
+            const newSelected = new Set<string>();
+            prev.forEach((varName) => {
+              if (envVariables[varName] !== undefined) {
+                newSelected.add(varName.toString());
+              }
+            });
+            return newSelected;
+          });
         } else {
           setVariables({});
+          setSelectedVars(new Set());
         }
-      } catch (error) {
-        console.error('Error loading variables from localStorage:', error);
+      } catch {
         setVariables({});
+        setSelectedVars(new Set());
       }
-      setSelectedVars(new Set());
     }
   }, [currentEnvName, initializeInputRef]);
 
   useEffect(() => {
     loadVariablesDirectly();
-  }, [loadVariablesDirectly]);
+  }, [loadVariablesDirectly, currentEnvName]);
 
   const sortedVariables = useCallback(() => {
     const entries = Object.entries(variables);
@@ -208,7 +236,7 @@ export default function EnvironmentVariablesContent() {
         setFocusedInput({ type: 'name', varName: newVarName });
       }, 0);
     }
-  }, [currentEnvName, setVariable, variables, initializeInputRef]);
+  }, [currentEnvName, setVariable, initializeInputRef]);
 
   const handleSelectAll = useCallback(() => {
     setSelectedVars(new Set(Object.keys(variables)));
