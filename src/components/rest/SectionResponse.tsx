@@ -12,8 +12,8 @@ import { Save, ClipboardList, Copy } from 'lucide-react';
 import type { ResponseData } from '@/app/[locale]/restful/[[...rest]]/page';
 
 interface SectionResponseProps {
-  responseData: ResponseData | null;
-  isLoading: boolean;
+  readonly responseData: ResponseData | null;
+  readonly isLoading: boolean;
 }
 
 export default function SectionResponse({

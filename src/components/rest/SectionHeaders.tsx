@@ -5,8 +5,8 @@ import type { Header } from '@/app/[locale]/restful/[[...rest]]/page';
 import { Plus } from 'lucide-react';
 
 interface SectionHeadersProps {
-  headers: Header[];
-  onHeadersChange: (headers: Header[]) => void;
+  readonly headers: Header[];
+  readonly onHeadersChange: (headers: Header[]) => void;
 }
 
 export default function SectionHeaders({

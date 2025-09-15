@@ -18,8 +18,8 @@ import {
 } from '@/components/ui/select';
 
 interface SectionBodyProps {
-  body: string;
-  onBodyChange: (body: string) => void;
+  readonly body: string;
+  readonly onBodyChange: (body: string) => void;
 }
 
 export default function SectionBody({ body, onBodyChange }: SectionBodyProps) {

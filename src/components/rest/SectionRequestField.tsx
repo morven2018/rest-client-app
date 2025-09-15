@@ -11,10 +11,10 @@ import { useTranslations } from 'next-intl';
 import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
 
 interface SectionRequestFieldProps {
-  requestData: RequestData;
-  onRequestDataChange: (data: Partial<RequestData>) => void;
-  onSendRequest: () => void;
-  isLoading?: boolean;
+  readonly requestData: RequestData;
+  readonly onRequestDataChange: (data: Partial<RequestData>) => void;
+  readonly onSendRequest: () => void;
+  readonly isLoading?: boolean;
 }
 
 export default function SectionRequestField({

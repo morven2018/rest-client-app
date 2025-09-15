@@ -20,7 +20,7 @@ import type { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
 import generateCode from '@/lib/generator';
 
 interface SectionCodeProps {
-  requestData: RequestData;
+  readonly requestData: RequestData;
 }
 
 export default function SectionCode({ requestData }: SectionCodeProps) {
