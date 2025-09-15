@@ -1,3 +1,11 @@
+import generateCode from "@/lib/generator";
+import { ClipboardList, Copy } from "lucide-react";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
+import type { RequestData } from "@/app/[locale]/restful/[[...rest]]/page";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+
 import {
   Accordion,
   AccordionContent,
@@ -11,19 +19,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { useState } from 'react';
-import { ClipboardList, Copy } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import type { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
-import generateCode from '@/lib/generator';
 
 interface SectionCodeProps {
   requestData: RequestData;
 }
 
-export default function SectionCode({ requestData }: SectionCodeProps) {
+export default function SectionCode({ requestData }: Readonly<SectionCodeProps>) {
   const [generator, setGenerator] = useState('curl');
   const [generatedCode, setGeneratedCode] = useState('');
   const [copied, setCopied] = useState(false);

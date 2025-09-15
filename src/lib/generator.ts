@@ -62,7 +62,7 @@ const generators: Record<string, GeneratorFunction> = {
   },
 
   nodejs: ({ method, url, body, headers }: RequestData) => {
-    const data = body ? body : 'null';
+    const data = body ?? 'null';
     try {
       const parsedUrl = new URL(url);
       let code = `const https = require('https');\n\n`;

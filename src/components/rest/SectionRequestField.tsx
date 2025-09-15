@@ -1,3 +1,8 @@
+import { useTranslations } from 'next-intl';
+import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+
 import {
   Select,
   SelectContent,
@@ -5,10 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
-import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
 
 interface SectionRequestFieldProps {
   requestData: RequestData;
@@ -18,7 +19,7 @@ interface SectionRequestFieldProps {
 export default function SectionRequestField({
   requestData,
   onRequestDataChange,
-}: SectionRequestFieldProps) {
+}: Readonly<SectionRequestFieldProps>) {
   const t = useTranslations('RestClient');
 
   const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];

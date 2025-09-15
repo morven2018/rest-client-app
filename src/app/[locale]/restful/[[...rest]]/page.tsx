@@ -1,12 +1,11 @@
 'use client';
-
-import { useState, useEffect, useCallback } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
-import SectionRequestField from '@/components/rest/SectionRequestField';
-import SectionHeaders from '@/components/rest/SectionHeaders';
-import SectionCode from '@/components/rest/SectionCode';
 import SectionBody from '@/components/rest/SectionBody';
+import SectionCode from '@/components/rest/SectionCode';
+import SectionHeaders from '@/components/rest/SectionHeaders';
+import SectionRequestField from '@/components/rest/SectionRequestField';
 import SectionResponse from '@/components/rest/SectionResponse';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
 
 export interface Header {
   key: string;

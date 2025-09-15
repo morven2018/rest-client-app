@@ -1,5 +1,8 @@
-import { useTranslations } from 'next-intl';
 import { Trash } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+
 import {
   Table,
   TableBody,
@@ -8,8 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 
 interface HeadersTableProps {
   readonly headers: { key: string; value: string }[];
@@ -39,7 +40,7 @@ export default function HeadersTable({
       </TableHeader>
       <TableBody>
         {headers.map((header, index) => (
-          <TableRow key={index}>
+          <TableRow key={header.key}>
             <TableCell>
               <Input
                 value={header.key}

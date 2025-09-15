@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button';
 import HeadersTable from './HeadersTable';
+import { Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import type { Header } from '@/app/[locale]/restful/[[...rest]]/page';
-import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface SectionHeadersProps {
   headers: Header[];
@@ -12,7 +12,7 @@ interface SectionHeadersProps {
 export default function SectionHeaders({
   headers,
   onHeadersChange,
-}: SectionHeadersProps) {
+}: Readonly<SectionHeadersProps>) {
   const t = useTranslations('RestClient');
 
   const addHeader = () => {
