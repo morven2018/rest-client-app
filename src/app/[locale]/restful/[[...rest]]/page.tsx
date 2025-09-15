@@ -59,7 +59,7 @@ export default function RestfulPage() {
 
     const headers: Header[] = [];
     searchParams.forEach((value, key) => {
-      if (!key.match(/^h\d+_(key|value)$/)) {
+      if (!RegExp(/^h\d+_(key|value)$/).exec(key)) {
         headers.push({ key, value });
       }
     });
