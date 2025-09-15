@@ -7,6 +7,8 @@ import SectionHeaders from '@/components/rest/SectionHeaders';
 import SectionCode from '@/components/rest/SectionCode';
 import SectionBody from '@/components/rest/SectionBody';
 import SectionResponse from '@/components/rest/SectionResponse';
+import CustomSidebar from '@/components/layout/sidebar/sidebar';
+import Heading from '@/components/layout/breadcrumb-and-heading/heading';
 
 export interface Header {
   key: string;
@@ -241,26 +243,35 @@ export default function RestfulPage() {
 
   return (
     <main className="w-full">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-[17px]">
-        <div className="flex flex-col gap-6 py-4">
-          <SectionRequestField
-            requestData={requestData}
-            onRequestDataChange={handleRequestDataChange}
-            onSendRequest={sendRequest}
-            isLoading={isLoading}
-          />
-          <SectionHeaders
-            headers={requestData.headers}
-            onHeadersChange={(headers) => handleRequestDataChange({ headers })}
-          />
-          <SectionCode requestData={requestData} />
-          <SectionBody
-            body={requestData.body}
-            onBodyChange={handleBodyChange}
-          />
-          <SectionResponse responseData={responseData} isLoading={isLoading} />
-        </div>
-      </div>
+      <CustomSidebar className="min-h-150">
+        <Heading>
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-[17px]">
+            <div className="flex flex-col gap-6 py-4">
+              <SectionRequestField
+                requestData={requestData}
+                onRequestDataChange={handleRequestDataChange}
+                onSendRequest={sendRequest}
+                isLoading={isLoading}
+              />
+              <SectionHeaders
+                headers={requestData.headers}
+                onHeadersChange={(headers) =>
+                  handleRequestDataChange({ headers })
+                }
+              />
+              <SectionCode requestData={requestData} />
+              <SectionBody
+                body={requestData.body}
+                onBodyChange={handleBodyChange}
+              />
+              <SectionResponse
+                responseData={responseData}
+                isLoading={isLoading}
+              />
+            </div>
+          </div>
+        </Heading>
+      </CustomSidebar>
     </main>
   );
 }
