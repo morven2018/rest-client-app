@@ -1,8 +1,3 @@
-import { useTranslations } from 'next-intl';
-import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-
 import {
   Select,
   SelectContent,
@@ -10,16 +5,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
+import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
 
 interface SectionRequestFieldProps {
-  requestData: RequestData;
-  onRequestDataChange: (data: Partial<RequestData>) => void;
+  readonly requestData: RequestData;
+  readonly onRequestDataChange: (data: Partial<RequestData>) => void;
+  readonly onSendRequest: () => void;
+  readonly isLoading?: boolean;
 }
 
 export default function SectionRequestField({
   requestData,
   onRequestDataChange,
-}: Readonly<SectionRequestFieldProps>) {
+  onSendRequest,
+  isLoading = false,
+}: SectionRequestFieldProps) {
   const t = useTranslations('RestClient');
 
   const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
@@ -33,7 +36,13 @@ export default function SectionRequestField({
   };
 
   const handleSend = () => {
-    console.log('Sending request:', requestData);
+    if (!requestData.url.trim()) return;
+    try {
+      new URL(requestData.url);
+      onSendRequest();
+    } catch (error) {
+      console.error('Invalid URL:', error);
+    }
   };
 
   return (
@@ -68,6 +77,7 @@ export default function SectionRequestField({
         <Button
           variant="outline"
           onClick={handleSend}
+          disabled={isLoading || !requestData.url.trim()}
           className="bg-request-button-bg cursor-pointer"
         >
           {t('buttonSend')}
