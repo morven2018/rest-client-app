@@ -42,17 +42,32 @@ export const useEnvVariables = () => {
     return variables[envName] || {};
   };
 
+  const getCurrentFromStorage = (): VariablesData => {
+    try {
+      const stored = localStorage.getItem('variables');
+      return stored ? JSON.parse(stored) : {};
+    } catch (error) {
+      console.error('Error reading from localStorage:', error);
+      return {};
+    }
+  };
+
   const addEnv = (envName: string, initialVariables: EnvVariables = {}) => {
-    setVariables((prev) => ({
-      ...prev,
-      [envName]: initialVariables,
-    }));
+    setVariables((prev) => {
+      const newVars = {
+        ...prev,
+        [envName]: initialVariables,
+      };
+      saveToStorage(newVars);
+      return newVars;
+    });
   };
 
   const removeEnv = (envName: string) => {
     setVariables((prev) => {
       const newVars = { ...prev };
       delete newVars[envName];
+      saveToStorage(newVars);
       return newVars;
     });
   };
@@ -82,15 +97,23 @@ export const useEnvVariables = () => {
   };
 
   const renameEnv = (oldName: string, newName: string) => {
-    setVariables((prev) => {
-      if (!prev[oldName]) return prev;
+    const currentData = getCurrentFromStorage();
+    if (!currentData[oldName]) return;
 
-      const newVars = { ...prev };
-      newVars[newName] = newVars[oldName];
-      delete newVars[oldName];
+    const newVars = { ...currentData };
+    newVars[newName] = { ...newVars[oldName] };
+    delete newVars[oldName];
 
-      return newVars;
-    });
+    setVariables(newVars);
+    saveToStorage(newVars);
+  };
+
+  const saveToStorage = (data: VariablesData) => {
+    try {
+      localStorage.setItem('variables', JSON.stringify(data));
+    } catch (error) {
+      console.error('Error saving to localStorage:', error);
+    }
   };
 
   const clearEnv = (envName: string) => {

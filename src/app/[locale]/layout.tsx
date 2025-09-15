@@ -1,7 +1,6 @@
 import '../globals.css';
 import type { Metadata } from 'next';
 import { NextIntlClientProvider, hasLocale } from 'next-intl';
-import { Geist, Geist_Mono } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { Toaster } from 'sonner';
 import { Footer } from '@/components/layout/footer/Footer';
@@ -9,16 +8,6 @@ import { Header } from '@/components/layout/header/Header';
 import { ThemeProvider } from '@/context/ThemeProvider';
 import { AuthProvider } from '@/context/auth/auth-provider';
 import { routing } from '@/i18n/routing';
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
   title: 'REST Client',
@@ -47,7 +36,7 @@ export default async function LocaleLayout({
       <ThemeProvider>
         <AuthProvider>
           <Header />
-          {children}
+          <div className="dark:bg-neutral-600 py-10"> {children}</div>
           <Footer />
           <Toaster />
         </AuthProvider>

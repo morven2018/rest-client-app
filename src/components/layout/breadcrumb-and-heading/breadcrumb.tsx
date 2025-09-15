@@ -1,5 +1,6 @@
 import { Home } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
+import { formatBreadcrumbName } from '@/lib/formatter';
 
 import {
   Breadcrumb,
@@ -14,19 +15,13 @@ interface CustomBreadcrumbProps {
   pathname: string;
 }
 
-function formatBreadcrumbName(name: string): string {
-  return decodeURIComponent(name)
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 export default function CustomBreadcrumb({
   pathname,
 }: Readonly<CustomBreadcrumbProps>) {
   const links = pathname.split('/').filter(Boolean);
 
   return (
-    <Breadcrumb className="px-4 py-2">
+    <Breadcrumb className="py-2">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink
