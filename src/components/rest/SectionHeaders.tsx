@@ -1,19 +1,26 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
 import HeadersTable from './HeadersTable';
+import { Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import type { Header } from '@/app/[locale]/restful/[[...rest]]/page';
+import { Button } from '@/components/ui/button';
 
-export default function SectionHeaders() {
-  const [headers, setHeaders] = useState<{ key: string; value: string }[]>([]);
+interface SectionHeadersProps {
+  headers: Header[];
+  onHeadersChange: (headers: Header[]) => void;
+}
 
+export default function SectionHeaders({
+  headers,
+  onHeadersChange,
+}: Readonly<SectionHeadersProps>) {
   const t = useTranslations('RestClient');
 
   const addHeader = () => {
-    setHeaders([...headers, { key: '', value: '' }]);
+    onHeadersChange([...headers, { key: '', value: '' }]);
   };
 
   const removeHeader = (index: number) => {
-    setHeaders(headers.filter((_, i) => i !== index));
+    onHeadersChange(headers.filter((_, i) => i !== index));
   };
 
   const updateHeader = (
@@ -23,11 +30,11 @@ export default function SectionHeaders() {
   ) => {
     const newHeaders = [...headers];
     newHeaders[index][field] = value;
-    setHeaders(newHeaders);
+    onHeadersChange(newHeaders);
   };
 
   return (
-    <>
+    <section className="flex flex-col gap-4 px-6 py-5 border-t border-t-black">
       <div className="flex justify-between items-center pl-6 pr-6">
         <h3>{t('headersTitle')}</h3>
         <Button
@@ -35,7 +42,7 @@ export default function SectionHeaders() {
           onClick={addHeader}
           className="cursor-pointer"
         >
-          {t('buttonAddHeader')}
+          <Plus />
         </Button>
       </div>
       <div>
@@ -58,6 +65,6 @@ export default function SectionHeaders() {
           />
         )}
       </div>
-    </>
+    </section>
   );
 }

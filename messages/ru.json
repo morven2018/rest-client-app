@@ -93,7 +93,8 @@
     "codeTitle": "Код",
     "codeButton": "Создать код",
     "bodyTitle": "Тело",
-    "responseTitle": "Ответ"
+    "responseTitle": "Ответ",
+    "codeNoUrl": "Пожалуйста, введите действительный URL-адрес."
   },
   "user-menu": {
     "update": "Обновить данные",

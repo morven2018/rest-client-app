@@ -93,7 +93,8 @@
     "codeTitle": "Code",
     "codeButton": "Generate code",
     "bodyTitle": "Body",
-    "responseTitle": "Response"
+    "responseTitle": "Response",
+    "codeNoUrl": "Please enter a valid URL."
   },
   "user-menu": {
     "update": "Update account",

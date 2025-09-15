@@ -1,5 +1,8 @@
-import { useTranslations } from 'next-intl';
 import { Trash } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+
 import {
   Table,
   TableBody,
@@ -8,8 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 
 interface HeadersTableProps {
   readonly headers: { key: string; value: string }[];
@@ -32,19 +33,14 @@ export default function HeadersTable({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-11" />
           <TableHead>{t('headerKey')}</TableHead>
           <TableHead>{t('headerValue')}</TableHead>
+          <TableHead className="w-11" />
         </TableRow>
       </TableHeader>
       <TableBody>
         {headers.map((header, index) => (
-          <TableRow key={index}>
-            <TableCell className="px-2 py-3">
-              <Button onClick={() => onRemove(index)}>
-                <Trash className="w-7 h-7" />
-              </Button>
-            </TableCell>
+          <TableRow key={header.key}>
             <TableCell>
               <Input
                 value={header.key}
@@ -58,6 +54,14 @@ export default function HeadersTable({
                 onChange={(e) => onUpdate(index, 'value', e.target.value)}
                 placeholder="value"
               />
+            </TableCell>
+            <TableCell className="px-2 py-3">
+              <Button
+                className="cursor-pointer"
+                onClick={() => onRemove(index)}
+              >
+                <Trash className="w-7 h-7" />
+              </Button>
             </TableCell>
           </TableRow>
         ))}
