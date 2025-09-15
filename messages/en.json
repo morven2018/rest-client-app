@@ -125,6 +125,12 @@
     "variable": "Variable",
     "value": "Value",
     "select": "Select the variable",
-    "delete": "Remove variable"
+    "delete": "Remove variable",
+    "delete-env": "Remove",
+    "delete-selected-env": "Remove selected",
+    "delete-all-env": "Remove all",
+    "no-environments": "There is no environment created",
+    "select-env": "Select the environment",
+    "vars": "Variables:"
   }
 }
