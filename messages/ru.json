@@ -88,9 +88,11 @@
     "codeTitle": "Код",
     "codeButton": "Создать код",
     "bodyTitle": "Тело",
-    "responseTitle": "Ответ",
-    "codeNoUrl": "Пожалуйста, введите действительный URL-адрес.",
     "bodyJSON": "ДЖСОН",
-    "bodyText": "Текст"
+    "bodyText": "Текст",
+    "responseTitle": "Ответ",
+    "responseSendingRequest": "Отправка запроса...",
+    "responseNoYet": "Пока нет ответа. Отправьте запрос, чтобы увидеть результаты.",
+    "codeNoUrl": "Пожалуйста, введите действительный URL-адрес."
   }
 }

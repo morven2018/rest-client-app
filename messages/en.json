@@ -87,10 +87,12 @@
     "headerValue": "Value",
     "codeTitle": "Code",
     "codeButton": "Generate code",
+    "bodyJSON": "JSON",
+    "bodyText": "Text",
     "bodyTitle": "Body",
     "responseTitle": "Response",
-    "codeNoUrl": "Please enter a valid URL.",
-    "bodyJSON": "JSON",
-    "bodyText": "Text"
+    "responseSendingRequest": "Sending request...",
+    "responseNoYet": "No response yet. Send a request to see the results.",
+    "codeNoUrl": "Please enter a valid URL."
   }
 }
