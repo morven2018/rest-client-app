@@ -20,6 +20,13 @@ export interface RequestData {
   headers: Header[];
 }
 
+export interface ResponseData {
+  status: number;
+  statusText: string;
+  headers: Record<string, string>;
+  body: string;
+}
+
 const safeAtob = (encoded: string): string => {
   if (!encoded) return '';
   try {
@@ -48,6 +55,71 @@ const safeBtoa = (str: string): string => {
   }
 };
 
+const HTTP_STATUS_TEXTS: Record<number, string> = {
+  100: 'Continue',
+  101: 'Switching Protocols',
+  102: 'Processing',
+  103: 'Early Hints',
+  200: 'OK',
+  201: 'Created',
+  202: 'Accepted',
+  203: 'Non-Authoritative Information',
+  204: 'No Content',
+  205: 'Reset Content',
+  206: 'Partial Content',
+  207: 'Multi-Status',
+  208: 'Already Reported',
+  226: 'IM Used',
+  300: 'Multiple Choices',
+  301: 'Moved Permanently',
+  302: 'Found',
+  303: 'See Other',
+  304: 'Not Modified',
+  305: 'Use Proxy',
+  307: 'Temporary Redirect',
+  308: 'Permanent Redirect',
+  400: 'Bad Request',
+  401: 'Unauthorized',
+  402: 'Payment Required',
+  403: 'Forbidden',
+  404: 'Not Found',
+  405: 'Method Not Allowed',
+  406: 'Not Acceptable',
+  407: 'Proxy Authentication Required',
+  408: 'Request Timeout',
+  409: 'Conflict',
+  410: 'Gone',
+  411: 'Length Required',
+  412: 'Precondition Failed',
+  413: 'Payload Too Large',
+  414: 'URI Too Long',
+  415: 'Unsupported Media Type',
+  416: 'Range Not Satisfiable',
+  417: 'Expectation Failed',
+  418: "I'm a teapot",
+  421: 'Misdirected Request',
+  422: 'Unprocessable Entity',
+  423: 'Locked',
+  424: 'Failed Dependency',
+  425: 'Too Early',
+  426: 'Upgrade Required',
+  428: 'Precondition Required',
+  429: 'Too Many Requests',
+  431: 'Request Header Fields Too Large',
+  451: 'Unavailable For Legal Reasons',
+  500: 'Internal Server Error',
+  501: 'Not Implemented',
+  502: 'Bad Gateway',
+  503: 'Service Unavailable',
+  504: 'Gateway Timeout',
+  505: 'HTTP Version Not Supported',
+  506: 'Variant Also Negotiates',
+  507: 'Insufficient Storage',
+  508: 'Loop Detected',
+  510: 'Not Extended',
+  511: 'Network Authentication Required',
+};
+
 export default function RestfulPage() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -67,6 +139,51 @@ export default function RestfulPage() {
 
     return { method, url, body, headers };
   });
+
+  const [responseData, setResponseData] = useState<ResponseData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const sendRequest = async () => {
+    setIsLoading(true);
+    try {
+      const headers = Object.fromEntries(
+        requestData.headers
+          .filter((h) => h.key && h.value)
+          .map((h) => [h.key, h.value])
+      );
+
+      const shouldSendBody = !['GET', 'HEAD'].includes(requestData.method);
+
+      const response = await fetch(requestData.url, {
+        method: requestData.method,
+        headers,
+        body: shouldSendBody ? requestData.body : undefined,
+      });
+
+      const responseBody = await response.text();
+      const statusText =
+        response.statusText ||
+        HTTP_STATUS_TEXTS[response.status] ||
+        'Unknown Status';
+
+      setResponseData({
+        status: response.status,
+        statusText: statusText,
+        headers: Object.fromEntries(response.headers.entries()),
+        body: responseBody,
+      });
+    } catch (error) {
+      console.error('Request failed:', error);
+      setResponseData({
+        status: 0,
+        statusText: 'Network Error',
+        headers: {},
+        body: error instanceof Error ? error.message : 'Unknown error',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const updateUrl = useCallback(
     (data: RequestData) => {
@@ -118,6 +235,10 @@ export default function RestfulPage() {
     []
   );
 
+  const handleBodyChange = useCallback((body: string) => {
+    setRequestData((prev) => ({ ...prev, body }));
+  }, []);
+
   return (
     <main className="w-full">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-[17px]">
@@ -125,14 +246,19 @@ export default function RestfulPage() {
           <SectionRequestField
             requestData={requestData}
             onRequestDataChange={handleRequestDataChange}
+            onSendRequest={sendRequest}
+            isLoading={isLoading}
           />
           <SectionHeaders
             headers={requestData.headers}
             onHeadersChange={(headers) => handleRequestDataChange({ headers })}
           />
-          <SectionCode />
-          <SectionBody />
-          <SectionResponse />
+          <SectionCode requestData={requestData} />
+          <SectionBody
+            body={requestData.body}
+            onBodyChange={handleBodyChange}
+          />
+          <SectionResponse responseData={responseData} isLoading={isLoading} />
         </div>
       </div>
     </main>
