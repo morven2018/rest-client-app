@@ -131,6 +131,6 @@
     "delete-all-env": "Remove all",
     "no-environments": "There is no environment created",
     "select-env": "Select the environment",
-    "vars": "Variables:"
+    "vars": "Variables: "
   }
 }
