@@ -6,7 +6,7 @@ import Heading from '@/components/layout/breadcrumb-and-heading/heading';
 export default function VariablePage() {
   return (
     <main>
-      <CustomSidebar className="min-h-150">
+      <CustomSidebar className="min-h-120">
         <Heading>
           <EnvHeading />
         </Heading>
