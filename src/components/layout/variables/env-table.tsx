@@ -1,5 +1,6 @@
 'use client';
 import { Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -50,6 +51,7 @@ export default function EnvTable({
 }: Readonly<EnvTableProps>) {
   const isAllSelected =
     selectedVars.size > 0 && selectedVars.size === variables.length;
+  const t = useTranslations('variables');
 
   const handleNameFocus = useCallback(
     (varName: string) => () => {
@@ -71,6 +73,7 @@ export default function EnvTable({
         <div className="flex justify-center">
           <Checkbox
             checked={isAllSelected}
+            title={t('select-all')}
             onCheckedChange={(checked) => {
               if (checked) {
                 onSelectAll();
@@ -85,13 +88,14 @@ export default function EnvTable({
         <button
           onClick={() => onSort('name')}
           className="flex items-center justify-between text-left hover:bg-muted-foreground/10 px-4"
+          title={sortOrder === 'asc' ? t('sort-up') : t('sort-down')}
         >
-          <span>Variable</span>
+          <span>{t('variable')}</span>
           {sortBy === 'name' && <span>{sortOrder === 'asc' ? '↑' : '↓'}</span>}
         </button>
 
         <div className="flex items-center gap-2 text-left hover:bg-muted-foreground/10">
-          <span>Value</span>
+          <span>{t('value')}</span>
         </div>
         <div></div>
       </div>
@@ -105,6 +109,7 @@ export default function EnvTable({
             <div className="flex justify-center">
               <Checkbox
                 checked={selectedVars.has(name)}
+                title={t('select')}
                 onCheckedChange={(checked) => {
                   if (checked) {
                     onSelectVariable(name);
@@ -123,7 +128,7 @@ export default function EnvTable({
               onFocus={handleNameFocus(name)}
               onBlur={onBlur}
               className="font-mono text-sm border-violet-200"
-              placeholder="Variable"
+              placeholder={t('variable')}
             />
 
             <Input
@@ -133,7 +138,7 @@ export default function EnvTable({
               onFocus={handleValueFocus(name)}
               onBlur={onBlur}
               className="font-mono text-sm border-violet-200"
-              placeholder="Value"
+              placeholder={t('value')}
             />
 
             <Button
@@ -141,6 +146,7 @@ export default function EnvTable({
               size="icon"
               onClick={() => onDeleteVariable(name)}
               className="p-2"
+              title={t('delete')}
             >
               <Trash2 className="h-4 w-4" />
             </Button>

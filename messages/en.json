@@ -115,6 +115,16 @@
   "variables": {
     "update": "Update name of environment",
     "add": "Add new environment",
-    "title": "Variables"
+    "title": "Variables",
+    "remove": "Remove all selected",
+    "add-variable": "Add Variable",
+    "no-variable": "There is no variable here",
+    "select-all": "Select all variables",
+    "sort-up": "Sort variables by acs",
+    "sort-down": "Sort variables by decs",
+    "variable": "Variable",
+    "value": "Value",
+    "select": "Select the variable",
+    "delete": "Remove variable"
   }
 }

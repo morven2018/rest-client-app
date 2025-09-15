@@ -1,5 +1,6 @@
 'use client';
 import { Plus, Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 
 interface EnvButtonsProps {
@@ -13,6 +14,7 @@ export default function EnvButtons({
   onAddVariable,
   onRemoveSelected,
 }: Readonly<EnvButtonsProps>) {
+  const t = useTranslations('variables');
   return (
     <div className="flex flex-row gap-4 w-full justify-end my-4 px-6 max-[500px]:pl-1 text-sm py-3">
       <Button
@@ -20,7 +22,7 @@ export default function EnvButtons({
         className="flex items-center gap-2  bg-violet-800 hover:bg-violet-900 dark:bg-neutral-50 text-white dark:text-violet-800 dark:hover:bg-violet-200"
       >
         <Plus className="h-4 w-4" />
-        Add Variable
+        {t('add-variable')}
       </Button>
       {selectedCount > 0 && (
         <Button
@@ -28,8 +30,7 @@ export default function EnvButtons({
           className="flex items-center gap-2 bg-purple-800 hover:bg-purple-900 dark:bg-neutral-50 dark:text-purple-800 dark:hover:bg-purple-200"
           variant="destructive"
         >
-          <Trash2 className="h-4 w-4" />
-          Remove selected ({selectedCount})
+          {t('remove')}
         </Button>
       )}
     </div>
