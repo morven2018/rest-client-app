@@ -1,8 +1,8 @@
+import { z } from 'zod';
 import { avatarSchema, usernameSchema } from './common-schemas';
-import { loginSchema } from './login-schema';
 
-export const registerSchema = (t: (key: string) => string) =>
-  loginSchema(t).extend({
+export const updateAccountSchema = (t: (key: string) => string) =>
+  z.object({
     username: usernameSchema(t),
     avatar: avatarSchema(t),
   });
