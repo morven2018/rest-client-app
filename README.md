@@ -2,7 +2,7 @@
 
 ### Description
 
-This is a browser REST Client developed to simplify APIs workflow. Quickly send requests with any method, header, or body. Use environment variables to switch between setups instantly, and never lose a result with automatic request history. This is a tool for developers building and integrating APIs.
+This is a browser-based REST Client developed to simplify API workflows. Quickly send reswitch between setups instantly, and never lose results with automatic request history.  
 
 ### ✨ Features
 
@@ -74,7 +74,7 @@ pnpm --version
    ```
    pnpm lint
    ```
-8. Formats the codebase using Prettier:
+8. Format the codebase using Prettier:
    ```
    pnpm format:fix
    ```
@@ -116,7 +116,7 @@ pnpm --version
 3. Create a Feature Branch
    - Create a new branch for your feature or fix. Use a clear naming convention:
 4. Make Your Changes & Commit
-   - Implement your feature or bug fix.
+   - Implement your feature or a bug fix
    - Commit your changes with a descriptive message
 5. Push to Your Fork
 6. Open a Pull Request (PR)
