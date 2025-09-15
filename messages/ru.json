@@ -88,11 +88,49 @@
     "codeTitle": "Код",
     "codeButton": "Создать код",
     "bodyTitle": "Тело",
+    "responseTitle": "Ответ",
     "bodyJSON": "ДЖСОН",
     "bodyText": "Текст",
-    "responseTitle": "Ответ",
     "responseSendingRequest": "Отправка запроса...",
     "responseNoYet": "Пока нет ответа. Отправьте запрос, чтобы увидеть результаты.",
     "codeNoUrl": "Пожалуйста, введите действительный URL-адрес."
+  },
+  "user-menu": {
+    "update": "Обновить данные",
+    "logout": "Выйти",
+    "profile": "Обновить данные"
+  },
+  "update": {
+    "name-placeholder": "Введите Ваше имя",
+    "avatar-placeholder": "Загрузите аватар ...",
+    "btn": "Обновить",
+    "name": "Имя",
+    "avatar": "Аватар"
+  },
+  "profile": {
+    "success": "success",
+    "title": "Обновить данные",
+    "home-btn": "На домашнюю страницу"
+  },
+  "variables": {
+    "update": "Обновить название окружения",
+    "add": "Добавить новое окружения",
+    "title": "Переменные",
+    "remove": "Удалить выбранные",
+    "add-variable": "Добавить переменую",
+    "no-variable": "В окружении нет переменных",
+    "select-all": "Выбрать все переменные",
+    "sort-up": "Сортировать по убыванию",
+    "sort-down": "Сортировать по возрастанию ",
+    "variable": "Переменная",
+    "value": "Значение",
+    "select": "Выбрать переменную",
+    "delete": "Удалить переменную",
+    "delete-env": "Удалить",
+    "delete-selected-env": "Удалить выбранные",
+    "delete-all-env": "Удалить все",
+    "no-environments": "Нет ни одного окружения",
+    "select-env": "Выбрать окружение",
+    "vars": "Переменных:"
   }
 }

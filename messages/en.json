@@ -78,6 +78,11 @@
     "avatar-placeholder": "Select picture",
     "upload-error": "The problems occur on upload avatar"
   },
+  "Sidebar": {
+    "rest": "REST Client",
+    "history": "History and analysis",
+    "variables": "Variables"
+  },
   "RestClient": {
     "buttonSend": "SEND",
     "headersTitle": "Headers",
@@ -87,12 +92,50 @@
     "headerValue": "Value",
     "codeTitle": "Code",
     "codeButton": "Generate code",
-    "bodyJSON": "JSON",
-    "bodyText": "Text",
     "bodyTitle": "Body",
     "responseTitle": "Response",
+    "bodyJSON": "JSON",
+    "bodyText": "Text",
     "responseSendingRequest": "Sending request...",
     "responseNoYet": "No response yet. Send a request to see the results.",
     "codeNoUrl": "Please enter a valid URL."
+  },
+  "user-menu": {
+    "update": "Update account",
+    "logout": "Log out",
+    "profile": "Update account"
+  },
+  "update": {
+    "name-placeholder": "User name",
+    "avatar-placeholder": "Load avatar...",
+    "btn": "Update",
+    "name": "User name",
+    "avatar": "Avatar"
+  },
+  "profile": {
+    "success": "success",
+    "title": "Update Info",
+    "home-btn": "To home page"
+  },
+  "variables": {
+    "update": "Update name of environment",
+    "add": "Add new environment",
+    "title": "Variables",
+    "remove": "Remove all selected",
+    "add-variable": "Add Variable",
+    "no-variable": "There is no variable here",
+    "select-all": "Select all variables",
+    "sort-up": "Sort variables by acs",
+    "sort-down": "Sort variables by decs",
+    "variable": "Variable",
+    "value": "Value",
+    "select": "Select the variable",
+    "delete": "Remove variable",
+    "delete-env": "Remove",
+    "delete-selected-env": "Remove selected",
+    "delete-all-env": "Remove all",
+    "no-environments": "There is no environment created",
+    "select-env": "Select the environment",
+    "vars": "Variables:"
   }
 }
