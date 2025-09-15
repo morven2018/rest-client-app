@@ -108,7 +108,7 @@ describe('verifyTokenLocally', () => {
       json: jest.fn().mockResolvedValue(mockResponse),
     });
 
-    const result = await verifyToken('valid-token');
+    await verifyToken('valid-token');
 
     expect(fetch).toHaveBeenCalledWith('/api/auth/verify-token', {
       method: 'POST',
