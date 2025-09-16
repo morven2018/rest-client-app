@@ -6,6 +6,8 @@ export const createNavigation = jest.fn().mockReturnValue({
   getPathname: jest.fn(),
 });
 
-export default {
+const navigationMock = {
   createNavigation,
 };
+
+export default navigationMock;

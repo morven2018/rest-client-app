@@ -1,9 +1,9 @@
-export const useToast = () => ({
+export const useToast = jest.fn(() => ({
   toastError: jest.fn(),
   toastSuccess: jest.fn(),
   toastNote: jest.fn(),
   showToast: jest.fn(),
-});
+}));
 
 export const toast = {
   custom: jest.fn(),
@@ -15,8 +15,10 @@ export const toast = {
 
 export const Toaster = jest.fn(() => null);
 
-export default {
+const sonnerMock = {
   useToast,
   toast,
   Toaster,
 };
+
+export default sonnerMock;

@@ -4,9 +4,11 @@ export const getTranslations = jest.fn(() => async (key: string) => key);
 export const getLocale = jest.fn(() => 'en');
 export const getMessages = jest.fn(() => ({}));
 
-export default {
+const serverMock = {
   getRequestConfig,
   getTranslations,
   getLocale,
   getMessages,
 };
+
+export default serverMock;

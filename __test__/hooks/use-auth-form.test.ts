@@ -26,7 +26,6 @@ const testSchema = z.object({
 });
 
 const mockReactHookForm = { useForm };
-const mockSonner = { useToast };
 
 describe('useAuthForm', () => {
   const mockLogin = jest.fn();
@@ -48,9 +47,7 @@ describe('useAuthForm', () => {
     });
 
     const mockUseForm = jest.fn().mockReturnValue({
-      handleSubmit:
-        (callback: (data: unknown) => void) => (e?: React.BaseSyntheticEvent) =>
-          callback({}),
+      handleSubmit: (callback: (data: unknown) => void) => () => callback({}),
       formState: { errors: {}, isValid: false },
       register: jest.fn(),
       watch: jest.fn(),
