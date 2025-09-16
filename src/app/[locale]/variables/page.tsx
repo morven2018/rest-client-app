@@ -1,12 +1,19 @@
+import CustomSidebar from '@/components/layout/sidebar/sidebar';
 import Heading from '@/components/layout/breadcrumb-and-heading/heading';
+import VariablesContent from '@/components/layout/variables/variables-content';
+import { getTranslations } from 'next-intl/server';
 
-export default function VariablesPage() {
+export default async function VariablesPage() {
+  const t = await getTranslations('variables');
+
   return (
     <main>
-      <div>This is Variables page</div>
-      <Heading>
-        <div>dvdsv</div>
-      </Heading>
+      <CustomSidebar className="min-h-120">
+        <Heading>
+          <h2 className="text-xl font-semibold my-6">{t('title')}</h2>
+          <VariablesContent />
+        </Heading>
+      </CustomSidebar>
     </main>
   );
 }

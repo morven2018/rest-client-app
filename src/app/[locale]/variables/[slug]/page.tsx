@@ -1,12 +1,17 @@
+import CustomSidebar from '@/components/layout/sidebar/sidebar';
+import EnvHeading from '@/components/layout/variables/env-heading';
+import EnvironmentVariablesTable from '@/components/layout/variables/env-content';
 import Heading from '@/components/layout/breadcrumb-and-heading/heading';
 
 export default function VariablePage() {
   return (
     <main>
-      <h1>New Environment</h1>
-      <Heading>
-        <div>dvdsv</div>
-      </Heading>
+      <CustomSidebar className="min-h-120">
+        <Heading>
+          <EnvHeading />
+        </Heading>
+        <EnvironmentVariablesTable />
+      </CustomSidebar>
     </main>
   );
 }

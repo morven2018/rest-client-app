@@ -125,6 +125,86 @@
   background-repeat: no-repeat;
 }
 
+[data-slot='sidebar-container'] {
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height) - var(--footer-height));
+  z-index: 40;
+  transition:
+    width 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+@media (max-width: 900px) {
+  [data-slot='sidebar-container'] {
+    width: var(--sidebar-width-icon) !important;
+  }
+
+  [data-slot='sidebar']:hover [data-slot='sidebar-container'] {
+    width: var(--sidebar-width) !important;
+    z-index: 50;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+  }
+
+  [data-slot='sidebar-container'] [data-sidebar='group-label'],
+  [data-slot='sidebar-container'] [data-sidebar='menu-button'] span,
+  [data-slot='sidebar-container'] [data-sidebar='menu-badge'],
+  [data-slot='sidebar-container'] [data-sidebar='group-action'] {
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+    pointer-events: none;
+  }
+
+  [data-slot='sidebar']:hover [data-sidebar='group-label'],
+  [data-slot='sidebar']:hover [data-sidebar='menu-button'] span,
+  [data-slot='sidebar']:hover [data-sidebar='menu-badge'],
+  [data-slot='sidebar']:hover [data-sidebar='group-action'] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+@media (min-width: 901px) {
+  [data-slot='sidebar-container'] {
+    width: var(--sidebar-width) !important;
+  }
+
+  [data-collapsible='icon'] [data-slot='sidebar-container'] {
+    width: var(--sidebar-width-icon) !important;
+  }
+
+  [data-collapsible='icon']
+    [data-slot='sidebar']:hover
+    [data-slot='sidebar-container'] {
+    width: var(--sidebar-width) !important;
+  }
+
+  [data-collapsible='icon'] [data-sidebar='group-label'],
+  [data-collapsible='icon'] [data-sidebar='menu-button'] span,
+  [data-collapsible='icon'] [data-sidebar='menu-badge'],
+  [data-collapsible='icon'] [data-sidebar='group-action'] {
+    opacity: 0;
+    transition: opacity 0.15s ease-in-out;
+    pointer-events: none;
+  }
+
+  [data-collapsible='icon']
+    [data-slot='sidebar']:hover
+    [data-sidebar='group-label'],
+  [data-collapsible='icon']
+    [data-slot='sidebar']:hover
+    [data-sidebar='menu-button']
+    span,
+  [data-collapsible='icon']
+    [data-slot='sidebar']:hover
+    [data-sidebar='menu-badge'],
+  [data-collapsible='icon']
+    [data-slot='sidebar']:hover
+    [data-sidebar='group-action'] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 .dark .bg-not-found {
   background-image: url('/404-dark-2.png'), url('/404-dark.jpg');
 }

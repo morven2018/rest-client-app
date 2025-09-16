@@ -8,59 +8,81 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
+import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
 
-export default function SectionRequestField() {
-  const [method, setMethod] = useState('GET');
-  const [url, setUrl] = useState('');
+interface SectionRequestFieldProps {
+  readonly requestData: RequestData;
+  readonly onRequestDataChange: (data: Partial<RequestData>) => void;
+  readonly onSendRequest: () => void;
+  readonly isLoading?: boolean;
+}
+
+export default function SectionRequestField({
+  requestData,
+  onRequestDataChange,
+  onSendRequest,
+  isLoading = false,
+}: SectionRequestFieldProps) {
   const t = useTranslations('RestClient');
 
   const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
 
   const handleMethodChange = (value: string) => {
-    setMethod(value);
+    onRequestDataChange({ method: value });
   };
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUrl(e.target.value);
+    onRequestDataChange({ url: e.target.value });
   };
 
   const handleSend = () => {
-    console.log('Method:', method);
-    console.log('URL:', url);
+    if (!requestData.url.trim()) return;
+    try {
+      new URL(requestData.url);
+      onSendRequest();
+    } catch (error) {
+      console.error('Invalid URL:', error);
+    }
   };
 
   return (
-    <div className="flex flex-col sm:flex-row gap-2 p-5 rounded-lg bg-request-field-bg">
-      <Select value={method} onValueChange={handleMethodChange}>
-        <SelectTrigger
-          className="w-[200px] md:w-[100px] lg:w-[200px] cursor-pointer"
-          aria-label="HTTP Method Selector"
+    <section className="px-6">
+      <div className="flex flex-col sm:flex-row gap-2 p-5 rounded-lg bg-request-field-bg">
+        <Select value={requestData.method} onValueChange={handleMethodChange}>
+          <SelectTrigger
+            className="w-[200px] md:w-[100px] lg:w-[200px] cursor-pointer"
+            aria-label="HTTP Method Selector"
+          >
+            <SelectValue placeholder="Method" />
+          </SelectTrigger>
+          <SelectContent className="dark:bg-chart-1">
+            {methods.map((method) => (
+              <SelectItem
+                key={method}
+                value={method}
+                className="cursor-pointer"
+              >
+                {method}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Input
+          id="url"
+          placeholder="Endpoint URL"
+          value={requestData.url}
+          onChange={handleUrlChange}
+          className="flex-1"
+        />
+        <Button
+          variant="outline"
+          onClick={handleSend}
+          disabled={isLoading || !requestData.url.trim()}
+          className="bg-request-button-bg cursor-pointer"
         >
-          <SelectValue placeholder="Method" />
-        </SelectTrigger>
-        <SelectContent className="dark:bg-chart-1">
-          {methods.map((method) => (
-            <SelectItem key={method} value={method} className="cursor-pointer">
-              {method}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <Input
-        id="url"
-        placeholder="Endpoint URL"
-        value={url}
-        onChange={handleUrlChange}
-        className="flex-1"
-      />
-      <Button
-        variant="outline"
-        onClick={handleSend}
-        className="bg-request-button-bg cursor-pointer"
-      >
-        {t('buttonSend')}
-      </Button>
-    </div>
+          {t('buttonSend')}
+        </Button>
+      </div>
+    </section>
   );
 }

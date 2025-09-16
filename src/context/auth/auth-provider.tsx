@@ -12,7 +12,7 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-  updateProfile,
+  updateProfile as updateFirebaseProfile,
 } from 'firebase/auth';
 
 const AUTH_TOKEN_KEY = 'authToken';
@@ -24,6 +24,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userRegistrationDate, setUserRegistrationDate] = useState<Date | null>(
+    null
+  );
 
   const isTokenValid = useCallback((token: string): boolean => {
     try {
@@ -65,6 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       );
 
       const userId = userCredential.user.uid;
+      const registrationDate = new Date();
 
       if (avatarFile) {
         const avatarBase64 = await convertFileToBase64(avatarFile);
@@ -79,9 +83,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         await getDoc(doc(db, 'userAvatars', userId));
       }
 
-      await updateProfile(userCredential.user, {
+      await setDoc(doc(db, 'userMetadata', userId), {
+        registrationDate,
         displayName: username || `User_${userId.slice(-5)}`,
       });
+
+      await updateProfile(username || `User_${userId.slice(-5)}`);
+
+      setUserRegistrationDate(registrationDate);
 
       const token = await userCredential.user.getIdToken();
       saveToken(token);
@@ -128,11 +137,61 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     await sendPasswordResetEmail(auth, email);
   }, []);
 
+  const updateProfile = useCallback(
+    async (username?: string, avatarFile?: File): Promise<void> => {
+      if (!currentUser) {
+        throw new Error('No user is currently logged in');
+      }
+
+      try {
+        const updates: { displayName?: string; photoURL?: string } = {};
+
+        if (username) {
+          updates.displayName = username;
+        }
+
+        if (avatarFile) {
+          const avatarBase64 = await convertFileToBase64(avatarFile);
+          await setDoc(doc(db, 'userAvatars', currentUser.uid), {
+            avatar: avatarBase64,
+            updatedAt: new Date(),
+            fileName: avatarFile.name,
+            fileType: avatarFile.type,
+          });
+
+          updates.photoURL = `data:${avatarFile.type};base64,${avatarBase64}`;
+        }
+
+        if (Object.keys(updates).length > 0) {
+          await updateFirebaseProfile(currentUser, updates);
+        }
+
+        setCurrentUser({
+          ...currentUser,
+          ...updates,
+        });
+
+        const newToken = await currentUser.getIdToken();
+        saveToken(newToken);
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        throw new Error('Failed to update profile');
+      }
+    },
+    [currentUser]
+  );
+
   const forceLogoutIfTokenExpired = useCallback(async () => {
     if (authToken && !isTokenValid(authToken)) {
       await logout();
     }
   }, [authToken, isTokenValid, logout]);
+
+  const getTimeSinceSignUp = useCallback((): number => {
+    if (!userRegistrationDate) return 0;
+    const now = new Date();
+    return now.getTime() - userRegistrationDate.getTime();
+  }, [userRegistrationDate]);
 
   useEffect(() => {
     const storedToken = localStorage.getItem(AUTH_TOKEN_KEY);
@@ -172,10 +231,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       login,
       register,
       getAvatar,
+      updateProfile,
       logout,
       resetPassword,
       loading,
       isTokenValid,
+      getTimeSinceSignUp,
     }),
     [
       currentUser,
@@ -185,10 +246,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       logout,
       register,
       getAvatar,
+      updateProfile,
       resetPassword,
       isTokenValid,
+      getTimeSinceSignUp,
     ]
   );
+
   return (
     <AuthContext.Provider value={value}>
       {!loading && children}

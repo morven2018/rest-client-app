@@ -1,9 +1,9 @@
 'use client';
-import dateString from '@/lib/date-formatter';
 import { useLocale } from 'next-intl';
 import { useTheme } from 'next-themes';
 import { Toaster as Sonner, ToasterProps, toast } from 'sonner';
 import { Badge } from './badge';
+import { dateString } from '@/lib/formatter';
 
 const SHOW_DURATION = 2000;
 
