@@ -15,6 +15,18 @@ describe('useAuthToken', () => {
     logout: jest.fn(),
     resetPassword: jest.fn(),
     loading: false,
+    getTimeSinceSignUp: function (): number {
+      throw new Error('Function not implemented.');
+    },
+    isTokenValid: function (token: string): boolean {
+      throw new Error('Function not implemented.');
+    },
+    updateProfile: function (
+      username?: string,
+      avatarFile?: File
+    ): Promise<void> {
+      throw new Error('Function not implemented.');
+    },
   });
 
   beforeEach(() => {
