@@ -33,10 +33,15 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <h4 className="text-lg font-semibold">{request.method}</h4>
-        <Badge variant={getStatusVariant(request.status)}>
-          {(request.status === 'ok' || request.status === 'error') &&
-            request.code}
-          {request.status.toUpperCase()}
+        <Badge
+          variant={getStatusVariant(request.status)}
+          className="flex flex-row gap-1"
+        >
+          <div>
+            {(request.status === 'ok' || request.status === 'error') &&
+              request.code}
+          </div>
+          <div>{request.status.toUpperCase()}</div>
         </Badge>
       </CardHeader>
       <CardContent>
