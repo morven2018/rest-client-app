@@ -1,6 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+let mockChangeHandler: jest.Mock;
 const mockMatchMedia = jest.fn();
 const mockAddEventListener = jest.fn();
 const mockRemoveEventListener = jest.fn();
@@ -18,11 +19,17 @@ Object.defineProperty(window, 'innerWidth', {
 describe('useIsMobile', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockChangeHandler = jest.fn();
 
     mockMatchMedia.mockImplementation((query) => ({
-      matches: false,
+      matches: query === '(max-width: 767px)' && window.innerWidth <= 767,
       media: query,
-      addEventListener: mockAddEventListener,
+      addEventListener: jest.fn((event, handler) => {
+        if (event === 'change') {
+          mockChangeHandler = handler as jest.Mock;
+        }
+        return mockAddEventListener(event, handler);
+      }),
       removeEventListener: mockRemoveEventListener,
       addListener: jest.fn(),
       removeListener: jest.fn(),
@@ -36,7 +43,7 @@ describe('useIsMobile', () => {
     expect(result.current).toBe(false);
   });
 
-  it('should return true for mobile screen initially', () => {
+  it('return true for mobile screen initially', () => {
     window.innerWidth = 767;
     const { result } = renderHook(() => useIsMobile());
 
@@ -47,21 +54,19 @@ describe('useIsMobile', () => {
     renderHook(() => useIsMobile());
 
     expect(mockMatchMedia).toHaveBeenCalledWith('(max-width: 767px)');
-    expect(mockAddEventListener).toHaveBeenCalledWith(
-      'change',
-      expect.any(Function)
-    );
+    expect(mockAddEventListener.mock.calls[0][0]).toBe('change');
+    expect(typeof mockAddEventListener.mock.calls[0][1]).toBe('function');
   });
-
   it('clean up event listener on unmount', () => {
     const { unmount } = renderHook(() => useIsMobile());
 
+    const eventHandler = mockAddEventListener.mock.calls[0][1];
+
     unmount();
 
-    expect(mockRemoveEventListener).toHaveBeenCalledWith(
-      'change',
-      expect.any(Function)
-    );
+    expect(mockRemoveEventListener.mock.calls[0][0]).toBe('change');
+    expect(typeof mockRemoveEventListener.mock.calls[0][1]).toBe('function');
+    expect(mockRemoveEventListener.mock.calls[0][1]).toBe(eventHandler);
   });
 
   it('update isMobile when window resizes to mobile', () => {
@@ -72,8 +77,7 @@ describe('useIsMobile', () => {
 
     window.innerWidth = 767;
     act(() => {
-      const changeCallback = mockAddEventListener.mock.calls[0][1];
-      changeCallback();
+      mockChangeHandler({ matches: true });
     });
 
     expect(result.current).toBe(true);
@@ -87,8 +91,7 @@ describe('useIsMobile', () => {
 
     window.innerWidth = 1024;
     act(() => {
-      const changeCallback = mockAddEventListener.mock.calls[0][1];
-      changeCallback();
+      mockChangeHandler({ matches: false });
     });
 
     expect(result.current).toBe(false);
