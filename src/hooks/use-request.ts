@@ -9,7 +9,7 @@ export interface RequestData {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS';
   status: 'ok' | 'error' | 'in process' | 'not send';
   code: number;
-  variables: Record<string, Record<string, string>>;
+  variables: Record<string, string> | {};
   path: string;
   url_with_vars: string;
   Duration: number;
@@ -34,7 +34,7 @@ export interface SaveRequestParams {
   response: string;
   headers: Record<string, string>;
   body?: string;
-  variables?: Record<string, Record<string, string>>;
+  variables?: Record<string, string>;
 }
 
 export const useSaveRequest = () => {
