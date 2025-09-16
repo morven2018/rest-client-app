@@ -140,5 +140,9 @@
     "no-environments": "There is no environment created",
     "select-env": "Select the environment",
     "vars": "Variables: "
+  },
+  "history": {
+    "title": "History and Analysis",
+    "to-rest": "To REST Client"
   }
 }
