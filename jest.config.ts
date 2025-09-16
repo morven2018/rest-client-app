@@ -1,5 +1,5 @@
-import type { Config } from 'jest';
 import nextJest from 'next/jest.js';
+import type { Config } from 'jest';
 
 const createJestConfig = nextJest({
   dir: './',
@@ -10,8 +10,14 @@ const config: Config = {
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
 
-  moduleNameMapper: { '^@/(.*)$': '<rootDir>/src/$1' },
-
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^next-intl$': '<rootDir>/__test__/__mocks__/next-intl/server.ts',
+    '^next-intl/navigation$':
+      '<rootDir>/__test__/__mocks__/next-intl/navigation.ts',
+    '^next-intl/routing$': '<rootDir>/__test__/__mocks__/next-intl/routing.ts',
+    '^@/components/ui/sonner$': '<rootDir>/__test__/__mocks__/sonner.ts',
+  },
   testEnvironment: 'jsdom',
 
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
