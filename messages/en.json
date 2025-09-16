@@ -144,5 +144,14 @@
   "history": {
     "title": "History and Analysis",
     "to-rest": "To REST Client"
+  },
+  "request-card": {
+    "duration": "Duration:",
+    "ms": "ms",
+    "date": "Date:",
+    "time": "Time:",
+    "request": "Request:",
+    "response": "Response:",
+    "detail": "Error Details"
   }
 }

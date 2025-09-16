@@ -144,5 +144,14 @@
   "history": {
     "title": "История и анализ",
     "to-rest": "Rest клиент"
+  },
+  "request-card": {
+    "duration": "Длительность:",
+    "ms": "мс",
+    "date": "Дата:",
+    "time": "Время:",
+    "request": "Запрос:",
+    "response": "Ответ:",
+    "detail": "Подробнее"
   }
 }
