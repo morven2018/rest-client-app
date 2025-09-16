@@ -1,4 +1,4 @@
-import dateString from '@/lib/date-formatter';
+import { dateString, formatBreadcrumbName } from '@/lib/formatter';
 
 describe('dateString', () => {
   beforeAll(() => {
@@ -36,5 +36,26 @@ describe('dateString', () => {
     expect(result).toContain('2024');
     expect(result).toContain(':30');
     expect(result).not.toContain('PM');
+  });
+});
+
+describe('formatBreadcrumbName', () => {
+  test('decode URI encoded strings', () => {
+    expect(formatBreadcrumbName('Hello%20World')).toBe('Hello World');
+    expect(formatBreadcrumbName('Test%26Example')).toBe('Test&Example');
+    expect(formatBreadcrumbName('Caf%C3%A9')).toBe('Café');
+    expect(formatBreadcrumbName('Price%3A%20%24100')).toBe('Price: $100');
+    expect(formatBreadcrumbName('Path%2FTo%2FFile')).toBe('Path/To/File');
+  });
+
+  test('handle empty string', () => {
+    expect(formatBreadcrumbName('')).toBe('');
+  });
+
+  test('handle non-ASCII characters', () => {
+    expect(formatBreadcrumbName('%D0%9F%D1%80%D0%B8%D0%B2%D0%B5%D1%82')).toBe(
+      'Привет'
+    );
+    expect(formatBreadcrumbName('%E4%BD%A0%E5%A5%BD')).toBe('你好');
   });
 });

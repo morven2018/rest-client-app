@@ -2,7 +2,7 @@ import type { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
 
 type GeneratorFunction = (data: RequestData) => string;
 
-const escapeString = (str: string): string => {
+export const escapeString = (str: string): string => {
   return str
     .replace(/\\/g, '\\\\')
     .replace(/"/g, '\\"')
@@ -10,7 +10,9 @@ const escapeString = (str: string): string => {
     .replace(/\r/g, '\\r');
 };
 
-const formatHeaders = (headers: { key: string; value: string }[]): string[] => {
+export const formatHeaders = (
+  headers: { key: string; value: string }[]
+): string[] => {
   return headers.map(
     (h) => `"${escapeString(h.key)}": "${escapeString(h.value)}"`
   );
