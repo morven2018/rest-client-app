@@ -18,13 +18,10 @@ describe('useAuthToken', () => {
     getTimeSinceSignUp: function (): number {
       throw new Error('Function not implemented.');
     },
-    isTokenValid: function (token: string): boolean {
+    isTokenValid: function (): boolean {
       throw new Error('Function not implemented.');
     },
-    updateProfile: function (
-      username?: string,
-      avatarFile?: File
-    ): Promise<void> {
+    updateProfile: function (): Promise<void> {
       throw new Error('Function not implemented.');
     },
   });
