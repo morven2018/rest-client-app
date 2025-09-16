@@ -98,7 +98,10 @@
     "bodyJSON": "ДЖСОН",
     "bodyText": "Текст",
     "responseSendingRequest": "Отправка запроса...",
-    "responseNoYet": "Пока нет ответа. Отправьте запрос, чтобы увидеть результаты."
+    "responseNoYet": "Пока нет ответа. Отправьте запрос, чтобы увидеть результаты.",
+    "placeholderEndpoint": "URL-адрес конечной точки",
+    "placeholderKey": "ключ",
+    "placeholderValue": "значение"
   },
   "user-menu": {
     "update": "Обновить данные",
