@@ -47,15 +47,15 @@ export default function SectionRequestField({
 
   return (
     <section className="px-6">
-      <div className="flex flex-col sm:flex-row gap-2 p-5 rounded-lg bg-request-field-bg">
+      <div className="flex flex-col sm:flex-row gap-2 p-5 rounded-lg bg-violet-200 dark:bg-violet-300">
         <Select value={requestData.method} onValueChange={handleMethodChange}>
           <SelectTrigger
-            className="w-[200px] md:w-[100px] lg:w-[200px] cursor-pointer"
+            className="w-[200px] md:w-[100px] lg:w-[200px] bg-white dark:bg-violet-950 dark:hover:bg-violet-950 cursor-pointer"
             aria-label="HTTP Method Selector"
           >
-            <SelectValue placeholder="Method" />
+            <SelectValue />
           </SelectTrigger>
-          <SelectContent className="dark:bg-chart-1">
+          <SelectContent className="bg-white dark:bg-violet-950">
             {methods.map((method) => (
               <SelectItem
                 key={method}
@@ -69,16 +69,16 @@ export default function SectionRequestField({
         </Select>
         <Input
           id="url"
-          placeholder="Endpoint URL"
+          placeholder={t('placeholderEndpoint')}
           value={requestData.url}
           onChange={handleUrlChange}
-          className="flex-1"
+          className="flex-1 bg-white dark:bg-violet-950"
         />
         <Button
           variant="outline"
           onClick={handleSend}
           disabled={isLoading || !requestData.url.trim()}
-          className="bg-request-button-bg cursor-pointer"
+          className="bg-purple-900  text-white dark:bg-violet-200 dark:text-zinc-950 dark:hover:bg-violet-800 hover:bg-purple-800 cursor-pointer"
         >
           {t('buttonSend')}
         </Button>

@@ -63,13 +63,15 @@ export default function SectionHeaders({
   };
 
   return (
-    <section className="flex flex-col gap-4 px-6 py-5 border-t border-t-black">
-      <div className="flex justify-between items-center pl-6 pr-6">
-        <h3>{t('headersTitle')}</h3>
+    <section className="flex flex-col gap-4 px-6 py-5">
+      <div className="flex justify-between items-center">
+        <h3 className="font-sans font-semibold text-xl leading-7 tracking-normal align-middle">
+          {t('headersTitle')}
+        </h3>
         <Button
           variant="outline"
           onClick={addHeader}
-          className="cursor-pointer"
+          className="bg-violet-200 dark:bg-violet-300 cursor-pointer"
         >
           <Plus />
         </Button>
@@ -77,11 +79,13 @@ export default function SectionHeaders({
       <div>
         {headersWithId.length === 0 ? (
           <div className="text-xl text-center font-medium">
-            <p>{t('noHeadersText')}</p>
+            <p className="font-sans font-medium text-xl leading-7 tracking-normal">
+              {t('noHeadersText')}
+            </p>
             <Button
               variant="default"
               onClick={addHeader}
-              className="mt-5 cursor-pointer"
+              className="mt-5 bg-purple-900 text-white cursor-pointer"
             >
               {t('buttonAddHeader')}
             </Button>

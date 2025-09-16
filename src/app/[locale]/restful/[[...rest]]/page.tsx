@@ -242,33 +242,31 @@ export default function RestfulPage() {
   }, []);
 
   return (
-    <main className="w-full">
-      <CustomSidebar className="min-h-150">
+    <main>
+      <CustomSidebar className="min-h-120">
         <Heading>
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-[17px]">
-            <div className="flex flex-col gap-6 py-4">
-              <SectionRequestField
-                requestData={requestData}
-                onRequestDataChange={handleRequestDataChange}
-                onSendRequest={sendRequest}
-                isLoading={isLoading}
-              />
-              <SectionHeaders
-                headers={requestData.headers}
-                onHeadersChange={(headers) =>
-                  handleRequestDataChange({ headers })
-                }
-              />
-              <SectionCode requestData={requestData} />
-              <SectionBody
-                body={requestData.body}
-                onBodyChange={handleBodyChange}
-              />
-              <SectionResponse
-                responseData={responseData}
-                isLoading={isLoading}
-              />
-            </div>
+          <div className="flex flex-col gap-6 py-4">
+            <SectionRequestField
+              requestData={requestData}
+              onRequestDataChange={handleRequestDataChange}
+              onSendRequest={sendRequest}
+              isLoading={isLoading}
+            />
+            <SectionHeaders
+              headers={requestData.headers}
+              onHeadersChange={(headers) =>
+                handleRequestDataChange({ headers })
+              }
+            />
+            <SectionCode requestData={requestData} />
+            <SectionBody
+              body={requestData.body}
+              onBodyChange={handleBodyChange}
+            />
+            <SectionResponse
+              responseData={responseData}
+              isLoading={isLoading}
+            />
           </div>
         </Heading>
       </CustomSidebar>
