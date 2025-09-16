@@ -38,6 +38,22 @@ export default function SectionResponse({
     });
   };
 
+  const handleSaveRequestBody = () => {
+    if (
+      typeof responseData?.body === 'string' &&
+      responseData.body.trim() !== ''
+    ) {
+      const link: HTMLAnchorElement = document.createElement('a');
+      const file: Blob = new Blob([responseData.body], {
+        type: 'application/json',
+      });
+      link.href = URL.createObjectURL(file);
+      link.download = 'responseBody.json';
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+  };
+
   if (isLoading) {
     return (
       <section className="px-6">
@@ -63,7 +79,9 @@ export default function SectionResponse({
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger className="flex items-center min-h-20">
-            {t('responseTitle')}
+            <h3 className="font-sans font-semibold text-xl leading-7 tracking-normal align-middle">
+              {t('responseTitle')}
+            </h3>
             <div className="w-full">
               <Badge className={getStatusColor(responseData.status)}>
                 {responseData.status} {responseData.statusText}
@@ -72,15 +90,21 @@ export default function SectionResponse({
           </AccordionTrigger>
           <AccordionContent className="py-2">
             <div className="flex justify-end gap-2">
-              <Button>
+              <Button
+                className="p-2 bg-white text-black dark:bg-neutral-600 dark:text-white cursor-pointer"
+                onClick={handleSaveRequestBody}
+              >
                 <Save />
               </Button>
-              <Button className="cursor-pointer" onClick={handleCopy}>
+              <Button
+                className="p-2 bg-white text-black dark:bg-neutral-600 dark:text-white cursor-pointer"
+                onClick={handleCopy}
+              >
                 {copied ? <Copy /> : <ClipboardList />}
               </Button>
             </div>
             <pre
-              className={`${getStatusColor(responseData.status)} w-full min-h-75 rounded-[8px] mt-4 p-3 overflow-y-auto whitespace-pre-wrap font-mono`}
+              className={`${getStatusColor(responseData.status)} w-full max-w-full min-h-75 rounded-[8px] mt-4 p-3 overflow-auto whitespace-pre-wrap break-all font-mono`}
             >
               {responseData.body}
             </pre>
