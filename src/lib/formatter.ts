@@ -20,3 +20,22 @@ export const dateString = (
 export function formatBreadcrumbName(name: string): string {
   return decodeURIComponent(name);
 }
+
+export function formatDate(dateString: string, locale: string = 'en'): string {
+  try {
+    const date = new Date(dateString);
+
+    if (isNaN(date.getTime())) {
+      return dateString;
+    }
+    console.log(locale);
+
+    return new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'ru-RU', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(date);
+  } catch {
+    return dateString;
+  }
+}

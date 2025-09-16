@@ -1,10 +1,11 @@
 import 'server-only';
+import { RequestData } from '@/hooks/use-request';
 
-const mockRequests = [
+const mockRequests: RequestData[] = [
   {
     id: '1',
-    method: 'GET' as const,
-    status: 'ok' as const,
+    method: 'GET',
+    status: 'ok',
     code: 200,
     variables: {},
     path: '/api/users',
@@ -27,13 +28,11 @@ const mockRequests = [
       Authorization: 'Bearer token123',
     },
     Body: '',
-    createdAt: new Date('2024-01-15T10:30:25Z'),
-    updatedAt: new Date('2024-01-15T10:30:25Z'),
   },
   {
     id: '2',
-    method: 'POST' as const,
-    status: 'ok' as const,
+    method: 'POST',
+    status: 'ok',
     code: 201,
     variables: {},
     path: '/api/users',
@@ -49,13 +48,11 @@ const mockRequests = [
       Authorization: 'Bearer token123',
     },
     Body: JSON.stringify({ name: 'Bob', email: 'bob@example.com' }),
-    createdAt: new Date('2024-01-15T11:45:12Z'),
-    updatedAt: new Date('2024-01-15T11:45:12Z'),
   },
   {
     id: '3',
-    method: 'GET' as const,
-    status: 'error' as const,
+    method: 'GET',
+    status: 'error',
     code: 404,
     variables: {},
     path: '/api/users/999',
@@ -70,13 +67,11 @@ const mockRequests = [
       'Content-Type': 'application/json',
     },
     Body: '',
-    createdAt: new Date('2024-01-14T14:20:33Z'),
-    updatedAt: new Date('2024-01-14T14:20:33Z'),
   },
   {
     id: '4',
-    method: 'PUT' as const,
-    status: 'ok' as const,
+    method: 'PUT',
+    status: 'ok',
     code: 200,
     variables: {},
     path: '/api/users/1',
@@ -92,13 +87,11 @@ const mockRequests = [
       Authorization: 'Bearer token123',
     },
     Body: JSON.stringify({ name: 'John Updated' }),
-    createdAt: new Date('2024-01-14T16:55:47Z'),
-    updatedAt: new Date('2024-01-14T16:55:47Z'),
   },
   {
     id: '5',
-    method: 'DELETE' as const,
-    status: 'in process' as const,
+    method: 'DELETE',
+    status: 'in process',
     code: 0,
     variables: {},
     path: '/api/users/2',
@@ -113,15 +106,13 @@ const mockRequests = [
       Authorization: 'Bearer token123',
     },
     Body: '',
-    createdAt: new Date('2024-01-13T09:15:22Z'),
-    updatedAt: new Date('2024-01-13T09:15:22Z'),
   },
   {
     id: '6',
-    method: 'GET' as const,
-    status: 'not send' as const,
+    method: 'GET',
+    status: 'not send',
     code: 0,
-    variables: { userId: { value: '123', type: 'string' } },
+    variables: {},
     path: '/api/users/{userId}',
     url_with_vars: 'https://api.example.com/users/123',
     Duration: 0,
@@ -134,13 +125,11 @@ const mockRequests = [
       'Content-Type': 'application/json',
     },
     Body: '',
-    createdAt: new Date('2024-01-13T17:40:18Z'),
-    updatedAt: new Date('2024-01-13T17:40:18Z'),
   },
   {
     id: '7',
-    method: 'PATCH' as const,
-    status: 'ok' as const,
+    method: 'PATCH',
+    status: 'ok',
     code: 200,
     variables: {},
     path: '/api/users/1/status',
@@ -156,18 +145,17 @@ const mockRequests = [
       Authorization: 'Bearer token123',
     },
     Body: JSON.stringify({ status: 'active' }),
-    createdAt: new Date('2024-01-12T08:30:45Z'),
-    updatedAt: new Date('2024-01-12T08:30:45Z'),
   },
 ];
 
-export async function getRequests(authToken: string | undefined) {
+export async function getRequests(
+  authToken: string | undefined
+): Promise<RequestData[]> {
   try {
     if (process.env.NODE_ENV === 'development') {
       console.log('Using mock requests data for development');
       return mockRequests;
     }
-
     /*
      const cookieStore = cookies();
      const userId = cookieStore.get('userId')?.value;
