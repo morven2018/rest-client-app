@@ -1,33 +1,69 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
 import HeadersTable from './HeadersTable';
+import { useTranslations } from 'next-intl';
+import type { Header } from '@/app/[locale]/restful/[[...rest]]/page';
+import { Plus } from 'lucide-react';
 
-export default function SectionHeaders() {
-  const [headers, setHeaders] = useState<{ key: string; value: string }[]>([]);
+interface SectionHeadersProps {
+  readonly headers: Header[];
+  readonly onHeadersChange: (headers: Header[]) => void;
+}
+
+export default function SectionHeaders({
+  headers,
+  onHeadersChange,
+}: SectionHeadersProps) {
+  const [headersWithId, setHeadersWithId] = useState<
+    { id: string; key: string; value: string }[]
+  >([]);
 
   const t = useTranslations('RestClient');
 
+  useEffect(() => {
+    setHeadersWithId((prev) => {
+      if (prev.length === headers.length) {
+        return prev.map((item, index) => ({
+          id: item.id,
+          ...headers[index],
+        }));
+      }
+      return headers.map((header) => ({
+        id: crypto.randomUUID(),
+        ...header,
+      }));
+    });
+  }, [headers]);
+
   const addHeader = () => {
-    setHeaders([...headers, { key: '', value: '' }]);
+    const newHeader = { id: crypto.randomUUID(), key: '', value: '' };
+    setHeadersWithId((prev) => [...prev, newHeader]);
+    onHeadersChange([...headers, { key: '', value: '' }]);
   };
 
-  const removeHeader = (index: number) => {
-    setHeaders(headers.filter((_, i) => i !== index));
+  const removeHeader = (id: string) => {
+    setHeadersWithId((prev) => prev.filter((h) => h.id !== id));
+    const index = headersWithId.findIndex((h) => h.id === id);
+    if (index !== -1) {
+      onHeadersChange(headers.filter((_, i) => i !== index));
+    }
   };
 
-  const updateHeader = (
-    index: number,
-    field: 'key' | 'value',
-    value: string
-  ) => {
-    const newHeaders = [...headers];
-    newHeaders[index][field] = value;
-    setHeaders(newHeaders);
+  const updateHeader = (id: string, field: 'key' | 'value', value: string) => {
+    setHeadersWithId((prev) =>
+      prev.map((h) => (h.id === id ? { ...h, [field]: value } : h))
+    );
+
+    const index = headersWithId.findIndex((h) => h.id === id);
+    if (index !== -1) {
+      const newHeaders = [...headers];
+      newHeaders[index] = { ...newHeaders[index], [field]: value };
+      onHeadersChange(newHeaders);
+    }
   };
 
   return (
-    <>
+    <section className="flex flex-col gap-4 px-6 py-5 border-t border-t-black">
       <div className="flex justify-between items-center pl-6 pr-6">
         <h3>{t('headersTitle')}</h3>
         <Button
@@ -35,11 +71,11 @@ export default function SectionHeaders() {
           onClick={addHeader}
           className="cursor-pointer"
         >
-          {t('buttonAddHeader')}
+          <Plus />
         </Button>
       </div>
       <div>
-        {headers.length === 0 ? (
+        {headersWithId.length === 0 ? (
           <div className="text-xl text-center font-medium">
             <p>{t('noHeadersText')}</p>
             <Button
@@ -52,12 +88,12 @@ export default function SectionHeaders() {
           </div>
         ) : (
           <HeadersTable
-            headers={headers}
+            headers={headersWithId}
             onRemove={removeHeader}
             onUpdate={updateHeader}
           />
         )}
       </div>
-    </>
+    </section>
   );
 }

@@ -12,10 +12,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 interface HeadersTableProps {
-  readonly headers: { key: string; value: string }[];
-  readonly onRemove: (index: number) => void;
+  readonly headers: { id: string; key: string; value: string }[];
+  readonly onRemove: (id: string) => void;
   readonly onUpdate: (
-    index: number,
+    id: string,
     field: 'key' | 'value',
     value: string
   ) => void;
@@ -32,32 +32,35 @@ export default function HeadersTable({
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-11" />
           <TableHead>{t('headerKey')}</TableHead>
           <TableHead>{t('headerValue')}</TableHead>
+          <TableHead className="w-11" />
         </TableRow>
       </TableHeader>
       <TableBody>
-        {headers.map((header, index) => (
-          <TableRow key={index}>
-            <TableCell className="px-2 py-3">
-              <Button onClick={() => onRemove(index)}>
-                <Trash className="w-7 h-7" />
-              </Button>
-            </TableCell>
+        {headers.map((header) => (
+          <TableRow key={header.id}>
             <TableCell>
               <Input
                 value={header.key}
-                onChange={(e) => onUpdate(index, 'key', e.target.value)}
+                onChange={(e) => onUpdate(header.id, 'key', e.target.value)}
                 placeholder="key"
               />
             </TableCell>
             <TableCell>
               <Input
                 value={header.value}
-                onChange={(e) => onUpdate(index, 'value', e.target.value)}
+                onChange={(e) => onUpdate(header.id, 'value', e.target.value)}
                 placeholder="value"
               />
+            </TableCell>
+            <TableCell className="px-2 py-3">
+              <Button
+                className="cursor-pointer"
+                onClick={() => onRemove(header.id)}
+              >
+                <Trash className="w-7 h-7" />
+              </Button>
             </TableCell>
           </TableRow>
         ))}

@@ -1,4 +1,7 @@
-const dateString = (date: Date = new Date(), locale: string = 'en'): string => {
+export const dateString = (
+  date: Date = new Date(),
+  locale: string = 'en'
+): string => {
   const formatOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
@@ -14,4 +17,6 @@ const dateString = (date: Date = new Date(), locale: string = 'en'): string => {
   );
 };
 
-export default dateString;
+export function formatBreadcrumbName(name: string): string {
+  return decodeURIComponent(name);
+}

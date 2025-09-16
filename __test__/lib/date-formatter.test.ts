@@ -1,4 +1,4 @@
-import dateString from '@/lib/date-formatter';
+import { dateString } from '@/lib/formatter';
 
 describe('dateString', () => {
   beforeAll(() => {
