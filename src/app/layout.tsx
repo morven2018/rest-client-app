@@ -1,3 +1,4 @@
+import './globals.css';
 import { ThemeProvider } from '@/context/ThemeProvider';
 
 export default function RootLayout({
