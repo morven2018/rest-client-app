@@ -2,7 +2,9 @@
 
 ### Description
 
+
 This is a browser-based REST Client developed to simplify API workflows. Quickly send reswitch between setups instantly, and never lose results with automatic request history.
+
 
 ### ✨ Features
 
@@ -101,15 +103,18 @@ pnpm --version
    - Click the 'Fork' button at the top of the repository page to create your own copy.
 2. Setup Your Local Environment
    - Clone your forked repository to your local machine:
+
    ```
    git clone https://github.com/your-username/rest-client-app.git
    cd rest-client-app
    ```
 
    - Install dependencies using pnpm (required):
+
    ```
    pnpm install
    ```
+
 3. Create a Feature Branch
    - Create a new branch for your feature or fix. Use a clear naming convention:
 4. Make Your Changes & Commit
