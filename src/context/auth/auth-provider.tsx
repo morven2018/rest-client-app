@@ -47,11 +47,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const saveToken = (token: string) => {
     localStorage.setItem(AUTH_TOKEN_KEY, token);
     setAuthToken(token);
+    document.cookie = `authToken=${token}; path=/; max-age=3600; SameSite=Lax`;
   };
 
   const removeToken = () => {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     setAuthToken(null);
+    document.cookie =
+      'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
   };
 
   const register = useCallback(
