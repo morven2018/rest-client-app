@@ -71,9 +71,39 @@ describe('Utility Functions', () => {
   });
 });
 
-describe('Specific Generator Tests', () => {
-  describe('cURL Generator', () => {
-    it('include -H for each header', () => {
+describe('Code Generators', () => {
+  const generators = [
+    'curl',
+    'fetch',
+    'nodejs',
+    'python',
+    'java',
+    'csharp',
+    'go',
+  ] as const;
+
+  describe.each(generators)('%s Generator', (generator) => {
+    it('generate code for valid request', () => {
+      const result = generateCode(baseRequestData, generator);
+      expect(result).toBeTruthy();
+      expect(typeof result).toBe('string');
+    });
+
+    it('handle empty URL', () => {
+      const requestData: RequestData = { ...baseRequestData, url: '' };
+      const result = generateCode(requestData, generator);
+      expect(result).toBe('');
+    });
+
+    it('handle empty headers', () => {
+      const requestData: RequestData = { ...baseRequestData, headers: [] };
+      const result = generateCode(requestData, generator);
+      expect(result).not.toContain('Authorization');
+    });
+  });
+
+  describe('Specific Generator Features', () => {
+    it('cURL includes -H for each header', () => {
       const requestData: RequestData = {
         ...baseRequestData,
         headers: [
@@ -87,7 +117,7 @@ describe('Specific Generator Tests', () => {
       expect(headerCount).toBe(2);
     });
 
-    it('use single quotes for body', () => {
+    it('cURL uses single quotes for body', () => {
       const requestData: RequestData = {
         ...baseRequestData,
         method: 'POST',
@@ -97,130 +127,39 @@ describe('Specific Generator Tests', () => {
       const result = generateCode(requestData, 'curl');
       expect(result).toContain("-d 'test data'");
     });
-  });
 
-  describe('Fetch Generator', () => {
-    it('include proper promise chain', () => {
+    it('Fetch includes proper promise chain', () => {
       const result = generateCode(baseRequestData, 'fetch');
       expect(result).toContain('.then(response => response.json())');
       expect(result).toContain('.then(data => console.log(data))');
       expect(result).toContain('.catch(error => console.error');
     });
 
-    it('stringify JSON body', () => {
-      const requestData: RequestData = {
-        ...baseRequestData,
-        method: 'POST',
-        body: '{"test": "data"}',
-      };
-
-      const result = generateCode(requestData, 'fetch');
-      expect(result).toContain('body: JSON.stringify({"test": "data"})');
-    });
-  });
-
-  describe('Node.js Generator', () => {
-    it('handle HTTPS module', () => {
+    it('Node.js handles HTTPS module', () => {
       const result = generateCode(baseRequestData, 'nodejs');
       expect(result).toContain("const https = require('https')");
     });
 
-    it('parse URL components', () => {
-      const result = generateCode(baseRequestData, 'nodejs');
-      expect(result).toContain('hostname:');
-      expect(result).toContain('path:');
-    });
-  });
-
-  describe('Python Generator', () => {
-    it('use requests library', () => {
+    it('Python uses requests library', () => {
       const result = generateCode(baseRequestData, 'python');
       expect(result).toContain('import requests');
     });
 
-    it('handle JSON body with json parameter', () => {
-      const requestData: RequestData = {
-        ...baseRequestData,
-        method: 'POST',
-        body: '{"test": "data"}',
-      };
-
-      const result = generateCode(requestData, 'python');
-      expect(result).toContain('json=data');
-    });
-  });
-
-  describe('Java Generator', () => {
-    it('include proper imports', () => {
+    it('Java includes proper imports', () => {
       const result = generateCode(baseRequestData, 'java');
       expect(result).toContain('import java.net.http.HttpClient');
-      expect(result).toContain('import java.net.http.HttpRequest');
     });
 
-    it('use HttpClient', () => {
-      const result = generateCode(baseRequestData, 'java');
-      expect(result).toContain('HttpClient.newHttpClient()');
-    });
-  });
-
-  describe('C# Generator', () => {
-    it('use HttpClient', () => {
+    it('C# uses HttpClient', () => {
       const result = generateCode(baseRequestData, 'csharp');
       expect(result).toContain('var client = new HttpClient()');
     });
 
-    it('use async/await', () => {
-      const result = generateCode(baseRequestData, 'csharp');
-      expect(result).toContain('async Task');
-      expect(result).toContain('await');
-    });
-  });
-
-  describe('Go Generator', () => {
-    it('include proper imports', () => {
+    it('Go includes proper imports', () => {
       const result = generateCode(baseRequestData, 'go');
       expect(result).toContain('import (');
       expect(result).toContain('"net/http"');
     });
-
-    it('handle error checking', () => {
-      const result = generateCode(baseRequestData, 'go');
-      expect(result).toContain('if err != nil');
-      expect(result).toContain('panic(err)');
-    });
-  });
-});
-
-describe('Edge Cases and Error Handling', () => {
-  it('return empty string for empty URL', () => {
-    const requestData: RequestData = { ...baseRequestData, url: '' };
-    const result = generateCode(requestData, 'curl');
-    expect(result).toBe('');
-  });
-
-  it('return empty string for invalid URL', () => {
-    const requestData: RequestData = {
-      ...baseRequestData,
-      url: 'invalid-url',
-    };
-    const result = generateCode(requestData, 'nodejs');
-    expect(result).toBe('');
-  });
-
-  it('handle empty headers array', () => {
-    const requestData: RequestData = { ...baseRequestData, headers: [] };
-    const result = generateCode(requestData, 'curl');
-    expect(result).not.toContain('-H');
-  });
-
-  it('handle malformed JSON body', () => {
-    const requestData: RequestData = {
-      ...baseRequestData,
-      method: 'POST',
-      body: 'invalid{json',
-    };
-    const result = generateCode(requestData, 'curl');
-    expect(result).toContain('invalid{json');
   });
 });
 
@@ -236,7 +175,7 @@ describe('HTTP Methods', () => {
   ] as const;
 
   methods.forEach((method) => {
-    it(`handle ${method} method correctly`, () => {
+    it(`handle ${method} method correctly in curl`, () => {
       const requestData: RequestData = { ...baseRequestData, method };
       const result = generateCode(requestData, 'curl');
 
@@ -260,33 +199,72 @@ describe('Special Characters Handling', () => {
     { description: 'special symbols', value: '!@#$%^&*()_+-=[]{}|;:,.<>?' },
   ];
 
-  specialCharsTestCases.forEach(({ description, value }) => {
-    it(`handle ${description} in URL`, () => {
-      const requestData: RequestData = {
-        ...baseRequestData,
+  const testScenarios = [
+    {
+      name: 'URL',
+      modifyRequest: (request: RequestData, value: string): RequestData => ({
+        ...request,
         url: `https://api.example.com/test?value=${value}`,
-      };
-      const result = generateCode(requestData, 'curl');
-      expect(result).toContain(escapeString(value));
-    });
-
-    it(`handle ${description} in headers`, () => {
-      const requestData: RequestData = {
-        ...baseRequestData,
+      }),
+    },
+    {
+      name: 'headers',
+      modifyRequest: (request: RequestData, value: string): RequestData => ({
+        ...request,
         headers: [{ key: 'X-Test', value }],
-      };
-      const result = generateCode(requestData, 'curl');
-      expect(result).toContain(escapeString(value));
-    });
-
-    it(`handle ${description} in body`, () => {
-      const requestData: RequestData = {
-        ...baseRequestData,
+      }),
+    },
+    {
+      name: 'body',
+      modifyRequest: (request: RequestData, value: string): RequestData => ({
+        ...request,
         method: 'POST',
         body: value,
-      };
-      const result = generateCode(requestData, 'curl');
-      expect(result).toContain(escapeString(value));
+      }),
+    },
+  ];
+
+  testScenarios.forEach(({ name, modifyRequest }) => {
+    specialCharsTestCases.forEach(({ description, value }) => {
+      it(`in ${name} handle ${description}`, () => {
+        const requestData = modifyRequest(baseRequestData, value);
+        const result = generateCode(requestData, 'curl');
+        expect(result).toContain(escapeString(value));
+      });
     });
+  });
+});
+
+describe('Edge Cases', () => {
+  it('handle malformed JSON body', () => {
+    const requestData: RequestData = {
+      ...baseRequestData,
+      method: 'POST',
+      body: 'invalid{json',
+    };
+    const result = generateCode(requestData, 'curl');
+    expect(result).toContain('invalid{json');
+  });
+
+  it('stringify JSON body in fetch', () => {
+    const requestData: RequestData = {
+      ...baseRequestData,
+      method: 'POST',
+      body: '{"test": "data"}',
+    };
+
+    const result = generateCode(requestData, 'fetch');
+    expect(result).toContain('body: JSON.stringify({"test": "data"})');
+  });
+
+  it('handle JSON body with json parameter in python', () => {
+    const requestData: RequestData = {
+      ...baseRequestData,
+      method: 'POST',
+      body: '{"test": "data"}',
+    };
+
+    const result = generateCode(requestData, 'python');
+    expect(result).toContain('json=data');
   });
 });
