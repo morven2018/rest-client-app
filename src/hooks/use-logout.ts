@@ -10,29 +10,40 @@ export const useLogout = () => {
   const router = useRouter();
   const { toastError, toastSuccess } = useToast();
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async (): Promise<void> => {
     try {
       await logout();
       toastSuccess(t('success'));
       router.push('/');
     } catch (error) {
+      const retryLogout = () => {
+        logout()
+          .then(() => {
+            toastSuccess(t('success'));
+            router.push('/');
+          })
+          .catch((retryError) => {
+            console.error('Retry logout error:', retryError);
+          });
+      };
+
       if (error instanceof Error) {
         toastError(`${'error-with-msg'} ${error.message}`, {
           action: {
             label: t('btn'),
-            onClick: () => handleLogoutSync(),
+            onClick: retryLogout,
           },
         });
       } else {
         toastError(t('error-no-msg'), {
           action: {
             label: t('btn'),
-            onClick: () => handleLogoutSync(),
+            onClick: retryLogout,
           },
         });
       }
     }
-  };
+  }, [logout, t, router, toastError, toastSuccess]);
 
   const handleLogoutSync = useCallback((): void => {
     handleLogout().catch((error) => {
