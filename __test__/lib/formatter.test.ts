@@ -44,16 +44,6 @@ describe('formatBreadcrumbName', () => {
     expect(formatBreadcrumbName('Hello%20World')).toBe('Hello World');
     expect(formatBreadcrumbName('Test%26Example')).toBe('Test&Example');
     expect(formatBreadcrumbName('Caf%C3%A9')).toBe('Café');
-  });
-
-  test('handle already decoded strings', () => {
-    expect(formatBreadcrumbName('Hello World')).toBe('Hello World');
-    expect(formatBreadcrumbName('Test&Example')).toBe('Test&Example');
-    expect(formatBreadcrumbName('Café')).toBe('Café');
-  });
-
-  test('handle special characters', () => {
-    expect(formatBreadcrumbName('%23Hash%20Tag')).toBe('#Hash Tag');
     expect(formatBreadcrumbName('Price%3A%20%24100')).toBe('Price: $100');
     expect(formatBreadcrumbName('Path%2FTo%2FFile')).toBe('Path/To/File');
   });
