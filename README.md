@@ -2,7 +2,9 @@
 
 ### Description
 
-This is a browser-based REST Client developed to simplify API workflows. Quickly send reswitch between setups instantly, and never lose results with automatic request history.  
+
+This is a browser-based REST Client developed to simplify API workflows. Quickly send reswitch between setups instantly, and never lose results with automatic request history.
+
 
 ### ✨ Features
 

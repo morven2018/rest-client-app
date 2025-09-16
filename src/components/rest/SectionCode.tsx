@@ -73,16 +73,19 @@ export default function SectionCode({ requestData }: SectionCodeProps) {
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>
-            {t('codeTitle')}
+            <h3 className="font-sans font-semibold text-xl leading-7 tracking-normal align-middle">
+              {t('codeTitle')}
+            </h3>
+
             <div className="flex flex-col gap-2 w-full sm:justify-end sm:flex-row">
               <Select value={generator} onValueChange={handleGeneratorChange}>
                 <SelectTrigger
-                  className="w-[200px] cursor-pointer"
+                  className="w-[200px] cursor-pointer dark:bg-neutral-400 hover:dark:bg-neutral-400"
                   aria-label="Code generators Selector"
                 >
-                  <SelectValue placeholder="Code generator" />
+                  <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="dark:bg-neutral-400">
                   {generators.map((generator) => (
                     <SelectItem
                       key={generator.value}
@@ -96,7 +99,7 @@ export default function SectionCode({ requestData }: SectionCodeProps) {
               </Select>
               <Button
                 onClick={handleGenerate}
-                className="w-[200px] cursor-pointer"
+                className="w-[200px] cursor-pointer bg-purple-900 hover:bg-purple-900 text-white"
               >
                 {t('codeButton')}
               </Button>
@@ -105,7 +108,7 @@ export default function SectionCode({ requestData }: SectionCodeProps) {
           <AccordionContent className="py-2">
             <Button
               onClick={handleCopy}
-              className="block mb-4 ml-auto cursor-pointer"
+              className="block border rounded-lg mb-4 p-2 ml-auto bg-white text-black dark:bg-neutral-600 dark:text-white cursor-pointer"
             >
               {copied ? <Copy /> : <ClipboardList />}
             </Button>

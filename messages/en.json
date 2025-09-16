@@ -98,7 +98,10 @@
     "bodyJSON": "JSON",
     "bodyText": "Text",
     "responseSendingRequest": "Sending request...",
-    "responseNoYet": "No response yet. Send a request to see the results."
+    "responseNoYet": "No response yet. Send a request to see the results.",
+    "placeholderEndpoint": "Endpoint URL",
+    "placeholderKey": "key",
+    "placeholderValue": "value"
   },
   "user-menu": {
     "update": "Update account",

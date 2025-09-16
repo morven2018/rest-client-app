@@ -23,7 +23,7 @@ interface SectionBodyProps {
 }
 
 export default function SectionBody({ body, onBodyChange }: SectionBodyProps) {
-  const [contentType, setContentType] = useState<'json' | 'text'>('json');
+  const [contentType, setContentType] = useState<'json' | 'txt'>('json');
   const [copied, setCopied] = useState(false);
   const t = useTranslations('RestClient');
 
@@ -35,7 +35,7 @@ export default function SectionBody({ body, onBodyChange }: SectionBodyProps) {
     });
   };
 
-  const handleTypeChange = (value: 'json' | 'text') => {
+  const handleTypeChange = (value: 'json' | 'txt') => {
     setContentType(value);
   };
 
@@ -46,25 +46,43 @@ export default function SectionBody({ body, onBodyChange }: SectionBodyProps) {
     return 'Enter text content...';
   };
 
+  const handleSaveBody = () => {
+    if (typeof body === 'string' && body.trim() !== '') {
+      const mimeType =
+        contentType === 'json' ? 'application/json' : 'text/plain';
+      const link: HTMLAnchorElement = document.createElement('a');
+      const file: Blob = new Blob([body], {
+        type: mimeType,
+      });
+      link.href = URL.createObjectURL(file);
+      link.download = `bodyData.${contentType}`;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+  };
+
   return (
     <section className="px-6">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger>
-            {t('bodyTitle')}
+            <h3 className="font-sans font-semibold text-xl leading-7 tracking-normal align-middle">
+              {t('bodyTitle')}
+            </h3>
+
             <div
               className="flex w-full justify-end"
               onClick={(e) => e.stopPropagation()}
             >
               <Select value={contentType} onValueChange={handleTypeChange}>
                 <SelectTrigger className="cursor-pointer">
-                  <SelectValue placeholder="Format" />
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem className="cursor-pointer" value="json">
                     {t('bodyJSON')}
                   </SelectItem>
-                  <SelectItem className="cursor-pointer" value="text">
+                  <SelectItem className="cursor-pointer" value="txt">
                     {t('bodyText')}
                   </SelectItem>
                 </SelectContent>
@@ -73,10 +91,16 @@ export default function SectionBody({ body, onBodyChange }: SectionBodyProps) {
           </AccordionTrigger>
           <AccordionContent className="py-2">
             <div className="flex gap-2 w-full justify-end mb-4">
-              <Button className="cursor-pointer">
+              <Button
+                className="p-2 bg-white text-black dark:bg-neutral-600 dark:text-white cursor-pointer"
+                onClick={handleSaveBody}
+              >
                 <Save />
               </Button>
-              <Button className="cursor-pointer" onClick={handleCopy}>
+              <Button
+                className="p-2 bg-white text-black dark:bg-neutral-600 dark:text-white cursor-pointer"
+                onClick={handleCopy}
+              >
                 {copied ? <Copy /> : <ClipboardList />}
               </Button>
             </div>
