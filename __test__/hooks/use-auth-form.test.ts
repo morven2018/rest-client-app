@@ -1,13 +1,14 @@
 import { act, renderHook } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { useToast } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 import { useAuthForm } from '@/hooks/use-auth-form';
 
 jest.mock('@/context/auth/auth-context');
 jest.mock('next/navigation');
 jest.mock('@/components/ui/sonner');
-
 jest.mock('react-hook-form', () => {
   const originalModule = jest.requireActual('react-hook-form');
   return {
@@ -15,7 +16,6 @@ jest.mock('react-hook-form', () => {
     useForm: jest.fn(),
   };
 });
-
 jest.mock('@hookform/resolvers/zod', () => ({
   zodResolver: jest.fn(() => jest.fn()),
 }));
@@ -24,6 +24,9 @@ const testSchema = z.object({
   email: z.string().email('Invalid email'),
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
+
+const mockReactHookForm = { useForm };
+const mockSonner = { useToast };
 
 describe('useAuthForm', () => {
   const mockLogin = jest.fn();
@@ -57,12 +60,9 @@ describe('useAuthForm', () => {
       trigger: jest.fn(),
     });
 
-    jest
-      .spyOn(require('react-hook-form'), 'useForm')
-      .mockImplementation(mockUseForm);
+    jest.spyOn(mockReactHookForm, 'useForm').mockImplementation(mockUseForm);
 
-    const { useToast } = require('@/components/ui/sonner');
-    useToast.mockReturnValue({
+    (useToast as jest.Mock).mockReturnValue({
       toastError: mockToastError,
       toastSuccess: mockToastSuccess,
       toastNote: jest.fn(),
