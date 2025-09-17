@@ -1,6 +1,9 @@
+import { RequestFilters } from '@/components/layout/history/history-filters';
 import { RequestData } from '@/hooks/use-request';
 
-export function groupRequestsByDate(requests: RequestData[]) {
+export function groupRequestsByDate(
+  requests: RequestData[]
+): { date: string; requests: RequestData[] }[] {
   const groups: { date: string; requests: RequestData[] }[] = [];
 
   requests.forEach((request) => {
@@ -17,4 +20,38 @@ export function groupRequestsByDate(requests: RequestData[]) {
   });
 
   return groups;
+}
+
+export function filterRequests(
+  requests: RequestData[],
+  filters: RequestFilters
+): RequestData[] {
+  return requests.filter((request) => {
+    const matchesMethod =
+      !filters.method ||
+      filters.method === 'all' ||
+      request.method === filters.method;
+
+    const matchesStatus =
+      !filters.status ||
+      filters.status === 'all' ||
+      request.status === filters.status;
+
+    let matchesDate = true;
+    if (filters.dateFrom) {
+      const requestDate = new Date(request.Date);
+      const fromDate = new Date(filters.dateFrom);
+      matchesDate = matchesDate && requestDate >= fromDate;
+      console.log(requestDate, fromDate);
+    }
+    if (filters.dateTo) {
+      const requestDate = new Date(request.Date);
+      const toDate = new Date(filters.dateTo);
+      toDate.setHours(23, 59, 59);
+      matchesDate = matchesDate && requestDate <= toDate;
+      console.log(requestDate, toDate);
+    }
+
+    return matchesMethod && matchesStatus && matchesDate;
+  });
 }

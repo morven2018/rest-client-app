@@ -2,18 +2,28 @@ import { RequestCard } from './card';
 import { CustomSeparator } from '@/components/ui/custom-separator';
 import { RequestData } from '@/hooks/use-request';
 import { formatDate } from '@/lib/formatter';
-import { groupRequestsByDate } from '@/lib/request-utils';
+import { filterRequests, groupRequestsByDate } from '@/lib/request-utils';
 
 interface HistoryListProps {
   initialRequests: RequestData[];
   locale?: string;
+  searchParams?: {
+    method?: string;
+    status?: string;
+    search?: string;
+    dateFrom?: string;
+    dateTo?: string;
+    sort?: string;
+  };
 }
 
 export async function HistoryList({
   initialRequests,
   locale = 'en',
-}: Readonly<HistoryListProps>) {
-  const groupedRequests = groupRequestsByDate(initialRequests);
+  searchParams = {},
+}: HistoryListProps) {
+  const filteredRequests = filterRequests(initialRequests, searchParams);
+  const groupedRequests = groupRequestsByDate(filteredRequests);
 
   return (
     <div className="space-y-6 mt-6">

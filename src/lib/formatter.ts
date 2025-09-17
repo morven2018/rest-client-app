@@ -28,7 +28,6 @@ export function formatDate(dateString: string, locale: string = 'en'): string {
     if (isNaN(date.getTime())) {
       return dateString;
     }
-    console.log(locale);
 
     return new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'ru-RU', {
       year: 'numeric',
