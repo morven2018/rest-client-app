@@ -143,7 +143,9 @@
   },
   "history": {
     "title": "History and Analysis",
-    "to-rest": "To REST Client"
+    "to-rest": "To REST Client",
+    "no-request": "There are no requests with such parameters",
+    "please-reset": "Please reset the filters"
   },
   "request-card": {
     "duration": "Duration:",

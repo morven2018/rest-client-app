@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server';
 import { RequestCard } from './card';
 import { CustomSeparator } from '@/components/ui/custom-separator';
 import { RequestData } from '@/hooks/use-request';
@@ -21,9 +22,10 @@ export async function HistoryList({
   initialRequests,
   locale = 'en',
   searchParams = {},
-}: HistoryListProps) {
+}: Readonly<HistoryListProps>) {
   const filteredRequests = filterRequests(initialRequests, searchParams);
   const groupedRequests = groupRequestsByDate(filteredRequests);
+  const t = await getTranslations('history');
 
   return (
     <div className="space-y-6 mt-6">
@@ -40,9 +42,14 @@ export async function HistoryList({
         ))}
 
         {groupedRequests.length === 0 && (
-          <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-            No Data
-          </div>
+          <>
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              {t('no-request')}
+            </div>
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
+              {t('please-reset')}
+            </div>
+          </>
         )}
       </div>
     </div>

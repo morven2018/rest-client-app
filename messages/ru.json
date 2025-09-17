@@ -143,7 +143,9 @@
   },
   "history": {
     "title": "История и анализ",
-    "to-rest": "Rest клиент"
+    "to-rest": "Rest клиент",
+    "no-request": "Нет запрсов с такими параметрами",
+    "please-reset": "Пожалуйста сбросте фильтры"
   },
   "request-card": {
     "duration": "Длительность:",
