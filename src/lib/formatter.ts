@@ -21,7 +21,11 @@ export function formatBreadcrumbName(name: string): string {
   return decodeURIComponent(name);
 }
 
-export function formatDate(dateString: string, locale: string = 'en'): string {
+export function formatDate(
+  dateString: string,
+  locale: string = 'en',
+  isShort = false
+): string {
   try {
     const date = new Date(dateString);
 
@@ -31,7 +35,7 @@ export function formatDate(dateString: string, locale: string = 'en'): string {
 
     return new Intl.DateTimeFormat(locale === 'en' ? 'en-US' : 'ru-RU', {
       year: 'numeric',
-      month: 'long',
+      month: isShort ? 'short' : 'long',
       day: 'numeric',
     }).format(date);
   } catch {

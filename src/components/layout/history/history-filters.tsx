@@ -95,26 +95,26 @@ export function HistoryFilters({
   }, [router, locale]);
 
   const formatDateRange = (from: Date, to: Date): string => {
-    const fromStr = formatDate(from.toISOString(), locale);
-    const toStr = formatDate(to.toISOString(), locale);
+    const fromStr = formatDate(from.toISOString(), locale, true);
+    const toStr = formatDate(to.toISOString(), locale, true);
     return `${fromStr} - ${toStr}`;
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-        <div>
-          <Label className="block text-sm font-medium mb-2 text-foreground">
+    <div className="p-6 bg-violet-100 rounded-lg max-[580px]:px-1.5">
+      <div className=" flex flex-row items-center gap-1 justify-around flex-wrap">
+        <div className="flex flex-row items-center ">
+          <Label className="block text-base font-medium text-foreground py-2 pr-1">
             {t('method')}
           </Label>
           <Select
             value={searchParams?.method || 'all'}
             onValueChange={(value) => handleFilterChange('method', value)}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full px-3 py-2 bg-white">
               <SelectValue placeholder={t('all-method')} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="px-3 py-2 bg-white">
               <SelectItem value="all">{t('all-method')}</SelectItem>
               <SelectItem value="GET">GET</SelectItem>
               <SelectItem value="POST">POST</SelectItem>
@@ -127,18 +127,21 @@ export function HistoryFilters({
           </Select>
         </div>
 
-        <div>
-          <Label className="block text-sm font-medium mb-2 text-foreground">
+        <div className="flex flex-row items-center">
+          <Label className="block text-base font-medium text-foreground py-2 pr-1">
             {t('status')}
           </Label>
           <Select
             value={searchParams?.status || 'all'}
             onValueChange={(value) => handleFilterChange('status', value)}
           >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={t('all-status')} />
+            <SelectTrigger className="w-full px-3 py-2 bg-white">
+              <SelectValue
+                placeholder={t('all-status')}
+                className="px-3 py-2 bg-white"
+              />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="px-3 py-2 bg-white">
               <SelectItem value="all">{t('all-status')}</SelectItem>
               <SelectItem value="ok">{t('ok')}</SelectItem>
               <SelectItem value="error">{t('error')}</SelectItem>
@@ -148,37 +151,39 @@ export function HistoryFilters({
           </Select>
         </div>
 
-        <div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-between font-normal h-9"
+        <div className="flex -flex-row gap-2 justify-between flex-nowrap max-[400px]:flex-wrap">
+          <div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full justify-between font-normal h-9"
+                >
+                  {dateRange?.from && dateRange?.to
+                    ? formatDateRange(dateRange.from, dateRange.to)
+                    : t('dates')}
+                  <ChevronDownIcon className="size-4 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-auto overflow-hidden p-0"
+                align="start"
               >
-                {dateRange?.from && dateRange?.to
-                  ? formatDateRange(dateRange.from, dateRange.to)
-                  : t('dates')}
-                <ChevronDownIcon className="size-4 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent
-              className="w-auto overflow-hidden p-0"
-              align="start"
-            >
-              <Calendar
-                mode="range"
-                selected={dateRange}
-                onSelect={handleDateRangeChange}
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-      </div>
+                <Calendar
+                  mode="range"
+                  selected={dateRange}
+                  onSelect={handleDateRangeChange}
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
-      <div className="flex gap-2">
-        <Button onClick={handleReset} variant="outline" title={t('reset')}>
-          <RotateCcw />
-        </Button>
+          <div className="flex gap-2">
+            <Button onClick={handleReset} variant="outline" title={t('reset')}>
+              <RotateCcw />
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   );
