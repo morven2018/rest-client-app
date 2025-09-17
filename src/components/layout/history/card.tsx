@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { RequestData } from '@/hooks/use-request';
 
 import {
@@ -30,7 +30,7 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
   };
 
   return (
-    <Card>
+    <Card className="h-full flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between">
         <h4 className="text-lg font-semibold">{request.method}</h4>
         <Badge
@@ -45,34 +45,34 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
         </Badge>
       </CardHeader>
       <CardContent>
-        <CardTitle className="text-base mb-4">
+        <h4 className="text-base font-regular mb-4 break-words break-all underline text-zinc-600">
           {request.url_with_vars}
-        </CardTitle>
+        </h4>
 
         <ul className="space-y-2">
-          <li key="Duration" className="flex justify-between">
+          <li key="Duration" className="flex justify-between pr-8">
             <div className="font-medium">{t('duration')}</div>
-            <div>
+            <div className="text-zinc-600">
               {request.status === 'ok' || request.status === 'error'
                 ? `${request.Duration} ${t('ms')}`
                 : '-'}
             </div>
           </li>
-          <li key="Date" className="flex justify-between">
+          <li key="Date" className="flex justify-between pr-8">
             <div className="font-medium">{t('date')}</div>
-            <div>{request.Date}</div>
+            <div className="text-zinc-600">{request.Date}</div>
           </li>
-          <li key="Time" className="flex justify-between">
+          <li key="Time" className="flex justify-between pr-8">
             <div className="font-medium">{t('time')}</div>
-            <div>{request.Time}</div>
+            <div className="text-zinc-600">{request.Time}</div>
           </li>
-          <li key="Request" className="flex justify-between">
+          <li key="Request" className="flex justify-between pr-8">
             <div className="font-medium">{t('request')}</div>
-            <div>{request.Request_weight}</div>
+            <div className="text-zinc-600">{request.Request_weight}</div>
           </li>
-          <li key="Response" className="flex justify-between">
+          <li key="Response" className="flex justify-between pr-8">
             <div className="font-medium">{t('response')}</div>
-            <div>
+            <div className="text-zinc-600">
               {request.status === 'ok' || request.status === 'error'
                 ? request.Response_weight
                 : '-'}
@@ -87,7 +87,7 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
                 {t('detail')}
               </AccordionTrigger>
               <AccordionContent>
-                <div className="bg-muted p-3 rounded-md">
+                <div className="p-3 rounded-md">
                   <pre className="text-xs overflow-auto">
                     {request.Response}
                   </pre>

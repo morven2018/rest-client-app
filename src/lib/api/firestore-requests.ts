@@ -58,7 +58,7 @@ const mockRequests: RequestData[] = [
     path: '/api/users/999',
     url_with_vars: 'https://api.example.com/users/999',
     Duration: 89,
-    Date: '2024-01-14',
+    Date: '2024-01-15',
     Time: '14:20:33',
     Request_weight: '0.5 KB',
     Response_weight: '0.9 KB',

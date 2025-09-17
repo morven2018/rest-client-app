@@ -33,23 +33,24 @@ export async function HistoryList({
         {groupedRequests.map((group) => (
           <div key={group.date}>
             <CustomSeparator>{formatDate(group.date, locale)}</CustomSeparator>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="flex flex-wrap gap-4 justify-center">
               {group.requests.map((request) => (
-                <RequestCard key={request.id} request={request} />
+                <div
+                  key={request.id}
+                  className="w-80 max-[600px]:w-70 max-[420px]:w-55"
+                >
+                  <RequestCard request={request} />
+                </div>
               ))}
             </div>
           </div>
         ))}
 
         {groupedRequests.length === 0 && (
-          <>
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              {t('no-request')}
-            </div>
-            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-              {t('please-reset')}
-            </div>
-          </>
+          <div className="text-center py-12 text-xl font-medium">
+            <div>{t('no-request')}</div>
+            <div className="mt-2">{t('please-reset')}</div>
+          </div>
         )}
       </div>
     </div>
