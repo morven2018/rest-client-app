@@ -1,6 +1,5 @@
 {
   "Header": {
-    "hello": "Hello Team",
     "logoAlt": "REST Client Logo",
     "login": "Log In",
     "logout": "Log Out",
@@ -168,5 +167,71 @@
     "ok": "OK",
     "dates": "Choose dates",
     "reset": "Reset filter"
+  },
+  "OurTeam": {
+    "title": "Our Team",
+    "about": "About",
+    "contributions": "Contributions",
+    "members": {
+      "alena": {
+        "name": "Alena Pudina",
+        "description": "Team Lead | UI/UX Design | Automated Testing | Frontend Development",
+        "bio": [
+          "Math & Computer Science Genius.",
+          "Skilled Programmer with a Master's Degree in Applied Mathematics and Computer Science.",
+          "Excelled in Physics and Chemistry Olympiads during her School Years.",
+          "Experience as a Project Manager."
+        ],
+        "contributions": [
+          "REST client application UI design implementation",
+          "Implemented a User authentication and registration system",
+          "Created robust Validation System for form inputs and user data.",
+          "Built API environment variables configuration interface with CRUD operations",
+          "Implemented API request history tracking with filtering and search functionality",
+          "Comprehensive unit test coverage for components and functionality",
+          "Conducted code reviews to foster successful collaboration among developers, significantly enhancing code quality by identifying and resolving issues.",
+          "Implemented a Router for page navigation and redirecting authorized/unauthorized users based on manual browser URL changes."
+        ],
+        "githubUrl": "https://github.com/morven2018"
+      },
+      "igor": {
+        "name": "Ihar Batura",
+        "description": "Frontend Development",
+        "bio": [
+          "Natural-Born Leader with a Vision for Technical Innovation.",
+          "Extremely Talented & Skilled Frontend Developer with a Strong Work Ethic.",
+          "Resilient, Disciplined & Goal-oriented.",
+          "Collaborative Team Player Who Elevates Those Around Him and Amplifies Collective Success."
+        ],
+        "contributions": [
+          "Architected and configured all project configuration files.",
+          "Next.js project initialization and configuration",
+          "Implementation of application routing structure",
+          "Light/dark theme toggle functionality",
+          "Multi-language support implementation",
+          "Developed product header component with navigation",
+          "Site footer component",
+          "REST API client interface page"
+        ],
+        "githubUrl": "https://github.com/Ihar-Batura"
+      },
+      "yulia": {
+        "name": "Yulia Podgurskaia",
+        "description": "English Translation | Frontend Development",
+        "bio": [
+          "Trilingual Frontend Developer: English, Chinese, Russian.",
+          "Excelled in Math, Chemistry, Russian, English Olympiads and Music Competitions.",
+          "Received a Medal for Academic Excellence. Graduated with Two Diplomas with Honors.",
+          "Pianist, Dancer & Athlete."
+        ],
+        "contributions": [
+          "Collaborated on UI/UX design system implementation.",
+          "Built several sections, pages and components.",
+          "Established comprehensive testing suite with 80%+ coverage using Jest and React Testing Library.",
+          "Conducted manual testing on multiple browsers and devices for reliability."
+        ],
+        "githubUrl": "https://github.com/yuliafire"
+      }
+    }
   }
 }
