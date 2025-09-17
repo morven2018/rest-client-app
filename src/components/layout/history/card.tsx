@@ -47,14 +47,14 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
         </Badge>
       </CardHeader>
       <CardContent>
-        <h4 className="text-base font-regular mb-4 break-words break-all underline text-zinc-600">
+        <h4 className="text-base font-regular mb-4 break-words break-all underline text-zinc-600 dark:text-zinc-300">
           {request.url_with_vars}
         </h4>
 
         <ul className="space-y-2">
           <li key="Duration" className="flex justify-between pr-8">
             <div className="font-medium">{t('duration')}</div>
-            <div className="text-zinc-600">
+            <div className="text-zinc-600 dark:text-zinc-400">
               {request.status === 'ok' || request.status === 'error'
                 ? `${request.Duration} ${t('ms')}`
                 : '-'}
@@ -62,19 +62,25 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
           </li>
           <li key="Date" className="flex justify-between pr-8">
             <div className="font-medium">{t('date')}</div>
-            <div className="text-zinc-600">{request.Date}</div>
+            <div className="text-zinc-600 dark:text-zinc-400">
+              {request.Date}
+            </div>
           </li>
           <li key="Time" className="flex justify-between pr-8">
             <div className="font-medium">{t('time')}</div>
-            <div className="text-zinc-600">{request.Time}</div>
+            <div className="text-zinc-600 dark:text-zinc-400">
+              {request.Time}
+            </div>
           </li>
           <li key="Request" className="flex justify-between pr-8">
             <div className="font-medium">{t('request')}</div>
-            <div className="text-zinc-600">{request.Request_weight}</div>
+            <div className="text-zinc-600 dark:text-zinc-400">
+              {request.Request_weight}
+            </div>
           </li>
           <li key="Response" className="flex justify-between pr-8">
             <div className="font-medium">{t('response')}</div>
-            <div className="text-zinc-600">
+            <div className="text-zinc-600 dark:text-zinc-400">
               {request.status === 'ok' || request.status === 'error'
                 ? request.Response_weight
                 : '-'}
@@ -84,7 +90,7 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
 
         <Link
           href="/restful"
-          className="flex w-full  text-center mt-4 inline-block text-base font-medium bg-violet-200 hover:bg-violet-300 px-4 py-2 rounded-lg"
+          className="flex w-full  text-center mt-4 inline-block text-base font-medium bg-violet-200 hover:bg-violet-300 dark:bg-violet-900 dark:hover:bg-violet-800 px-4 py-2 rounded-lg"
         >
           {t('view-details')}
         </Link>

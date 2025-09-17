@@ -11,7 +11,7 @@ export default async function HistoryHeading() {
       <Link
         href="/restful"
         title={t('to-rest')}
-        className="bg-violet-200 hover:bg-violet-300 px-4 py-2 rounded-lg"
+        className="bg-violet-200 hover:bg-violet-300 dark:bg-violet-900 dark:hover:bg-violet-800  px-4 py-2 rounded-lg"
       >
         {t('to-rest')}
       </Link>

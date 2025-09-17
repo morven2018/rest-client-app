@@ -101,20 +101,20 @@ export function HistoryFilters({
   };
 
   return (
-    <div className="p-6 bg-violet-100 rounded-lg max-[580px]:px-1.5">
+    <div className="p-6 bg-violet-100 dark:bg-violet-900 rounded-lg max-[580px]:px-1.5">
       <div className=" flex flex-row items-center gap-1 justify-around flex-wrap">
         <div className="flex flex-row items-center ">
-          <Label className="block text-base font-medium text-foreground py-2 pr-1">
+          <Label className="block text-base font-medium text-foreground py-2 pr-3">
             {t('method')}
           </Label>
           <Select
             value={searchParams?.method || 'all'}
             onValueChange={(value) => handleFilterChange('method', value)}
           >
-            <SelectTrigger className="w-full px-3 py-2 bg-white">
+            <SelectTrigger className="w-full px-3 py-2 bg-white dark:bg-violet-950">
               <SelectValue placeholder={t('all-method')} />
             </SelectTrigger>
-            <SelectContent className="px-3 py-2 bg-white">
+            <SelectContent className="px-3 py-2 bg-white dark:bg-violet-950">
               <SelectItem value="all">{t('all-method')}</SelectItem>
               <SelectItem value="GET">GET</SelectItem>
               <SelectItem value="POST">POST</SelectItem>
@@ -128,20 +128,20 @@ export function HistoryFilters({
         </div>
 
         <div className="flex flex-row items-center">
-          <Label className="block text-base font-medium text-foreground py-2 pr-1">
+          <Label className="block text-base font-medium text-foreground py-2 pr-3">
             {t('status')}
           </Label>
           <Select
             value={searchParams?.status || 'all'}
             onValueChange={(value) => handleFilterChange('status', value)}
           >
-            <SelectTrigger className="w-full px-3 py-2 bg-white">
+            <SelectTrigger className="w-full px-3 py-2 bg-white dark:bg-violet-950">
               <SelectValue
                 placeholder={t('all-status')}
                 className="px-3 py-2 bg-white"
               />
             </SelectTrigger>
-            <SelectContent className="px-3 py-2 bg-white">
+            <SelectContent className="px-3 py-2 bg-white dark:bg-violet-950">
               <SelectItem value="all">{t('all-status')}</SelectItem>
               <SelectItem value="ok">{t('ok')}</SelectItem>
               <SelectItem value="error">{t('error')}</SelectItem>
@@ -157,7 +157,7 @@ export function HistoryFilters({
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full justify-between font-normal h-9"
+                  className="w-full justify-between font-normal h-9 dark:bg-violet-950"
                 >
                   {dateRange?.from && dateRange?.to
                     ? formatDateRange(dateRange.from, dateRange.to)
@@ -166,7 +166,7 @@ export function HistoryFilters({
                 </Button>
               </PopoverTrigger>
               <PopoverContent
-                className="w-auto overflow-hidden p-0"
+                className="w-auto overflow-hidden p-0 dark:bg-violet-950"
                 align="start"
               >
                 <Calendar
@@ -179,7 +179,12 @@ export function HistoryFilters({
           </div>
 
           <div className="flex gap-2">
-            <Button onClick={handleReset} variant="outline" title={t('reset')}>
+            <Button
+              onClick={handleReset}
+              variant="outline"
+              title={t('reset')}
+              className="dark:bg-violet-950 dark:hover:bg-violet-900 "
+            >
               <RotateCcw />
             </Button>
           </div>
