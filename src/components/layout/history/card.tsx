@@ -1,5 +1,4 @@
 import { getTranslations } from 'next-intl/server';
-import { redirect } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { RequestData } from '@/hooks/use-request';
