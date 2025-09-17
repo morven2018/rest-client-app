@@ -1,5 +1,6 @@
 'use client';
 import { ChevronDownIcon, RotateCcw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import { type DateRange } from 'react-day-picker';
@@ -40,6 +41,7 @@ export function HistoryFilters({
   const router = useRouter();
   const pathname = usePathname();
   const currentSearchParams = useSearchParams();
+  const t = useTranslations('filters');
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
     const from = searchParams?.dateFrom
@@ -103,17 +105,17 @@ export function HistoryFilters({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
         <div>
           <Label className="block text-sm font-medium mb-2 text-foreground">
-            Метод
+            {t('method')}
           </Label>
           <Select
             value={searchParams?.method || 'all'}
             onValueChange={(value) => handleFilterChange('method', value)}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Все методы" />
+              <SelectValue placeholder={t('all-method')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Все методы</SelectItem>
+              <SelectItem value="all">{t('all-method')}</SelectItem>
               <SelectItem value="GET">GET</SelectItem>
               <SelectItem value="POST">POST</SelectItem>
               <SelectItem value="PUT">PUT</SelectItem>
@@ -127,29 +129,26 @@ export function HistoryFilters({
 
         <div>
           <Label className="block text-sm font-medium mb-2 text-foreground">
-            Статус
+            {t('status')}
           </Label>
           <Select
             value={searchParams?.status || 'all'}
             onValueChange={(value) => handleFilterChange('status', value)}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Все статусы" />
+              <SelectValue placeholder={t('all-status')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Все статусы</SelectItem>
-              <SelectItem value="ok">OK</SelectItem>
-              <SelectItem value="error">Error</SelectItem>
-              <SelectItem value="in process">In Process</SelectItem>
-              <SelectItem value="not send">Not Send</SelectItem>
+              <SelectItem value="all">{t('all-status')}</SelectItem>
+              <SelectItem value="ok">{t('ok')}</SelectItem>
+              <SelectItem value="error">{t('error')}</SelectItem>
+              <SelectItem value="in process">{t('in-process')}</SelectItem>
+              <SelectItem value="not send">{t('not-send')}</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div>
-          <Label className="block text-sm font-medium mb-2 text-foreground">
-            Период
-          </Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -158,7 +157,7 @@ export function HistoryFilters({
               >
                 {dateRange?.from && dateRange?.to
                   ? formatDateRange(dateRange.from, dateRange.to)
-                  : 'Выберите период'}
+                  : t('dates')}
                 <ChevronDownIcon className="size-4 opacity-50" />
               </Button>
             </PopoverTrigger>
@@ -177,7 +176,7 @@ export function HistoryFilters({
       </div>
 
       <div className="flex gap-2">
-        <Button onClick={handleReset} variant="outline">
+        <Button onClick={handleReset} variant="outline" title={t('reset')}>
           <RotateCcw />
         </Button>
       </div>

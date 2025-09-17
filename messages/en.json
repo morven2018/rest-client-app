@@ -155,5 +155,17 @@
     "request": "Request:",
     "response": "Response:",
     "detail": "Error Details"
+  },
+  "filters": {
+    "method": "Method",
+    "all-method": "All methods",
+    "status": "Status",
+    "all-status": "All statuses",
+    "in-process": "In process",
+    "not-send": "Not Send",
+    "error": "Error",
+    "ok": "OK",
+    "dates": "Choose dates",
+    "reset": "Reset filter"
   }
 }
