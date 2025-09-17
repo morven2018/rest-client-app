@@ -70,7 +70,7 @@ export const Navigate = () => {
             <Button
               asChild
               variant="outline"
-              className="bg-chart-1 dark:bg-chart-1 dark:hover:bg-neutral-800"
+              className="bg-zinc-200 hover:bg-zinc-100 dark:bg-neutral-600 dark:hover:bg-neutral-700"
             >
               <Link href="/login">
                 <LogIn />
@@ -81,7 +81,7 @@ export const Navigate = () => {
             <Button
               asChild
               variant="outline"
-              className="bg-chart-1 dark:bg-chart-1 dark:hover:bg-neutral-800"
+              className="bg-zinc-200 hover:bg-zinc-100 dark:bg-neutral-600 dark:hover:bg-neutral-700"
             >
               <Link href="/register">{t('register')}</Link>
             </Button>
@@ -89,7 +89,7 @@ export const Navigate = () => {
         ) : (
           <Button
             variant="outline"
-            className="bg-chart-1 dark:bg-chart-1 cursor-pointer dark:hover:bg-neutral-800"
+            className="bg-zinc-200 hover:bg-zinc-100 dark:bg-neutral-600 dark:hover:bg-neutral-700"
             onClick={handleLogoutSync}
           >
             <LogOut />
@@ -98,10 +98,10 @@ export const Navigate = () => {
         )}
 
         <Select value={currentLocale} onValueChange={handleLanguageChange}>
-          <SelectTrigger className="w-[80px] bg-chart-1 dark:bg-chart-1 cursor-pointer dark:hover:bg-neutral-800">
+          <SelectTrigger className="w-[80px] bg-zinc-200 hover:bg-zinc-100 dark:bg-neutral-600 dark:hover:bg-neutral-700 cursor-pointer">
             <SelectValue placeholder="Lang" />
           </SelectTrigger>
-          <SelectContent className="min-w-[80px] w-auto dark:bg-chart-1">
+          <SelectContent className="min-w-[80px] w-auto ">
             <SelectItem className=" cursor-pointer" value="en">
               En
             </SelectItem>
@@ -113,7 +113,7 @@ export const Navigate = () => {
 
         <Button
           variant="outline"
-          className="bg-chart-1 dark:bg-chart-1 cursor-pointer dark:hover:bg-neutral-800"
+          className="bg-zinc-200 hover:bg-zinc-100 dark:bg-neutral-600 dark:hover:bg-neutral-700 cursor-pointer "
           onClick={changeTheme}
         >
           {theme === 'light' ? <Sun /> : <Moon />}
@@ -123,7 +123,7 @@ export const Navigate = () => {
       <div className="md:hidden flex items-center">
         <Button
           variant="outline"
-          className="bg-chart-1 dark:bg-chart-1 cursor-pointer dark:hover:bg-neutral-800"
+          className="bg-zinc-200 dark:bg-neutral-600"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
           {isMenuOpen ? <X /> : <Menu />}
@@ -138,7 +138,7 @@ export const Navigate = () => {
                     <Button
                       asChild
                       variant="outline"
-                      className="bg-chart-1 dark:bg-chart-1"
+                      className="bg-zinc-200 dark:bg-neutral-600"
                       onClick={closeMenu}
                     >
                       <Link href="/login">
@@ -150,7 +150,7 @@ export const Navigate = () => {
                     <Button
                       asChild
                       variant="outline"
-                      className="bg-chart-1 dark:bg-chart-1"
+                      className="bg-zinc-200 dark:bg-neutral-600"
                       onClick={closeMenu}
                     >
                       <Link href="/register">{t('register')}</Link>
@@ -159,7 +159,7 @@ export const Navigate = () => {
                 ) : (
                   <Button
                     variant="outline"
-                    className="bg-chart-1 dark:bg-chart-1"
+                    className="bg-zinc-200 dark:bg-neutral-600"
                     onClick={() => {
                       handleLogoutSync();
                       closeMenu();
@@ -174,7 +174,7 @@ export const Navigate = () => {
                   value={currentLocale}
                   onValueChange={handleLanguageChange}
                 >
-                  <SelectTrigger className=" min-w-[80px] w-auto bg-chart-1 dark:bg-chart-1">
+                  <SelectTrigger className=" min-w-[80px] w-auto bg-zinc-200 dark:bg-neutral-600">
                     <SelectValue placeholder="Lang" />
                   </SelectTrigger>
                   <SelectContent className="min-w-[80px] w-auto dark:bg-chart-1">
@@ -185,7 +185,7 @@ export const Navigate = () => {
 
                 <Button
                   variant="outline"
-                  className="bg-chart-1 dark:bg-chart-1 "
+                  className="bg-zinc-200 dark:bg-neutral-600"
                   onClick={() => {
                     changeTheme();
                     closeMenu();

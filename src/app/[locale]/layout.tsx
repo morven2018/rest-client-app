@@ -36,7 +36,7 @@ export default async function LocaleLayout({
       <ThemeProvider>
         <AuthProvider>
           <Header />
-          <div className="dark:bg-neutral-600 py-10"> {children}</div>
+          {children}
           <Footer />
           <Toaster />
         </AuthProvider>
