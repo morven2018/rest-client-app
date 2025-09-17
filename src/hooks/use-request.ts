@@ -9,7 +9,7 @@ export interface RequestData {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'HEAD' | 'OPTIONS';
   status: 'ok' | 'error' | 'in process' | 'not send';
   code: number;
-  variables: Record<string, string> | {};
+  variables: Record<string, string> | object;
   path: string;
   url_with_vars: string;
   Duration: number;
