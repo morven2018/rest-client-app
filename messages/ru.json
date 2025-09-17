@@ -154,7 +154,8 @@
     "time": "Время:",
     "request": "Запрос:",
     "response": "Ответ:",
-    "detail": "Подробнее"
+    "detail": "Подробнее",
+    "view-details": "Посмотреть запрос"
   },
   "filters": {
     "method": "Метод",

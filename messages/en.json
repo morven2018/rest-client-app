@@ -154,7 +154,8 @@
     "time": "Time:",
     "request": "Request:",
     "response": "Response:",
-    "detail": "Error Details"
+    "detail": "Error Details",
+    "view-details": "View request"
   },
   "filters": {
     "method": "Method",

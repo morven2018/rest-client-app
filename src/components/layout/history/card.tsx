@@ -1,7 +1,9 @@
 import { getTranslations } from 'next-intl/server';
+import { redirect } from 'next/navigation';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { RequestData } from '@/hooks/use-request';
+import { Link } from '@/i18n/navigation';
 
 import {
   Accordion,
@@ -79,6 +81,13 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
             </div>
           </li>
         </ul>
+
+        <Link
+          href="/restful"
+          className="flex w-full  text-center mt-4 inline-block text-base font-medium bg-violet-200 hover:bg-violet-300 px-4 py-2 rounded-lg"
+        >
+          {t('view-details')}
+        </Link>
 
         {request.status === 'error' && (
           <Accordion type="single" collapsible className="mt-4">
