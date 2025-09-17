@@ -2,8 +2,13 @@ import CustomSidebar from '@/components/layout/sidebar/sidebar';
 import Heading from '@/components/layout/breadcrumb-and-heading/heading';
 import VariablesContent from '@/components/layout/variables/variables-content';
 import { getTranslations } from 'next-intl/server';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 export default async function VariablesPage() {
+  const cookieStore = cookies();
+  const authToken = (await cookieStore).get('authToken')?.value;
+  if (!authToken) redirect('/');
   const t = await getTranslations('variables');
 
   return (

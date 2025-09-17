@@ -140,5 +140,33 @@
     "no-environments": "There is no environment created",
     "select-env": "Select the environment",
     "vars": "Variables: "
+  },
+  "history": {
+    "title": "History and Analysis",
+    "to-rest": "To REST Client",
+    "no-request": "There are no requests with such parameters",
+    "please-reset": "Please reset the filters"
+  },
+  "request-card": {
+    "duration": "Duration:",
+    "ms": "ms",
+    "date": "Date:",
+    "time": "Time:",
+    "request": "Request:",
+    "response": "Response:",
+    "detail": "Error Details",
+    "view-details": "View request"
+  },
+  "filters": {
+    "method": "Method",
+    "all-method": "All methods",
+    "status": "Status",
+    "all-status": "All statuses",
+    "in-process": "In process",
+    "not-send": "Not Send",
+    "error": "Error",
+    "ok": "OK",
+    "dates": "Choose dates",
+    "reset": "Reset filter"
   }
 }
