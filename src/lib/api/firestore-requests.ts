@@ -1,5 +1,6 @@
 import 'server-only';
 import { RequestData } from '@/hooks/use-request';
+import { toastError } from '@/components/ui/sonner';
 
 const mockRequests: RequestData[] = [
   {
@@ -153,7 +154,6 @@ export async function getRequests(
 ): Promise<RequestData[]> {
   try {
     if (process.env.NODE_ENV === 'development') {
-      console.log('Using mock requests data for development');
       return mockRequests;
     }
     /*
@@ -172,7 +172,11 @@ export async function getRequests(
 */
     return mockRequests;
   } catch (error) {
-    console.error('Error fetching requests:', error);
+    toastError('Error fetching requests:', {
+      additionalMessage:
+        error instanceof Error ? error.message : "Can't fetching requests",
+      duration: 3000,
+    });
     return mockRequests;
   }
 }

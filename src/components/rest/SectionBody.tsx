@@ -69,11 +69,9 @@ export default function SectionBody({ body, onBodyChange }: SectionBodyProps) {
             <h3 className="font-sans font-semibold text-xl leading-7 tracking-normal align-middle">
               {t('bodyTitle')}
             </h3>
-
-            <div
-              className="flex w-full justify-end"
-              onClick={(e) => e.stopPropagation()}
-            >
+          </AccordionTrigger>
+          <AccordionContent className="py-2">
+            <div className="flex w-full justify-end mb-4">
               <Select value={contentType} onValueChange={handleTypeChange}>
                 <SelectTrigger className="cursor-pointer">
                   <SelectValue />
@@ -88,8 +86,6 @@ export default function SectionBody({ body, onBodyChange }: SectionBodyProps) {
                 </SelectContent>
               </Select>
             </div>
-          </AccordionTrigger>
-          <AccordionContent className="py-2">
             <div className="flex gap-2 w-full justify-end mb-4">
               <Button
                 className="p-2 bg-white text-black dark:bg-neutral-600 dark:text-white cursor-pointer"

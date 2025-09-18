@@ -23,7 +23,13 @@ export const useLogout = () => {
             router.push('/');
           })
           .catch((retryError) => {
-            console.error('Retry logout error:', retryError);
+            toastError('Retry logout error:', {
+              additionalMessage:
+                retryError instanceof Error
+                  ? retryError.message
+                  : "Can't logout error",
+              duration: 3000,
+            });
           });
       };
 

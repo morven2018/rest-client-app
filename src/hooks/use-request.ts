@@ -3,6 +3,7 @@ import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useCallback } from 'react';
 import { useAuth } from '@/context/auth/auth-context';
 import { db } from '@/firebase/config';
+import { toastError, toastNote } from '@/components/ui/sonner';
 
 export interface RequestData {
   id: string;
@@ -43,7 +44,7 @@ export const useSaveRequest = () => {
   const saveRequest = useCallback(
     async (requestData: Omit<RequestData, 'id'> & { id?: string }) => {
       if (!currentUser) {
-        console.warn('User not authenticated. Cannot save request.');
+        toastNote('User not authenticated. Cannot save request.');
         return null;
       }
 
@@ -101,7 +102,13 @@ export const useSaveRequest = () => {
         });
         return true;
       } catch (error) {
-        console.error('Error updating request in Firestore:', error);
+        toastError('Error updating request in Firestore:', {
+          additionalMessage:
+            error instanceof Error
+              ? error.message
+              : "Can't updating request in Firestore",
+          duration: 3000,
+        });
         return false;
       }
     },

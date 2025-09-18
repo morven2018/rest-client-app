@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
 import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
+import { toastError } from '@/components/ui/sonner';
 
 interface SectionRequestFieldProps {
   readonly requestData: RequestData;
@@ -41,7 +42,11 @@ export default function SectionRequestField({
       new URL(requestData.url);
       onSendRequest();
     } catch (error) {
-      console.error('Invalid URL:', error);
+      toastError('Invalid URL', {
+        additionalMessage:
+          error instanceof Error ? error.message : 'Check your URL',
+        duration: 3000,
+      });
     }
   };
 

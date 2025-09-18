@@ -1,15 +1,15 @@
 'use client';
+
+import { useState, useEffect, useCallback } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
+import SectionRequestField from '@/components/rest/SectionRequestField';
+import SectionHeaders from '@/components/rest/SectionHeaders';
+import SectionCode from '@/components/rest/SectionCode';
+import SectionBody from '@/components/rest/SectionBody';
+import SectionResponse from '@/components/rest/SectionResponse';
 import CustomSidebar from '@/components/layout/sidebar/sidebar';
 import Heading from '@/components/layout/breadcrumb-and-heading/heading';
-import SectionBody from '@/components/rest/SectionBody';
-import SectionCode from '@/components/rest/SectionCode';
-import SectionHeaders from '@/components/rest/SectionHeaders';
-import SectionRequestField from '@/components/rest/SectionRequestField';
-import SectionResponse from '@/components/rest/SectionResponse';
-import { useParams, useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import { useAuthToken } from '@/hooks/use-auth-token';
-import { useRouter } from '@/i18n/navigation';
+import { toastError, toastNote } from '@/components/ui/sonner';
 
 export interface Header {
   key: string;
@@ -38,7 +38,7 @@ const safeAtob = (encoded: string): string => {
         encoded
       )
     ) {
-      console.warn('Invalid base64 format:', encoded);
+      toastNote('Invalid base64 format');
       return '';
     }
     return decodeURIComponent(
@@ -47,7 +47,10 @@ const safeAtob = (encoded: string): string => {
         .join('')
     );
   } catch (e) {
-    console.error('Invalid base64:', e);
+    toastError('Invalid base64', {
+      additionalMessage: e instanceof Error ? e.message : 'Check your value',
+      duration: 3000,
+    });
     return '';
   }
 };
@@ -61,7 +64,10 @@ const safeBtoa = (str: string): string => {
       )
     );
   } catch (e) {
-    console.error('Error encoding to base64:', e);
+    toastError('Error encoding to base64', {
+      additionalMessage: e instanceof Error ? e.message : 'Check your code',
+      duration: 3000,
+    });
     return '';
   }
 };
@@ -193,7 +199,12 @@ export default function RestfulPage() {
         body: responseBody,
       });
     } catch (error) {
-      console.error('Request failed:', error);
+      toastError('Request failed', {
+        additionalMessage:
+          error instanceof Error ? error.message : 'Check your URL',
+        duration: 3000,
+      });
+
       setResponseData({
         status: 0,
         statusText: 'Network Error',
@@ -234,7 +245,11 @@ export default function RestfulPage() {
           window.history.replaceState(null, '', fullUrl);
         }
       } catch (error) {
-        console.error('Failed to update URL:', error);
+        toastError('Failed to update URL', {
+          additionalMessage:
+            error instanceof Error ? error.message : "Can't update your URL",
+          duration: 3000,
+        });
       }
     },
     [params.locale]
