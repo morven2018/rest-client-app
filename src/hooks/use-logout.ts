@@ -3,7 +3,6 @@ import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { useToast } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
-import { toastError } from '@/components/ui/sonner';
 
 export const useLogout = () => {
   const { logout } = useAuth();
