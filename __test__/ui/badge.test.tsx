@@ -256,7 +256,6 @@ describe('Badge Component', () => {
   });
 });
 
-// Optional: Snapshot tests
 describe('Badge Component Snapshot', () => {
   it('default variant should match snapshot', () => {
     const { container } = render(<Badge>Default</Badge>);

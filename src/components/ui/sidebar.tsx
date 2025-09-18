@@ -671,4 +671,6 @@ export {
   SidebarSeparator,
   SidebarTrigger,
   useSidebar,
+  SIDEBAR_KEYBOARD_SHORTCUT,
+  SIDEBAR_COOKIE_NAME,
 };
