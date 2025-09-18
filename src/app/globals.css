@@ -125,6 +125,13 @@
   background-repeat: no-repeat;
 }
 
+.bg-greetings {
+  background-image: url('/greetings-light.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 [data-slot='sidebar-container'] {
   top: var(--header-height);
   height: calc(100vh - var(--header-height) - var(--footer-height));
@@ -207,6 +214,10 @@
 
 .dark .bg-not-found {
   background-image: url('/404-dark-2.png'), url('/404-dark.jpg');
+}
+
+.dark .bg-greetings {
+  background-image: url('/greetings-dark.jpg');
 }
 
 @layer base {
