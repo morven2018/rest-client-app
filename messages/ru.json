@@ -234,5 +234,13 @@
         "githubUrl": "https://github.com/yuliafire"
       }
     }
+  },
+  "Greetings": {
+    "title": "Добро пожаловать",
+    "btnLogin": "Войти",
+    "btnRegister": "Регистрация",
+    "btnRest": "REST-клиент",
+    "btnHistory": "История",
+    "btnVariables": "Переменные"
   }
 }

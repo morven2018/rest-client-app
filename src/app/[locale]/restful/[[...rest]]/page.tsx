@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
-import SectionRequestField from '@/components/rest/SectionRequestField';
-import SectionHeaders from '@/components/rest/SectionHeaders';
-import SectionCode from '@/components/rest/SectionCode';
-import SectionBody from '@/components/rest/SectionBody';
-import SectionResponse from '@/components/rest/SectionResponse';
 import CustomSidebar from '@/components/layout/sidebar/sidebar';
 import Heading from '@/components/layout/breadcrumb-and-heading/heading';
+import SectionBody from '@/components/rest/SectionBody';
+import SectionCode from '@/components/rest/SectionCode';
+import SectionHeaders from '@/components/rest/SectionHeaders';
+import SectionRequestField from '@/components/rest/SectionRequestField';
+import SectionResponse from '@/components/rest/SectionResponse';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { useAuthToken } from '@/hooks/use-auth-token';
+import { useRouter } from '@/i18n/navigation';
 import { toastError, toastNote } from '@/components/ui/sonner';
 
 export interface Header {
