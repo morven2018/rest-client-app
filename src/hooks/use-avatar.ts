@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/auth/auth-context';
+import { toastError } from '@/components/ui/sonner';
 
 export function useAvatar() {
   const { currentUser, getAvatar } = useAuth();
@@ -20,7 +21,11 @@ export function useAvatar() {
             setAvatarUrl('');
           }
         } catch (error) {
-          console.error('Error fetching avatar:', error);
+          toastError('Error fetching avatar', {
+            additionalMessage:
+              error instanceof Error ? error.message : "Can't fetching avatar",
+            duration: 3000,
+          });
           setAvatarUrl('');
         } finally {
           setLoading(false);

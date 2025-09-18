@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 import { useToast } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
+import { toastError } from '@/components/ui/sonner';
 
 export const useLogout = () => {
   const { logout } = useAuth();
@@ -23,7 +24,13 @@ export const useLogout = () => {
             router.push('/');
           })
           .catch((retryError) => {
-            console.error('Retry logout error:', retryError);
+            toastError('Retry logout error:', {
+              additionalMessage:
+                retryError instanceof Error
+                  ? retryError.message
+                  : "Can't logout error",
+              duration: 3000,
+            });
           });
       };
 

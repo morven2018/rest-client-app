@@ -5,6 +5,7 @@ import { AuthContext } from './auth-context';
 import { auth, db } from '@/firebase/config';
 import { compressImage } from '@/lib/compressor';
 import { convertFileToBase64 } from '@/lib/converter';
+import { toastError } from '@/components/ui/sonner';
 
 import {
   User,
@@ -205,7 +206,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         const newToken = await currentUser.getIdToken(true);
         saveToken(newToken);
       } catch (error) {
-        console.error('Error updating profile:', error);
+        toastError('Error updating profile:', {
+          additionalMessage:
+            error instanceof Error ? error.message : "Can't updating profile",
+          duration: 3000,
+        });
         throw new Error('Failed to update profile');
       }
     },
@@ -248,7 +253,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
             }
           }
         } catch (error) {
-          console.error('Error loading registration date:', error);
+          toastError('Error loading registration date:', {
+            additionalMessage:
+              error instanceof Error
+                ? error.message
+                : "Can't loading registration date",
+            duration: 3000,
+          });
         }
       } else {
         removeToken();

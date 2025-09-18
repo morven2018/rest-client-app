@@ -42,14 +42,12 @@ export function filterRequests(
       const requestDate = new Date(request.Date);
       const fromDate = new Date(filters.dateFrom);
       matchesDate = matchesDate && requestDate >= fromDate;
-      console.log(requestDate, fromDate);
     }
     if (filters.dateTo) {
       const requestDate = new Date(request.Date);
       const toDate = new Date(filters.dateTo);
       toDate.setHours(23, 59, 59);
       matchesDate = matchesDate && requestDate <= toDate;
-      console.log(requestDate, toDate);
     }
 
     return matchesMethod && matchesStatus && matchesDate;

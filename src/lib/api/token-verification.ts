@@ -1,3 +1,5 @@
+import { toastError } from '@/components/ui/sonner';
+
 export interface TokenVerificationResponse {
   isValid: boolean;
   user?: {
@@ -26,7 +28,11 @@ export const verifyToken = async (
 
     return await verifyTokenLocally(token);
   } catch (error) {
-    console.error('Token verification error:', error);
+    toastError('Token verification error:', {
+      additionalMessage:
+        error instanceof Error ? error.message : 'Token not verification',
+      duration: 3000,
+    });
     return {
       isValid: false,
       error: 'Verification failed',

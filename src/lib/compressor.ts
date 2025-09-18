@@ -59,9 +59,6 @@ export const compressImage = (
             lastModified: Date.now(),
           });
 
-          console.log(
-            `Original: ${(file.size / 1024).toFixed(0)}KB → Compressed: ${(blob.size / 1024).toFixed(0)}KB`
-          );
           resolve(compressedFile);
         },
         'image/jpeg',

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { toastError } from '@/components/ui/sonner';
 
 interface EnvVariables {
   [key: string]: string;
@@ -20,7 +21,13 @@ export const useEnvVariables = () => {
           setVariables(JSON.parse(stored));
         }
       } catch (error) {
-        console.error('Error loading variables from localStorage:', error);
+        toastError('Error loading variables from localStorage:', {
+          additionalMessage:
+            error instanceof Error
+              ? error.message
+              : "Can't loading variables from localStorage",
+          duration: 3000,
+        });
       } finally {
         setLoading(false);
       }
@@ -47,7 +54,13 @@ export const useEnvVariables = () => {
       const stored = localStorage.getItem('variables');
       return stored ? JSON.parse(stored) : {};
     } catch (error) {
-      console.error('Error reading from localStorage:', error);
+      toastError('Error reading from localStorage:', {
+        additionalMessage:
+          error instanceof Error
+            ? error.message
+            : "Can't reading from localStorage",
+        duration: 3000,
+      });
       return {};
     }
   };
@@ -112,7 +125,13 @@ export const useEnvVariables = () => {
     try {
       localStorage.setItem('variables', JSON.stringify(data));
     } catch (error) {
-      console.error('Error saving to localStorage:', error);
+      toastError('Error saving to localStorage:', {
+        additionalMessage:
+          error instanceof Error
+            ? error.message
+            : "Can't saving to localStorage",
+        duration: 3000,
+      });
     }
   };
 
