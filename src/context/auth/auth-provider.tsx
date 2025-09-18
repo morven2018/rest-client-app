@@ -3,6 +3,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AuthContext } from './auth-context';
 import { auth, db } from '@/firebase/config';
+import { compressImage } from '@/lib/compressor';
 import { convertFileToBase64 } from '@/lib/converter';
 
 import {
@@ -31,13 +32,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const isTokenValid = useCallback((token: string): boolean => {
     try {
       if (!token) return false;
-
       const payload = token.split('.')[1];
       const decodedPayload = JSON.parse(atob(payload));
-
       const expirationTime = decodedPayload.exp * 1000;
       const currentTime = Date.now();
-
       return expirationTime > currentTime;
     } catch {
       return false;
@@ -56,6 +54,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     document.cookie =
       'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
   };
+  const getAvatar = useCallback(async (userId: string): Promise<string> => {
+    try {
+      const docRef = doc(db, 'userAvatars', userId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        return docSnap.data().avatar;
+      }
+      return '';
+    } catch {
+      return '';
+    }
+  }, []);
 
   const register = useCallback(
     async (
@@ -72,50 +83,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
       const userId = userCredential.user.uid;
       const registrationDate = new Date();
+      let avatarBase64 = '';
 
       if (avatarFile) {
-        const avatarBase64 = await convertFileToBase64(avatarFile);
+        const compressedFile = await compressImage(avatarFile, 200, 200, 0.6);
+        avatarBase64 = await convertFileToBase64(compressedFile);
 
-        await setDoc(doc(db, 'userAvatars', userId), {
-          avatar: avatarBase64,
-          createdAt: new Date(),
-          fileName: avatarFile.name,
-          fileType: avatarFile.type,
-        });
-
-        await getDoc(doc(db, 'userAvatars', userId));
+        await setDoc(
+          doc(db, 'userAvatars', userId),
+          {
+            avatar: avatarBase64,
+            createdAt: new Date(),
+            fileName: compressedFile.name,
+            fileType: compressedFile.type,
+          },
+          { merge: true }
+        );
       }
 
-      await setDoc(doc(db, 'userMetadata', userId), {
-        registrationDate,
+      await setDoc(
+        doc(db, 'userMetadata', userId),
+        {
+          registrationDate,
+          displayName: username || `User_${userId.slice(-5)}`,
+        },
+        { merge: true }
+      );
+
+      await updateFirebaseProfile(userCredential.user, {
         displayName: username || `User_${userId.slice(-5)}`,
+        photoURL: avatarFile ? `/avatars/${userId}` : undefined,
       });
 
-      await updateProfile(username || `User_${userId.slice(-5)}`);
-
       setUserRegistrationDate(registrationDate);
-
       const token = await userCredential.user.getIdToken();
       saveToken(token);
 
-      return { token };
+      return { token, avatarUrl: avatarBase64 };
     },
     []
   );
-
-  const getAvatar = useCallback(async (userId: string): Promise<string> => {
-    try {
-      const docRef = doc(db, 'userAvatars', userId);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        return docSnap.data().avatar;
-      }
-      return '';
-    } catch {
-      return '';
-    }
-  }, []);
 
   const login = useCallback(
     async (email: string, password: string): Promise<string> => {
@@ -126,11 +133,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       );
       const token = await userCredential.user.getIdToken();
       saveToken(token);
+
+      if (userCredential.user) {
+        await setDoc(
+          doc(db, 'userMetadata', userCredential.user.uid),
+          {
+            lastLogin: new Date(),
+          },
+          { merge: true }
+        );
+      }
+
       return token;
     },
     []
   );
-
   const logout = useCallback(async () => {
     await signOut(auth);
     removeToken();
@@ -151,30 +168,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
         if (username) {
           updates.displayName = username;
+          await setDoc(
+            doc(db, 'userMetadata', currentUser.uid),
+            {
+              displayName: username,
+            },
+            { merge: true }
+          );
         }
 
         if (avatarFile) {
-          const avatarBase64 = await convertFileToBase64(avatarFile);
-          await setDoc(doc(db, 'userAvatars', currentUser.uid), {
-            avatar: avatarBase64,
-            updatedAt: new Date(),
-            fileName: avatarFile.name,
-            fileType: avatarFile.type,
-          });
+          const compressedFile = await compressImage(avatarFile, 200, 200, 0.6);
+          const avatarBase64 = await convertFileToBase64(compressedFile);
 
-          updates.photoURL = `data:${avatarFile.type};base64,${avatarBase64}`;
+          await setDoc(
+            doc(db, 'userAvatars', currentUser.uid),
+            {
+              avatar: avatarBase64,
+              updatedAt: new Date(),
+              fileName: compressedFile.name,
+              fileType: compressedFile.type,
+            },
+            { merge: true }
+          );
+
+          updates.photoURL = `/avatars/${currentUser.uid}`;
         }
 
-        if (Object.keys(updates).length > 0) {
-          await updateFirebaseProfile(currentUser, updates);
-        }
+        await updateFirebaseProfile(currentUser, updates);
 
         setCurrentUser({
           ...currentUser,
           ...updates,
         });
 
-        const newToken = await currentUser.getIdToken();
+        const newToken = await currentUser.getIdToken(true);
         saveToken(newToken);
       } catch (error) {
         console.error('Error updating profile:', error);
@@ -210,8 +238,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (user) {
         const token = await user.getIdToken();
         saveToken(token);
+
+        try {
+          const userDoc = await getDoc(doc(db, 'userMetadata', user.uid));
+          if (userDoc.exists()) {
+            const registrationDate = userDoc.data().registrationDate?.toDate();
+            if (registrationDate) {
+              setUserRegistrationDate(registrationDate);
+            }
+          }
+        } catch (error) {
+          console.error('Error loading registration date:', error);
+        }
       } else {
         removeToken();
+        setUserRegistrationDate(null);
       }
 
       setLoading(false);

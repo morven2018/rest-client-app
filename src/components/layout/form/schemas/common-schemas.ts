@@ -23,7 +23,12 @@ export const avatarSchema = (t: (key: string) => string) =>
         !file || (file instanceof File && file.type.startsWith('image/')),
       t('image-only')
     )
-    .refine((file) => !file || file.size <= 2 * 1024 * 1024, t('image-size'));
+    .refine((file) => !file || file.size <= 500 * 1024, t('image-size'))
+    .refine((file) => {
+      if (!file) return true;
+      const estimatedBase64Size = file.size * 1.37;
+      return estimatedBase64Size <= 700 * 1024;
+    }, t('image-too-big'));
 
 export const passwordSchema = (t: (key: string) => string) =>
   z
