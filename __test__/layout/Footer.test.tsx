@@ -100,7 +100,9 @@ describe('Footer Component', () => {
 
     const footer = container.querySelector('footer');
     expect(footer).toBeTruthy();
-    expect(footer?.className).toContain('bg-chart-2');
+    expect(footer?.className).toContain(
+      'bg-neutral-200 dark:bg-[#262626] w-full pt-8'
+    );
     expect(footer?.className).toContain('w-full');
     expect(footer?.className).toContain('pt-8');
   });

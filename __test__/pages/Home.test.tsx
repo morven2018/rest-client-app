@@ -7,8 +7,9 @@ jest.mock('@/components/layout/header/Header', () => ({
   Header: () => <div>Header Mock</div>,
 }));
 
-jest.mock('@/components/layout/team/teamWrapper', () => ({
-  TeamWrapper: () => <div>Team Mock</div>,
+jest.mock('@/components/layout/team/team', () => ({
+  __esModule: true,
+  default: () => <div>Team Mock</div>,
 }));
 
 describe('Home', () => {
