@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { toastError } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 import { useAuthForm } from '@/hooks/use-auth-form';
+import { useRouter } from '@/i18n/navigation';
 
 interface UpdateAccountFormProps {
   onSuccess?: () => void;
@@ -19,6 +20,7 @@ export const UpdateAccountForm = ({ onSuccess }: UpdateAccountFormProps) => {
   const te = useTranslations('ValidationErrors');
   const schema = updateAccountSchema(te);
   const { currentUser, updateProfile } = useAuth();
+  const router = useRouter();
 
   const {
     form: {
@@ -40,6 +42,7 @@ export const UpdateAccountForm = ({ onSuccess }: UpdateAccountFormProps) => {
     try {
       await updateProfile(data.username, data.avatar);
       onSuccess?.();
+      router.push('/');
     } catch (err) {
       toastError(JSON.stringify(err));
     }

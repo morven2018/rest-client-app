@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { UpdateAccountForm } from '../form/update-account-form';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/context/auth/auth-context';
+import { useAvatar } from '@/hooks/use-avatar';
 import { useLogout } from '@/hooks/use-logout';
 import { Link } from '@/i18n/navigation';
 
@@ -31,9 +32,9 @@ import {
 
 export function UserMenu() {
   const t = useTranslations('user-menu');
-  const { currentUser, getAvatar } = useAuth();
+  const { currentUser } = useAuth();
+  const { avatarUrl } = useAvatar();
   const { handleLogout } = useLogout();
-  const [avatarUrl, setAvatarUrl] = useState<string>('');
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -47,24 +48,6 @@ export function UserMenu() {
 
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
-
-  useEffect(() => {
-    const fetchAvatar = async () => {
-      if (currentUser?.uid) {
-        try {
-          const avatarBase64 = await getAvatar(currentUser.uid);
-          if (avatarBase64) {
-            setAvatarUrl(avatarBase64);
-          }
-        } catch (error) {
-          console.error('Error fetching avatar:', error);
-          setAvatarUrl('');
-        }
-      }
-    };
-
-    fetchAvatar();
-  }, [currentUser, getAvatar]);
 
   const handleDialogOpen = () => {
     setIsUpdateDialogOpen(true);

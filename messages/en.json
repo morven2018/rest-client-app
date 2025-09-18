@@ -48,7 +48,8 @@
     "name-length": "The name should be over 3 and less than 20 symbols",
     "name-format": "The name could consist of letters, digits and whitespaces",
     "image-only": "The file should be image",
-    "image-size": "The image should be less than 2MB"
+    "image-size": "The image should be less than 50KB",
+    "image-too-big": "This image too big, please use smaller"
   },
   "NotFound": {
     "title": "This page is not found",
