@@ -2,13 +2,25 @@
 import Link from 'next/link';
 import { Home } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useEffect } from 'react';
 import { AuthWrapper } from '@/components/layout/auth-redirection/auth-wrapper';
 import { UpdateAccountForm } from '@/components/layout/form/update-account-form';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toastSuccess } from '@/components/ui/sonner';
+import { useAuthToken } from '@/hooks/use-auth-token';
+import { useRouter } from '@/i18n/navigation';
 
 export default function ProfilePage() {
+  const router = useRouter();
+  const { hasValidToken } = useAuthToken();
+
+  useEffect(() => {
+    if (!hasValidToken) {
+      router.push('/');
+    }
+  }, [hasValidToken, router]);
+
   const t = useTranslations('profile');
   const handleSuccess = () => {
     toastSuccess(t('success'));
