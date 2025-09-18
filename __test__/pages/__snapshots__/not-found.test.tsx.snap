@@ -2,11 +2,17 @@
 
 exports[`NotFound Page Snapshot should match snapshot 1`] = `
 <div>
-  <main>
-    <h2>
+  <main
+    class="flex flex-col items-center justify-center min-h-screen gap-5"
+  >
+    <h2
+      class="text-red-600 font-bold text-5xl"
+    >
       Oooops!
     </h2>
-    <h2>
+    <h2
+      class="text-xl"
+    >
       This page is not found
     </h2>
     <a

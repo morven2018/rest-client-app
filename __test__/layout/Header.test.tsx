@@ -40,7 +40,9 @@ describe('Header Component', () => {
 
     const header = container.querySelector('header');
     expect(header).toBeTruthy();
-    expect(header?.className).toContain('bg-ring');
+    expect(header?.className).toContain(
+      'sticky top-0 z-50 w-full transition-colors duration-300 bg-neutral-400 dark:bg-slate-200'
+    );
     expect(header?.className).toContain('sticky');
     expect(header?.className).toContain('top-0');
     expect(header?.className).toContain('z-50');
