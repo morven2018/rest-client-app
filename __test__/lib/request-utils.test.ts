@@ -257,7 +257,7 @@ describe('groupRequestsByDate', () => {
     const result = groupRequestsByDate(requestsWithUniqueDates);
 
     expect(result).toHaveLength(3);
-    result.forEach((group, index) => {
+    result.forEach((group) => {
       expect(group.requests).toHaveLength(1);
     });
   });
