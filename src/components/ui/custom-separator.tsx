@@ -11,7 +11,10 @@ export function CustomSeparator({
   children,
 }: Readonly<SeparatorProps>) {
   return (
-    <div className={cn('relative flex items-center py-4', className)}>
+    <div
+      className={cn('relative flex items-center py-4', className)}
+      data-testid="separator"
+    >
       <div className="flex-grow border-t border-border"></div>
       {children && (
         <span className="mx-3 flex-shrink text-sm text-muted-foreground">
