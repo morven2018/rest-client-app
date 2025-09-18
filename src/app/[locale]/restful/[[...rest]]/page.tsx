@@ -1,14 +1,15 @@
 'use client';
-
-import { useState, useEffect, useCallback } from 'react';
-import { useParams, useSearchParams } from 'next/navigation';
-import SectionRequestField from '@/components/rest/SectionRequestField';
-import SectionHeaders from '@/components/rest/SectionHeaders';
-import SectionCode from '@/components/rest/SectionCode';
-import SectionBody from '@/components/rest/SectionBody';
-import SectionResponse from '@/components/rest/SectionResponse';
 import CustomSidebar from '@/components/layout/sidebar/sidebar';
 import Heading from '@/components/layout/breadcrumb-and-heading/heading';
+import SectionBody from '@/components/rest/SectionBody';
+import SectionCode from '@/components/rest/SectionCode';
+import SectionHeaders from '@/components/rest/SectionHeaders';
+import SectionRequestField from '@/components/rest/SectionRequestField';
+import SectionResponse from '@/components/rest/SectionResponse';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useState } from 'react';
+import { useAuthToken } from '@/hooks/use-auth-token';
+import { useRouter } from '@/i18n/navigation';
 
 export interface Header {
   key: string;
@@ -131,6 +132,15 @@ const HTTP_STATUS_TEXTS: Record<number, string> = {
 };
 
 export default function RestfulPage() {
+  const router = useRouter();
+  const { hasValidToken } = useAuthToken();
+
+  useEffect(() => {
+    if (!hasValidToken) {
+      router.push('/');
+    }
+  }, [hasValidToken, router]);
+
   const params = useParams();
   const searchParams = useSearchParams();
 
