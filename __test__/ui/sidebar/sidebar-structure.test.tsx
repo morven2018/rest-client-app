@@ -8,9 +8,6 @@ import {
   SidebarHeader,
   SidebarContent,
   SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
   SidebarSeparator,
 } from '@/components/ui/sidebar';
 
