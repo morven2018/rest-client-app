@@ -138,6 +138,15 @@ const HTTP_STATUS_TEXTS: Record<number, string> = {
 };
 
 export default function RestfulPage() {
+  const router = useRouter();
+  const { hasValidToken } = useAuthToken();
+
+  useEffect(() => {
+    if (!hasValidToken) {
+      router.push('/');
+    }
+  }, [hasValidToken, router]);
+
   const params = useParams();
   const searchParams = useSearchParams();
 
