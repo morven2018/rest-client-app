@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
+
 import {
   Card,
   CardHeader,
@@ -10,7 +11,6 @@ import {
   CardContent,
 } from '@/components/ui/card';
 
-// Mock the cn utility function
 jest.mock('@/lib/utils', () => ({
   cn: (...classes: (string | undefined)[]) => classes.filter(Boolean).join(' '),
 }));

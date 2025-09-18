@@ -96,7 +96,6 @@ describe('Label Component', () => {
     const { getByTestId } = render(<Label className={undefined}>Test</Label>);
     const labelElement = getByTestId('label-root');
 
-    // Should still have default classes
     expect(labelElement.className).toContain('flex');
     expect(labelElement.className).toContain('text-sm');
   });
