@@ -40,6 +40,17 @@ node --version
 pnpm --version
 ```
 
+4. Create a .env file in the root directory
+
+```
+NEXT_PUBLIC_API_KEY=AIzaSyDQAFC879YU9rhiOI0B9fTEdt0TVU4xis8
+NEXT_PUBLIC_AUTH_DOMAIN=rest-client-app-c8844.firebaseapp.com
+NEXT_PUBLIC_PROJECT_ID=rest-client-app-c8844
+NEXT_PUBLIC_APP_ID=1:433521416875:web:0d5c0a5fdeaa303f44f5ee
+NEXT_PUBLIC_SENDER_ID=433521416875
+NEXT_PUBLIC_MEASUREMENT_ID=G-T3KHVLHZ1B
+```
+
 ### Setup and Running
 
 1. Clone the repository:
