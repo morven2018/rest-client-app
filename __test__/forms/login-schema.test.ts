@@ -4,13 +4,12 @@ const mockT = (key: string) => `translated_${key}`;
 
 describe('loginSchema', () => {
   const schema = loginSchema(mockT);
+  const validData = {
+    email: 'user@example.com',
+    password: 'ValidPassword123!',
+  };
 
   it('validate correct login data', () => {
-    const validData = {
-      email: 'user@example.com',
-      password: 'ValidPassword123!',
-    };
-
     const result = schema.safeParse(validData);
     expect(result.success).toBe(true);
   });
@@ -20,87 +19,65 @@ describe('loginSchema', () => {
     expect(result.success).toBe(false);
   });
 
-  it('reject missing email', () => {
-    const invalidData = {
-      password: 'ValidPassword123!',
-    };
+  describe('missing required fields', () => {
+    it('reject missing email', () => {
+      const result = schema.safeParse({ password: validData.password });
+      expect(result.success).toBe(false);
+    });
 
-    const result = schema.safeParse(invalidData);
-    expect(result.success).toBe(false);
+    it('reject missing password', () => {
+      const result = schema.safeParse({ email: validData.email });
+      expect(result.success).toBe(false);
+    });
   });
 
-  it('reject missing password', () => {
-    const invalidData = {
-      email: 'user@example.com',
-    };
+  describe('invalid field formats', () => {
+    it('reject invalid email format', () => {
+      const result = schema.safeParse({
+        email: 'invalid-email',
+        password: validData.password,
+      });
+      expect(result.success).toBe(false);
+    });
 
-    const result = schema.safeParse(invalidData);
-    expect(result.success).toBe(false);
-  });
-
-  it('reject invalid email format', () => {
-    const invalidData = {
-      email: 'invalid-email',
-      password: 'ValidPassword123!',
-    };
-
-    const result = schema.safeParse(invalidData);
-    expect(result.success).toBe(false);
-  });
-
-  it('reject invalid password', () => {
-    const invalidData = {
-      email: 'user@example.com',
-      password: 'weak',
-    };
-
-    const result = schema.safeParse(invalidData);
-    expect(result.success).toBe(false);
+    it('reject invalid password', () => {
+      const result = schema.safeParse({
+        email: validData.email,
+        password: 'weak',
+      });
+      expect(result.success).toBe(false);
+    });
   });
 
   it('include error messages from nested schemas', () => {
-    const invalidData = {
-      email: '',
-      password: '',
-    };
-
-    const result = schema.safeParse(invalidData);
+    const result = schema.safeParse({ email: '', password: '' });
     expect(result.success).toBe(false);
 
     if (!result.success) {
       const errorMessages = result.error.issues.map((issue) => issue.message);
       expect(errorMessages).toContain('translated_required');
-      expect(errorMessages).toContain('translated_required');
     }
   });
 
-  it('reject extra fields', () => {
+  describe('extra fields handling', () => {
     const dataWithExtraFields = {
-      email: 'user@example.com',
-      password: 'ValidPassword123!',
+      ...validData,
       extraField: 'should not be here',
     };
 
-    const result = schema.safeParse(dataWithExtraFields);
-    expect(result.success).toBe(true);
-    if (result.success) {
-      expect(result.data).toEqual({
-        email: 'user@example.com',
-        password: 'ValidPassword123!',
-      });
-      expect(result.data).not.toHaveProperty('extraField');
-    }
-  });
+    it('strip extra fields by default', () => {
+      const result = schema.safeParse(dataWithExtraFields);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data).toEqual(validData);
+        expect(result.data).not.toHaveProperty('extraField');
+      }
+    });
 
-  it('work with strict mode if enabled', () => {
-    const strictSchema = loginSchema(mockT).strict();
-    const dataWithExtraFields = {
-      email: 'user@example.com',
-      password: 'ValidPassword123!',
-      extraField: 'should cause error',
-    };
-
-    const result = strictSchema.safeParse(dataWithExtraFields);
-    expect(result.success).toBe(false);
+    it('reject extra fields in strict mode', () => {
+      const strictSchema = loginSchema(mockT).strict();
+      const result = strictSchema.safeParse(dataWithExtraFields);
+      expect(result.success).toBe(false);
+    });
   });
 });
