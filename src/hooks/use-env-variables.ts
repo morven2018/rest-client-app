@@ -66,7 +66,7 @@ export const useEnvVariables = () => {
   };
 
   const variableValue = (varName: string): string => {
-    return variables[varName] || "";
+    return variables[varName] || '';
   };
 
   return {

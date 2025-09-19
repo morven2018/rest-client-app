@@ -1,5 +1,4 @@
 'use client';
-
 import CustomSidebar from '@/components/layout/sidebar/sidebar';
 import Heading from '@/components/layout/breadcrumb-and-heading/heading';
 import SectionBody from '@/components/rest/SectionBody';
@@ -9,9 +8,10 @@ import SectionRequestField from '@/components/rest/SectionRequestField';
 import SectionResponse from '@/components/rest/SectionResponse';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { useAuthToken } from '@/hooks/use-auth-token';
-import { useRouter } from '@/i18n/navigation';
 import { toastError, toastNote } from '@/components/ui/sonner';
+import { useAuthToken } from '@/hooks/use-auth-token';
+import { useEnvVariables } from '@/hooks/use-env-variables';
+import { useRouter } from '@/i18n/navigation';
 
 export interface Header {
   key: string;
@@ -142,6 +142,7 @@ const HTTP_STATUS_TEXTS: Record<number, string> = {
 export default function RestfulPage() {
   const router = useRouter();
   const { hasValidToken } = useAuthToken();
+  const { variables, variableExists, variableValue } = useEnvVariables();
 
   useEffect(() => {
     if (!hasValidToken) {
@@ -151,6 +152,17 @@ export default function RestfulPage() {
 
   const params = useParams();
   const searchParams = useSearchParams();
+
+  const substituteVariables = useCallback(
+    (text: string): string => {
+      if (!text || !variables) return text;
+
+      return text.replace(/\{\{(\w+)\}\}/g, (match, varName) => {
+        return variableExists(varName) ? variableValue(varName) : match;
+      });
+    },
+    [variables]
+  );
 
   const [requestData, setRequestData] = useState<RequestData>(() => {
     const rest = Array.isArray(params.rest) ? params.rest : [];
@@ -174,18 +186,21 @@ export default function RestfulPage() {
   const sendRequest = async () => {
     setIsLoading(true);
     try {
+      const substitutedUrl = substituteVariables(requestData.url);
+
+      const substitutedBody = substituteVariables(requestData.body);
       const headers = Object.fromEntries(
         requestData.headers
           .filter((h) => h.key && h.value)
-          .map((h) => [h.key, h.value])
+          .map((h) => [h.key, substituteVariables(h.value)])
       );
 
       const shouldSendBody = !['GET', 'HEAD'].includes(requestData.method);
 
-      const response = await fetch(requestData.url, {
+      const response = await fetch(substitutedUrl, {
         method: requestData.method,
         headers,
-        body: shouldSendBody ? requestData.body : undefined,
+        body: shouldSendBody ? substitutedBody : undefined,
       });
 
       const responseBody = await response.text();
