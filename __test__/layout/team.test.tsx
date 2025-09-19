@@ -129,15 +129,6 @@ describe('Team', () => {
     expect(screen.getByText('Our Team')).toBeInTheDocument();
   });
 
-  it('render images with correct alt text', () => {
-    render(<Team />);
-    const images = screen.getAllByTestId('team-image');
-    expect(images).toHaveLength(3);
-    expect(images[0]).toHaveAttribute('data-alt', 'Alena');
-    expect(images[1]).toHaveAttribute('data-alt', 'Igor');
-    expect(images[2]).toHaveAttribute('data-alt', 'Yulia');
-  });
-
   it('render all team members', () => {
     render(<Team />);
 
@@ -157,9 +148,6 @@ describe('Team', () => {
   it('render GitHub links with correct URLs', () => {
     render(<Team />);
 
-    const githubLinks = screen.getAllByRole('link');
-    expect(githubLinks.length).toBeGreaterThan(0);
-
     const links = screen.getAllByRole('link');
     const githubUrls = links.map((link) => link.getAttribute('href'));
 
@@ -174,6 +162,8 @@ describe('Team', () => {
     expect(screen.getByText('Alena bio line 1')).toBeInTheDocument();
     expect(screen.getByText('Alena bio line 2')).toBeInTheDocument();
     expect(screen.getByText('Igor bio line 1')).toBeInTheDocument();
+    expect(screen.getByText('Yulia bio line 1')).toBeInTheDocument();
+    expect(screen.getByText('Yulia bio line 2')).toBeInTheDocument();
   });
 
   it('render member contributions', () => {
@@ -182,6 +172,8 @@ describe('Team', () => {
     expect(screen.getByText('Alena contribution 1')).toBeInTheDocument();
     expect(screen.getByText('Alena contribution 2')).toBeInTheDocument();
     expect(screen.getByText('Igor contribution 1')).toBeInTheDocument();
+    expect(screen.getByText('Yulia contribution 1')).toBeInTheDocument();
+    expect(screen.getByText('Yulia contribution 2')).toBeInTheDocument();
   });
 
   it('render images with correct alt text', () => {
