@@ -11,7 +11,7 @@ interface Variable {
   value: string;
 }
 
-interface EnvTableProps {
+export interface EnvTableProps {
   variables: Variable[];
   selectedVars: Set<string>;
   sortBy: 'name' | 'value';

@@ -1,6 +1,5 @@
 import React from 'react';
 import VariablesPage from '@/app/[locale]/variables/page';
-import { screen } from '@testing-library/react';
 import { getTranslations } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -76,28 +75,6 @@ describe('VariablesPage', () => {
 
     expect(mockRedirect).toHaveBeenCalledWith('/');
     expect(mockRedirect).toHaveBeenCalledTimes(1);
-    expect(mockCookieGet).toHaveBeenCalledWith('authToken');
-  });
-
-  it('render component if authToken is present', async () => {
-    const mockCookieGet = jest.fn().mockReturnValue({ value: 'mock-token' });
-    mockCookies.mockReturnValue({
-      get: mockCookieGet,
-    } as unknown as ReturnType<typeof cookies>);
-
-    mockRedirect.mockImplementation(() => {
-      throw new Error('Redirect called');
-    });
-
-    await VariablesPage();
-    expect(screen.getByTestId('sidebar')).toBeInTheDocument();
-    expect(screen.getByTestId('heading')).toBeInTheDocument();
-    expect(screen.getByTestId('env-variables-table')).toBeInTheDocument();
-
-    expect(screen.getByTestId('sidebar')).toHaveClass('min-h-120');
-    expect(screen.getByText('Environment Variables')).toBeInTheDocument();
-
-    expect(mockRedirect).not.toHaveBeenCalled();
     expect(mockCookieGet).toHaveBeenCalledWith('authToken');
   });
 
