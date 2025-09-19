@@ -19,12 +19,12 @@
   "Tabs": {
     "login": "Sign in",
     "register": "Sign up",
-    "access-begin-login": "To get access login or",
-    "link-login": " register",
-    "access-end-login": ", if you have no account",
-    "access-begin-register": "To get access ",
-    "link-register": "login",
-    "access-end-register": " or register, if you already have an account"
+    "access-begin-login": "Please log in or",
+    "link-login": " create an account",
+    "access-end-login": " to continue.",
+    "access-begin-register": "Please ",
+    "link-register": "log in",
+    "access-end-register": " or create an account to continue."
   },
   "Login": {
     "btn": "Sign in",
