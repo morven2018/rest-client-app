@@ -65,6 +65,10 @@ export const useEnvVariables = () => {
     return variables[varName] !== undefined;
   };
 
+  const variableValue = (varName: string): string => {
+    return variables[varName] || "";
+  };
+
   return {
     variables,
     loading,
@@ -73,5 +77,6 @@ export const useEnvVariables = () => {
     removeVariable,
     clearVariables,
     variableExists,
+    variableValue,
   };
 };
