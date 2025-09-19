@@ -47,30 +47,34 @@ describe('EnvTable', () => {
   const mockOnBlur = jest.fn();
   const mockSetInputRef = jest.fn();
 
+  const defaultProps = {
+    variables: mockVariables,
+    selectedVars: mockSelectedVars,
+    sortBy: 'name' as const,
+    sortOrder: 'asc' as const,
+    onSort: mockOnSort,
+    onSelectAll: mockOnSelectAll,
+    onDeselectAll: mockOnDeselectAll,
+    onSelectVariable: mockOnSelectVariable,
+    onDeselectVariable: mockOnDeselectVariable,
+    onNameChange: mockOnNameChange,
+    onValueChange: mockOnValueChange,
+    onDeleteVariable: mockOnDeleteVariable,
+    onFocus: mockOnFocus,
+    onBlur: mockOnBlur,
+    setInputRef: mockSetInputRef,
+  };
+
+  const renderTable = (overrides = {}) => {
+    return render(<EnvTable {...{ ...defaultProps, ...overrides }} />);
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   it('render table with variables', () => {
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={mockSelectedVars}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable();
 
     expect(screen.getByText('Variable')).toBeInTheDocument();
     expect(screen.getByText('Value')).toBeInTheDocument();
@@ -82,25 +86,7 @@ describe('EnvTable', () => {
 
   it('handle select all checkbox', async () => {
     const user = userEvent.setup();
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={new Set()}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable({ selectedVars: new Set() });
 
     const selectAllCheckbox = screen.getByTitle('Select All');
     await user.click(selectAllCheckbox);
@@ -110,25 +96,7 @@ describe('EnvTable', () => {
 
   it('handle deselect all checkbox', async () => {
     const user = userEvent.setup();
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={new Set(['API_URL', 'API_KEY'])}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable({ selectedVars: new Set(['API_URL', 'API_KEY']) });
 
     const selectAllCheckbox = screen.getByTitle('Select All');
     await user.click(selectAllCheckbox);
@@ -138,25 +106,7 @@ describe('EnvTable', () => {
 
   it('handle individual variable selection', async () => {
     const user = userEvent.setup();
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={new Set()}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable({ selectedVars: new Set() });
 
     const variableCheckboxes = screen.getAllByTitle('Select');
     await user.click(variableCheckboxes[0]);
@@ -166,25 +116,7 @@ describe('EnvTable', () => {
 
   it('handle individual variable deselection', async () => {
     const user = userEvent.setup();
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={new Set(['API_URL'])}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable({ selectedVars: new Set(['API_URL']) });
 
     const variableCheckboxes = screen.getAllByTitle('Select');
     await user.click(variableCheckboxes[0]);
@@ -194,28 +126,9 @@ describe('EnvTable', () => {
 
   it('handle name change', async () => {
     const user = userEvent.setup();
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={mockSelectedVars}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable();
 
     const nameInput = screen.getByDisplayValue('API_URL');
-
     await user.clear(nameInput);
     await user.type(nameInput, 'API_URL_NEW');
 
@@ -224,28 +137,9 @@ describe('EnvTable', () => {
 
   it('handle value change', async () => {
     const user = userEvent.setup();
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={mockSelectedVars}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable();
 
     const valueInput = screen.getByDisplayValue(API_URL);
-
     await user.clear(valueInput);
     await user.type(valueInput, 'https://api.example.com/v2');
 
@@ -257,25 +151,7 @@ describe('EnvTable', () => {
 
   it('handle variable deletion', async () => {
     const user = userEvent.setup();
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={mockSelectedVars}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable();
 
     const deleteButtons = screen.getAllByTitle('Delete');
     await user.click(deleteButtons[0]);
@@ -285,25 +161,7 @@ describe('EnvTable', () => {
 
   it('handle sort click', async () => {
     const user = userEvent.setup();
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={mockSelectedVars}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable();
 
     const sortButton = screen.getByText('Variable');
     await user.click(sortButton);
@@ -312,50 +170,14 @@ describe('EnvTable', () => {
   });
 
   it('show sort indicators', () => {
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={mockSelectedVars}
-        sortBy="name"
-        sortOrder="desc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable({ sortOrder: 'desc' });
 
     expect(screen.getByText('↓')).toBeInTheDocument();
   });
 
   it('handle focus events', async () => {
     const user = userEvent.setup();
-    render(
-      <EnvTable
-        variables={mockVariables}
-        selectedVars={mockSelectedVars}
-        sortBy="name"
-        sortOrder="asc"
-        onSort={mockOnSort}
-        onSelectAll={mockOnSelectAll}
-        onDeselectAll={mockOnDeselectAll}
-        onSelectVariable={mockOnSelectVariable}
-        onDeselectVariable={mockOnDeselectVariable}
-        onNameChange={mockOnNameChange}
-        onValueChange={mockOnValueChange}
-        onDeleteVariable={mockOnDeleteVariable}
-        onFocus={mockOnFocus}
-        onBlur={mockOnBlur}
-        setInputRef={mockSetInputRef}
-      />
-    );
+    renderTable();
 
     const nameInput = screen.getByDisplayValue('API_URL');
     await user.click(nameInput);
