@@ -68,7 +68,7 @@ export default function SectionRequestField({
 
   return (
     <section className="px-6">
-      <div className="flex flex-col sm:flex-row gap-2 p-5 rounded-lg bg-violet-200 dark:bg-violet-300">
+      <div className="flex flex-col sm:flex-row gap-2 p-5 rounded-lg bg-violet-200 dark:bg-violet-300 mb-3">
         <Select value={requestData.method} onValueChange={handleMethodChange}>
           <SelectTrigger
             className="w-[200px] md:w-[100px] lg:w-[200px] bg-white dark:bg-violet-950 dark:hover:bg-violet-950 cursor-pointer"
@@ -104,6 +104,12 @@ export default function SectionRequestField({
           {t('buttonSend')}
         </Button>
       </div>
+      <span className="text-sm text-gray-600 dark:text-gray-400">
+        {t('prompt')}{' '}
+        <code className="px-1 py-0.5 bg-gray-100 dark:bg-gray-800 rounded font-mono text-sm">
+          {'{{variable_name}}'}
+        </code>
+      </span>
     </section>
   );
 }
