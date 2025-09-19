@@ -27,11 +27,32 @@ const expectValidationError = (
   }
 };
 
+const runTestCases = (
+  schema: z.ZodTypeAny,
+  testCases: Array<{
+    name: string;
+    value: string | undefined | File;
+    expectedSuccess: boolean;
+    expectedMessage?: string;
+  }>
+) => {
+  testCases.forEach(({ name, value, expectedSuccess, expectedMessage }) => {
+    it(name, () => {
+      const result = schema.safeParse(value);
+      if (expectedSuccess) {
+        expectValidationSuccess(result);
+      } else {
+        expectValidationError(result, expectedMessage!);
+      }
+    });
+  });
+};
+
 describe('Validation Schemas', () => {
   describe('usernameSchema', () => {
     const schema = usernameSchema(mockT);
 
-    const testCases = [
+    runTestCases(schema, [
       {
         name: 'allow empty username',
         value: undefined,
@@ -76,24 +97,13 @@ describe('Validation Schemas', () => {
         value: 'Valid User_Name',
         expectedSuccess: true,
       },
-    ];
-
-    testCases.forEach(({ name, value, expectedSuccess, expectedMessage }) => {
-      it(name, () => {
-        const result = schema.safeParse(value);
-        if (expectedSuccess) {
-          expectValidationSuccess(result);
-        } else {
-          expectValidationError(result, expectedMessage!);
-        }
-      });
-    });
+    ]);
   });
 
   describe('avatarSchema', () => {
     const schema = avatarSchema(mockT);
 
-    const testCases = [
+    runTestCases(schema, [
       {
         name: 'allow empty avatar',
         value: undefined,
@@ -128,24 +138,13 @@ describe('Validation Schemas', () => {
         }),
         expectedSuccess: true,
       },
-    ];
-
-    testCases.forEach(({ name, value, expectedSuccess, expectedMessage }) => {
-      it(name, () => {
-        const result = schema.safeParse(value);
-        if (expectedSuccess) {
-          expectValidationSuccess(result);
-        } else {
-          expectValidationError(result, expectedMessage!);
-        }
-      });
-    });
+    ]);
   });
 
   describe('passwordSchema', () => {
     const schema = passwordSchema(mockT);
 
-    const testCases = [
+    runTestCases(schema, [
       {
         name: 'reject empty password',
         value: '',
@@ -192,24 +191,13 @@ describe('Validation Schemas', () => {
         value: 'Password123§',
         expectedSuccess: true,
       },
-    ];
-
-    testCases.forEach(({ name, value, expectedSuccess, expectedMessage }) => {
-      it(name, () => {
-        const result = schema.safeParse(value);
-        if (expectedSuccess) {
-          expectValidationSuccess(result);
-        } else {
-          expectValidationError(result, expectedMessage!);
-        }
-      });
-    });
+    ]);
   });
 
   describe('emailSchema', () => {
     const schema = emailSchema(mockT);
 
-    const testCases = [
+    runTestCases(schema, [
       {
         name: 'reject empty email',
         value: '',
@@ -249,17 +237,6 @@ describe('Validation Schemas', () => {
         value: 'user.name+tag@example.com',
         expectedSuccess: true,
       },
-    ];
-
-    testCases.forEach(({ name, value, expectedSuccess, expectedMessage }) => {
-      it(name, () => {
-        const result = schema.safeParse(value);
-        if (expectedSuccess) {
-          expectValidationSuccess(result);
-        } else {
-          expectValidationError(result, expectedMessage!);
-        }
-      });
-    });
+    ]);
   });
 });
