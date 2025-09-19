@@ -90,6 +90,39 @@ describe('Team', () => {
     'members.yulia.githubUrl': 'https://github.com/yulia',
   };
 
+  const mockBioData = {
+    'members.alena.bio': ['Alena bio line 1', 'Alena bio line 2'],
+    'members.alena.contributions': [
+      'Alena contribution 1',
+      'Alena contribution 2',
+    ],
+    'members.igor.bio': ['Igor bio line 1'],
+    'members.igor.contributions': ['Igor contribution 1'],
+    'members.yulia.bio': ['Yulia bio line 1', 'Yulia bio line 2'],
+    'members.yulia.contributions': [
+      'Yulia contribution 1',
+      'Yulia contribution 2',
+    ],
+  };
+
+  const teamMembers = [
+    {
+      name: 'Alena',
+      role: 'Frontend Developer',
+      github: 'https://github.com/alena',
+    },
+    {
+      name: 'Igor',
+      role: 'Backend Developer',
+      github: 'https://github.com/igor',
+    },
+    {
+      name: 'Yulia',
+      role: 'Fullstack Developer',
+      github: 'https://github.com/yulia',
+    },
+  ];
+
   beforeEach(() => {
     jest.clearAllMocks();
 
@@ -98,25 +131,7 @@ describe('Team', () => {
     });
 
     mockRaw.mockImplementation((key: string) => {
-      if (key === 'members.alena.bio') {
-        return ['Alena bio line 1', 'Alena bio line 2'];
-      }
-      if (key === 'members.alena.contributions') {
-        return ['Alena contribution 1', 'Alena contribution 2'];
-      }
-      if (key === 'members.igor.bio') {
-        return ['Igor bio line 1'];
-      }
-      if (key === 'members.igor.contributions') {
-        return ['Igor contribution 1'];
-      }
-      if (key === 'members.yulia.bio') {
-        return ['Yulia bio line 1', 'Yulia bio line 2'];
-      }
-      if (key === 'members.yulia.contributions') {
-        return ['Yulia contribution 1', 'Yulia contribution 2'];
-      }
-      return [];
+      return mockBioData[key as keyof typeof mockBioData] || [];
     });
 
     (useTranslations as jest.Mock).mockReturnValue(
@@ -124,89 +139,72 @@ describe('Team', () => {
     );
   });
 
+  const renderTeam = () => render(<Team />);
+
   it('render title', () => {
-    render(<Team />);
+    renderTeam();
     expect(screen.getByText('Our Team')).toBeInTheDocument();
   });
 
-  it('render all team members', () => {
-    render(<Team />);
+  it('render all team members with their details', () => {
+    renderTeam();
 
-    expect(screen.getByText('Alena')).toBeInTheDocument();
-    expect(screen.getByText('Igor')).toBeInTheDocument();
-    expect(screen.getByText('Yulia')).toBeInTheDocument();
-  });
-
-  it('render member descriptions', () => {
-    render(<Team />);
-
-    expect(screen.getByText('Frontend Developer')).toBeInTheDocument();
-    expect(screen.getByText('Backend Developer')).toBeInTheDocument();
-    expect(screen.getByText('Fullstack Developer')).toBeInTheDocument();
+    teamMembers.forEach((member) => {
+      expect(screen.getByText(member.name)).toBeInTheDocument();
+      expect(screen.getByText(member.role)).toBeInTheDocument();
+    });
   });
 
   it('render GitHub links with correct URLs', () => {
-    render(<Team />);
+    renderTeam();
 
     const links = screen.getAllByRole('link');
     const githubUrls = links.map((link) => link.getAttribute('href'));
 
-    expect(githubUrls).toContain('https://github.com/alena');
-    expect(githubUrls).toContain('https://github.com/igor');
-    expect(githubUrls).toContain('https://github.com/yulia');
+    teamMembers.forEach((member) => {
+      expect(githubUrls).toContain(member.github);
+    });
   });
 
-  it('render member bios', () => {
-    render(<Team />);
+  it('render member bios and contributions', () => {
+    renderTeam();
 
-    expect(screen.getByText('Alena bio line 1')).toBeInTheDocument();
-    expect(screen.getByText('Alena bio line 2')).toBeInTheDocument();
-    expect(screen.getByText('Igor bio line 1')).toBeInTheDocument();
-    expect(screen.getByText('Yulia bio line 1')).toBeInTheDocument();
-    expect(screen.getByText('Yulia bio line 2')).toBeInTheDocument();
-  });
-
-  it('render member contributions', () => {
-    render(<Team />);
-
-    expect(screen.getByText('Alena contribution 1')).toBeInTheDocument();
-    expect(screen.getByText('Alena contribution 2')).toBeInTheDocument();
-    expect(screen.getByText('Igor contribution 1')).toBeInTheDocument();
-    expect(screen.getByText('Yulia contribution 1')).toBeInTheDocument();
-    expect(screen.getByText('Yulia contribution 2')).toBeInTheDocument();
+    Object.values(mockBioData)
+      .flat()
+      .forEach((text) => {
+        expect(screen.getByText(text)).toBeInTheDocument();
+      });
   });
 
   it('render images with correct alt text', () => {
-    render(<Team />);
+    renderTeam();
 
     const images = screen.getAllByTestId('team-image');
-    expect(images).toHaveLength(3);
+    expect(images).toHaveLength(teamMembers.length);
 
-    expect(images[0]).toHaveAttribute('data-alt', 'Alena');
-    expect(images[1]).toHaveAttribute('data-alt', 'Igor');
-    expect(images[2]).toHaveAttribute('data-alt', 'Yulia');
+    teamMembers.forEach((member, index) => {
+      expect(images[index]).toHaveAttribute('data-alt', member.name);
+    });
   });
 
   it('apply correct CSS classes for dark mode', () => {
-    render(<Team />);
-
+    renderTeam();
     const container = screen.getByText('Our Team').closest('div');
     expect(container).toHaveClass('dark:bg-gray-900');
   });
 
-  it('render section headings', () => {
-    render(<Team />);
-
-    expect(screen.getAllByText('About')).toHaveLength(3);
-    expect(screen.getAllByText('Contributions')).toHaveLength(3);
+  it('render section headings for each member', () => {
+    renderTeam();
+    expect(screen.getAllByText('About')).toHaveLength(teamMembers.length);
+    expect(screen.getAllByText('Contributions')).toHaveLength(
+      teamMembers.length
+    );
   });
 
   it('render checkmarks for contributions', () => {
-    render(<Team />);
-
+    renderTeam();
     const checkmarks = screen.getAllByText('✓');
     expect(checkmarks.length).toBeGreaterThan(0);
-
     checkmarks.forEach((checkmark) => {
       expect(checkmark).toHaveClass('text-green-500');
     });
