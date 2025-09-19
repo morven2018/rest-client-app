@@ -241,6 +241,7 @@
     "btnRegister": "Sign Up",
     "btnRest": "REST Client",
     "btnHistory": "History",
-    "btnVariables": "Variables"
+    "btnVariables": "Variables",
+    "descriptions": "This is a browser-based REST Client with auth, history, variables, and multi-language support for streamlined API testing and development."
   }
 }
