@@ -17,9 +17,10 @@ export default function GreetingsSection() {
     <section className="w-full bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
       <div className="container w-full min-h-150 space-y-4 mx-auto bg-greetings px-7 py-20 rounded-[8px] flex justify-center items-center">
         <div className="inline-block px-8 py-16 rounded-[8px] bg-[#FFFFFFB2] dark:bg-[#0A0A0AB2]">
-          <h3 className="text-center text-5xl font-semibold leading-tight tracking-normal mb-20">
+          <h3 className="text-center text-3xl sm:text-5xl font-semibold leading-tight tracking-normal mb-10">
             {displayName ? `${t('title')}, ${displayName}!` : `${t('title')}!`}
           </h3>
+          <p className="text-center font-semibold mb-10">{t('descriptions')}</p>
           {displayName ? (
             <div className="flex gap-4 flex-col items-center md:justify-center md:flex-row">
               <Button asChild variant="outline" className={buttonStyles}>
