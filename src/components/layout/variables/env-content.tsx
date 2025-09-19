@@ -4,20 +4,18 @@ import EnvTable from './env-table';
 import NoVariables from './no-variables';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useEnvVariables } from '@/hooks/use-env-variables';
-import { usePathname } from '@/i18n/navigation';
 
 export default function EnvironmentVariablesContent() {
-  const pathname = usePathname();
-  const links = pathname.split('/').filter(Boolean);
-  const currentEnvName = links[1] ? decodeURIComponent(links[1]) : '';
-
-  const { setVariable, removeVariable } = useEnvVariables();
+  const {
+    variables: storedVariables,
+    setVariable,
+    removeVariable,
+  } = useEnvVariables();
 
   const [variables, setVariables] = useState<Record<string, string>>({});
   const [selectedVars, setSelectedVars] = useState<Set<string>>(() => {
-    if (typeof window !== 'undefined' && currentEnvName) {
-      const envSelectedKey = `selectedVariables_${currentEnvName}`;
-      const saved = localStorage.getItem(envSelectedKey);
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('selectedVariables');
       return saved ? new Set(JSON.parse(saved)) : new Set();
     }
     return new Set();
@@ -37,14 +35,11 @@ export default function EnvironmentVariablesContent() {
   >(new Map());
 
   useEffect(() => {
-    if (currentEnvName) {
-      const envSelectedKey = `selectedVariables_${currentEnvName}`;
-      localStorage.setItem(
-        envSelectedKey,
-        JSON.stringify(Array.from(selectedVars))
-      );
-    }
-  }, [selectedVars, currentEnvName]);
+    localStorage.setItem(
+      'selectedVariables',
+      JSON.stringify(Array.from(selectedVars))
+    );
+  }, [selectedVars]);
 
   const initializeInputRef = useCallback((varName: string) => {
     if (!inputRefs.current.has(varName)) {
@@ -88,38 +83,35 @@ export default function EnvironmentVariablesContent() {
   }, [focusedInput]);
 
   const loadVariablesDirectly = useCallback(() => {
-    if (currentEnvName) {
-      try {
-        const stored = localStorage.getItem('variables');
-        if (stored) {
-          const allVariables = JSON.parse(stored);
-          const envVariables = allVariables[currentEnvName] || {};
-          setVariables(envVariables);
-          Object.keys(envVariables).forEach(initializeInputRef);
+    try {
+      const stored = localStorage.getItem('variables');
+      if (stored) {
+        const envVariables = JSON.parse(stored);
+        setVariables(envVariables);
+        Object.keys(envVariables).forEach(initializeInputRef);
 
-          setSelectedVars((prev) => {
-            const newSelected = new Set<string>();
-            prev.forEach((varName) => {
-              if (envVariables[varName] !== undefined) {
-                newSelected.add(varName.toString());
-              }
-            });
-            return newSelected;
+        setSelectedVars((prev) => {
+          const newSelected = new Set<string>();
+          prev.forEach((varName) => {
+            if (envVariables[varName] !== undefined) {
+              newSelected.add(varName.toString());
+            }
           });
-        } else {
-          setVariables({});
-          setSelectedVars(new Set());
-        }
-      } catch {
+          return newSelected;
+        });
+      } else {
         setVariables({});
         setSelectedVars(new Set());
       }
+    } catch {
+      setVariables({});
+      setSelectedVars(new Set());
     }
-  }, [currentEnvName, initializeInputRef]);
+  }, [initializeInputRef]);
 
   useEffect(() => {
     loadVariablesDirectly();
-  }, [loadVariablesDirectly, currentEnvName]);
+  }, [loadVariablesDirectly, storedVariables]);
 
   const sortedVariables = useCallback(() => {
     const entries = Object.entries(variables);
@@ -151,17 +143,15 @@ export default function EnvironmentVariablesContent() {
 
   const handleVariableValueChange = useCallback(
     (varName: string, newValue: string) => {
-      if (currentEnvName) {
-        setVariable(currentEnvName, varName, newValue);
-        setVariables((prev) => ({ ...prev, [varName]: newValue }));
-      }
+      setVariable(varName, newValue);
+      setVariables((prev) => ({ ...prev, [varName]: newValue }));
     },
-    [currentEnvName, setVariable]
+    [setVariable]
   );
 
   const handleVariableNameChange = useCallback(
     (oldName: string, newName: string) => {
-      if (currentEnvName && newName.trim() && newName !== oldName) {
+      if (newName.trim() && newName !== oldName) {
         if (variables[newName] !== undefined) {
           return;
         }
@@ -169,8 +159,8 @@ export default function EnvironmentVariablesContent() {
         const oldValue = variables[oldName];
         const wasFocused = focusedInput?.varName === oldName;
 
-        removeVariable(currentEnvName, oldName);
-        setVariable(currentEnvName, newName, oldValue);
+        removeVariable(oldName);
+        setVariable(newName, oldValue);
 
         setVariables((prev) => {
           const newVars = { ...prev };
@@ -199,43 +189,39 @@ export default function EnvironmentVariablesContent() {
         }
       }
     },
-    [currentEnvName, variables, removeVariable, setVariable, focusedInput]
+    [variables, removeVariable, setVariable, focusedInput]
   );
 
   const handleDeleteVariable = useCallback(
     (varName: string) => {
-      if (currentEnvName) {
-        removeVariable(currentEnvName, varName);
-        setVariables((prev) => {
-          const newVars = { ...prev };
-          delete newVars[varName];
-          return newVars;
-        });
-        setSelectedVars((prev) => {
-          const newSelected = new Set(prev);
-          newSelected.delete(varName);
-          return newSelected;
-        });
-        inputRefs.current.delete(varName);
-      }
+      removeVariable(varName);
+      setVariables((prev) => {
+        const newVars = { ...prev };
+        delete newVars[varName];
+        return newVars;
+      });
+      setSelectedVars((prev) => {
+        const newSelected = new Set(prev);
+        newSelected.delete(varName);
+        return newSelected;
+      });
+      inputRefs.current.delete(varName);
     },
-    [currentEnvName, removeVariable]
+    [removeVariable]
   );
 
   const handleAddVariable = useCallback(() => {
-    if (currentEnvName) {
-      const newVarName = `variable_${Object.keys(variables).length + 1}`;
-      const newValue = '';
+    const newVarName = `variable_${Object.keys(variables).length + 1}`;
+    const newValue = '';
 
-      setVariable(currentEnvName, newVarName, newValue);
-      setVariables((prev) => ({ ...prev, [newVarName]: newValue }));
-      initializeInputRef(newVarName);
+    setVariable(newVarName, newValue);
+    setVariables((prev) => ({ ...prev, [newVarName]: newValue }));
+    initializeInputRef(newVarName);
 
-      setTimeout(() => {
-        setFocusedInput({ type: 'name', varName: newVarName });
-      }, 0);
-    }
-  }, [currentEnvName, setVariable, initializeInputRef, variables]);
+    setTimeout(() => {
+      setFocusedInput({ type: 'name', varName: newVarName });
+    }, 0);
+  }, [setVariable, initializeInputRef, variables]);
 
   const handleSelectAll = useCallback(() => {
     setSelectedVars(new Set(Object.keys(variables)));
@@ -262,11 +248,11 @@ export default function EnvironmentVariablesContent() {
   }, []);
 
   const handleRemoveSelected = useCallback(() => {
-    if (currentEnvName && selectedVars.size > 0) {
+    if (selectedVars.size > 0) {
       const varsToDelete = new Set(selectedVars);
 
       varsToDelete.forEach((varName) => {
-        removeVariable(currentEnvName, varName);
+        removeVariable(varName);
         inputRefs.current.delete(varName);
       });
 
@@ -278,7 +264,7 @@ export default function EnvironmentVariablesContent() {
 
       setSelectedVars(new Set());
     }
-  }, [currentEnvName, selectedVars, removeVariable]);
+  }, [selectedVars, removeVariable]);
 
   const handleFocus = useCallback((varName: string, type: 'name' | 'value') => {
     setFocusedInput({ varName, type });
