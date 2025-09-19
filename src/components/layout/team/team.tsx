@@ -1,8 +1,8 @@
 import Image, { StaticImageData } from 'next/image';
-import { useTranslations } from 'next-intl';
 import alenaImage from '../../../../public/team-img/Alena.jpg';
 import igorImage from '../../../../public/team-img/Igor.jpg';
 import yuliaImage from '../../../../public/team-img/junior.jpg';
+import { useTranslations } from 'next-intl';
 
 interface TeamProps {
   nameKey: string;
@@ -17,6 +17,8 @@ const Team = () => {
     { nameKey: 'igor', image: igorImage },
     { nameKey: 'yulia', image: yuliaImage },
   ];
+
+  const memberName = (nameKey: string): string => t(`members.${nameKey}.name`);
 
   return (
     <div className="w-full bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
@@ -47,7 +49,7 @@ const Team = () => {
                       href={t(`members.${nameKey}.githubUrl`)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={`Visit ${t(`members.${nameKey}.name`)}'s GitHub profile`}
+                      aria-label={`Visit ${memberName(nameKey)}'s GitHub profile`}
                       className="text-xl font-semibold text-white-600 dark:text-white-400 hover:underline"
                     >
                       {t(`members.${nameKey}.name`)}
