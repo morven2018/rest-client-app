@@ -3,7 +3,7 @@
     "logoAlt": "REST Client Logo",
     "login": "Log In",
     "logout": "Log Out",
-    "register": "Register"
+    "register": "Sign up"
   },
   "Footer": {
     "command": "Our team",
@@ -18,7 +18,7 @@
   },
   "Tabs": {
     "login": "LOG IN",
-    "register": "Register",
+    "register": "Sign up",
     "access-begin-login": "To get access login or",
     "link-login": " register",
     "access-end-login": ", if you have no account",
@@ -63,7 +63,7 @@
     "btn": "RETRY"
   },
   "Register": {
-    "btn": "Register",
+    "btn": "Sign up",
     "name": "User name",
     "placeholder": "Enter the password",
     "success": "You have successfully registered.",
