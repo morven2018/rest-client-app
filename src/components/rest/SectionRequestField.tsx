@@ -8,6 +8,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
+import { useEnvVariables } from '@/hooks/use-env-variables';
 import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
 import { toastError } from '@/components/ui/sonner';
 
@@ -25,6 +26,7 @@ export default function SectionRequestField({
   isLoading = false,
 }: SectionRequestFieldProps) {
   const t = useTranslations('RestClient');
+  const { variables, variableExists, variableValue } = useEnvVariables();
 
   const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
 
@@ -36,10 +38,24 @@ export default function SectionRequestField({
     onRequestDataChange({ url: e.target.value });
   };
 
+  const substituteVariablesInUrl = (url: string): string => {
+    if (!url) return url;
+
+    return url.replace(/{{(\w+)}}/g, (match, varName) => {
+      if (variableExists(varName)) {
+        return variableValue(varName);
+      }
+
+      return match;
+    });
+  };
+
+  const resolvedUrl = substituteVariablesInUrl(requestData.url);
+
   const handleSend = () => {
     if (!requestData.url.trim()) return;
     try {
-      new URL(requestData.url);
+      new URL(resolvedUrl);
       onSendRequest();
     } catch (error) {
       toastError('Invalid URL', {
