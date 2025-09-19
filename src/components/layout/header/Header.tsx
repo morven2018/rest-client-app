@@ -40,6 +40,7 @@ export const Header = () => {
                 height={90}
                 priority
                 data-testid="header-logo"
+                style={{ width: 'auto', height: 'auto' }}
               />
             </Link>
           </h1>

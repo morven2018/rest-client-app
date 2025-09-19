@@ -1,12 +1,12 @@
 {
   "Header": {
     "logoAlt": "REST Client Logo",
-    "login": "Log In",
-    "logout": "Log Out",
-    "register": "Register"
+    "login": "Sign In",
+    "logout": "Sign Out",
+    "register": "Sign Up"
   },
   "Footer": {
-    "command": "Our team",
+    "command": "Our Team",
     "pages": "Pages",
     "restful": "Rest Client",
     "variables": "Variables",
@@ -17,8 +17,8 @@
     "right": "All rights reserved."
   },
   "Tabs": {
-    "login": "LOG IN",
-    "register": "Register",
+    "login": "Sign in",
+    "register": "Sign up",
     "access-begin-login": "To get access login or",
     "link-login": " register",
     "access-end-login": ", if you have no account",
@@ -27,10 +27,10 @@
     "access-end-register": " or register, if you already have an account"
   },
   "Login": {
-    "btn": "LOG IN",
+    "btn": "Sign in",
     "placeholder": "Enter the password",
     "success": "You have successfully logged in.",
-    "logout-btn": "LOG OUT",
+    "logout-btn": "Sign Out",
     "no-user": "No user exist with such parameters",
     "error": "An error occurred while logging in. Error:",
     "retry-btn": "RETRY",
@@ -63,11 +63,11 @@
     "btn": "RETRY"
   },
   "Register": {
-    "btn": "Register",
+    "btn": "Sign up",
     "name": "User name",
     "placeholder": "Enter the password",
     "success": "You have successfully registered.",
-    "logout-btn": "LOG OUT",
+    "logout-btn": "Sign Out",
     "user-exist": "This email is already used",
     "error": "An error occurred while register. Error:",
     "try-again": "RETRY",
@@ -101,11 +101,12 @@
     "responseNoYet": "No response yet. Send a request to see the results.",
     "placeholderEndpoint": "Endpoint URL",
     "placeholderKey": "key",
-    "placeholderValue": "value"
+    "placeholderValue": "value",
+    "prompt": "You can use environment variables in URLs or headers. Simply enclose the variable name in double curly braces"
   },
   "user-menu": {
     "update": "Update account",
-    "logout": "Log out",
+    "logout": "Sign Out",
     "profile": "Update account"
   },
   "update": {
@@ -241,6 +242,7 @@
     "btnRegister": "Sign Up",
     "btnRest": "REST Client",
     "btnHistory": "History",
-    "btnVariables": "Variables"
+    "btnVariables": "Variables",
+    "descriptions": "This is a browser-based REST Client with auth, history, variables, and multi-language support for streamlined API testing and development."
   }
 }

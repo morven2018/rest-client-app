@@ -8,6 +8,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useTranslations } from 'next-intl';
+import { useEnvVariables } from '@/hooks/use-env-variables';
 import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
 import { toastError } from '@/components/ui/sonner';
 
@@ -25,6 +26,7 @@ export default function SectionRequestField({
   isLoading = false,
 }: SectionRequestFieldProps) {
   const t = useTranslations('RestClient');
+  const { variables, variableExists, variableValue } = useEnvVariables();
 
   const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
 
@@ -36,10 +38,24 @@ export default function SectionRequestField({
     onRequestDataChange({ url: e.target.value });
   };
 
+  const substituteVariablesInUrl = (url: string): string => {
+    if (!url) return url;
+
+    return url.replace(/{{(\w+)}}/g, (match, varName) => {
+      if (variableExists(varName)) {
+        return variableValue(varName);
+      }
+
+      return match;
+    });
+  };
+
+  const resolvedUrl = substituteVariablesInUrl(requestData.url);
+
   const handleSend = () => {
     if (!requestData.url.trim()) return;
     try {
-      new URL(requestData.url);
+      new URL(resolvedUrl);
       onSendRequest();
     } catch (error) {
       toastError('Invalid URL', {
@@ -52,7 +68,7 @@ export default function SectionRequestField({
 
   return (
     <section className="px-6">
-      <div className="flex flex-col sm:flex-row gap-2 p-5 rounded-lg bg-violet-200 dark:bg-violet-300">
+      <div className="flex flex-col sm:flex-row gap-2 p-5 rounded-lg bg-violet-200 dark:bg-violet-300 mb-3">
         <Select value={requestData.method} onValueChange={handleMethodChange}>
           <SelectTrigger
             className="w-[200px] md:w-[100px] lg:w-[200px] bg-white dark:bg-violet-950 dark:hover:bg-violet-950 cursor-pointer"
@@ -88,6 +104,12 @@ export default function SectionRequestField({
           {t('buttonSend')}
         </Button>
       </div>
+      <span className="text-sm text-gray-600 dark:text-gray-400">
+        {t('prompt')}{' '}
+        <code className="px-1 py-0.5 bg-gray-100 dark:bg-gray-800 rounded font-mono text-sm">
+          {'{{variable_name}}'}
+        </code>
+      </span>
     </section>
   );
 }

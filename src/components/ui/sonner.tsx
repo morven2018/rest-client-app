@@ -79,18 +79,18 @@ export const showToast = (message: string, options?: ToastOptions) => {
     switch (type) {
       case 'success':
         return {
-          className: 'border-teal-100 shadow-inner',
+          className: 'border-teal-100 shadow-inner bg-opacity-50',
           actionClass: 'bg-teal-700 hover:bg-teal-600 text-white',
         };
       case 'error':
         return {
-          className: 'border-red-300 text-red-900 shadow-inner',
+          className: 'border-red-300 text-red-900 shadow-inner bg-opacity-50',
           actionClass: 'bg-red-600 hover:bg-red-700 text-white',
         };
       case 'note':
       default:
         return {
-          className: 'border-blue-200 text-blue-900 shadow-inner',
+          className: 'border-blue-200 text-blue-900 shadow-inner bg-opacity-50',
           actionClass: 'bg-blue-600 hover:bg-blue-700 text-white',
         };
     }
