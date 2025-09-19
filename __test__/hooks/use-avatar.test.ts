@@ -1,8 +1,12 @@
 import { act, renderHook } from '@testing-library/react';
+import { toastError } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 import { useAvatar } from '@/hooks/use-avatar';
 
 jest.mock('@/context/auth/auth-context');
+jest.mock('@/components/ui/sonner', () => ({
+  toastError: jest.fn(),
+}));
 
 describe('useAvatar', () => {
   const mockGetAvatar = jest.fn();
@@ -54,23 +58,23 @@ describe('useAvatar', () => {
   });
 
   it('handle errors on loading an avatar', async () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
     mockGetAvatar.mockRejectedValue(new Error('Failed to fetch'));
 
     const { result } = renderHook(() => useAvatar());
 
     await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+      await Promise.resolve();
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error fetching avatar:',
-      expect.anything()
+    expect(toastError).toHaveBeenCalledWith(
+      'Error fetching avatar',
+      expect.objectContaining({
+        additionalMessage: 'Failed to fetch',
+        duration: 3000,
+      })
     );
     expect(result.current.avatarUrl).toBe('');
     expect(result.current.loading).toBe(false);
-
-    consoleErrorSpy.mockRestore();
   });
 
   it('clear the avatar if currentUser is missing', async () => {

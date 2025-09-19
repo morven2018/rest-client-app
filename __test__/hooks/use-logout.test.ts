@@ -151,7 +151,6 @@ describe('useLogout', () => {
     await act(async () => {
       await result.current.handleLogout();
     });
-
     const retryAction = mockToastError.mock.calls[0][1]?.action?.onClick;
     expect(typeof retryAction).toBe('function');
 
@@ -159,12 +158,17 @@ describe('useLogout', () => {
       retryAction();
     });
 
-    expect(mockToastError).toHaveBeenCalledTimes(1);
-    expect(consoleErrorSpy).toHaveBeenCalledWith('Retry logout error:', error);
+    expect(mockToastError).toHaveBeenCalledTimes(2);
+    expect(mockToastError).toHaveBeenCalledWith(
+      'Retry logout error:',
+      expect.objectContaining({
+        additionalMessage: 'Permanent error',
+        duration: 3000,
+      })
+    );
 
     consoleErrorSpy.mockRestore();
   });
-
   it('not show success toast if retry fails', async () => {
     const error = new Error('Retry error');
     mockLogout.mockRejectedValue(error);
@@ -183,7 +187,7 @@ describe('useLogout', () => {
     });
 
     expect(mockToastSuccess).not.toHaveBeenCalled();
-    expect(mockToastError).toHaveBeenCalledTimes(1);
+    expect(mockToastError).toHaveBeenCalledTimes(2);
   });
 
   it('have correct toast action button label', async () => {
