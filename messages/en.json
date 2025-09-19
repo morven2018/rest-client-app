@@ -3,10 +3,10 @@
     "logoAlt": "REST Client Logo",
     "login": "Sign In",
     "logout": "Sign Out",
-    "register": "Sign up"
+    "register": "Sign Up"
   },
   "Footer": {
-    "command": "Our team",
+    "command": "Our Team",
     "pages": "Pages",
     "restful": "Rest Client",
     "variables": "Variables",
