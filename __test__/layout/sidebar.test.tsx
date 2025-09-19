@@ -1,5 +1,4 @@
 import CustomSidebar from '@/components/layout/sidebar/sidebar';
-import userEvent from '@testing-library/user-event';
 import { render, screen } from '@testing-library/react';
 
 jest.mock('@/components/layout/sidebar/nav-menu', () => ({
