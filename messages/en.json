@@ -1,8 +1,8 @@
 {
   "Header": {
     "logoAlt": "REST Client Logo",
-    "login": "Log In",
-    "logout": "Log Out",
+    "login": "Sign In",
+    "logout": "Sign Out",
     "register": "Sign up"
   },
   "Footer": {
@@ -17,7 +17,7 @@
     "right": "All rights reserved."
   },
   "Tabs": {
-    "login": "LOG IN",
+    "login": "Sign in",
     "register": "Sign up",
     "access-begin-login": "To get access login or",
     "link-login": " register",
@@ -27,10 +27,10 @@
     "access-end-register": " or register, if you already have an account"
   },
   "Login": {
-    "btn": "LOG IN",
+    "btn": "Sign in",
     "placeholder": "Enter the password",
     "success": "You have successfully logged in.",
-    "logout-btn": "LOG OUT",
+    "logout-btn": "Sign Out",
     "no-user": "No user exist with such parameters",
     "error": "An error occurred while logging in. Error:",
     "retry-btn": "RETRY",
@@ -67,7 +67,7 @@
     "name": "User name",
     "placeholder": "Enter the password",
     "success": "You have successfully registered.",
-    "logout-btn": "LOG OUT",
+    "logout-btn": "Sign Out",
     "user-exist": "This email is already used",
     "error": "An error occurred while register. Error:",
     "try-again": "RETRY",
@@ -105,7 +105,7 @@
   },
   "user-menu": {
     "update": "Update account",
-    "logout": "Log out",
+    "logout": "Sign Out",
     "profile": "Update account"
   },
   "update": {
