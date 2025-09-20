@@ -105,7 +105,7 @@ export default function SectionResponse({
               </Button>
             </div>
             <pre
-              className={`${getStatusColor(responseData.status)} w-full max-w-full min-h-75 rounded-[8px] mt-4 p-3 overflow-auto whitespace-pre-wrap break-all font-mono`}
+              className={`${getStatusColor(responseData.status)} w-full max-w-full min-h-75 rounded-[8px] mt-4 p-3 overflow-auto whitespace-pre-wrap break-all font-mono text-white`}
             >
               {responseData.body}
             </pre>
