@@ -102,7 +102,7 @@
     "placeholderEndpoint": "Endpoint URL",
     "placeholderKey": "key",
     "placeholderValue": "value",
-    "prompt": "You can use environment variables in URLs or headers. Simply enclose the variable name in double curly braces"
+    "prompt": "* You can use environment variables in URLs or headers. Simply enclose the variable name in double curly braces"
   },
   "user-menu": {
     "update": "Update account",
