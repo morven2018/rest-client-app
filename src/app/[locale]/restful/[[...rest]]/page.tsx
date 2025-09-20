@@ -190,7 +190,6 @@ export default function RestfulPage() {
     let requestId: string | null = null;
     try {
       const substitutedUrl = substituteVariables(requestData.url);
-
       const substitutedBody = substituteVariables(requestData.body);
       const headers = Object.fromEntries(
         requestData.headers
@@ -201,6 +200,9 @@ export default function RestfulPage() {
       const shouldSendBody = !['GET', 'HEAD'].includes(requestData.method);
 
       const requestWeight = `${new Blob([substitutedBody]).size} bytes`;
+
+      const base64Url = window.location.href;
+
       requestId = await saveApiRequest({
         method: requestData.method as
           | 'GET'
@@ -221,7 +223,10 @@ export default function RestfulPage() {
         headers: headers,
         body: substitutedBody,
         variables: {},
+        errorDetails: '',
+        base64Url: base64Url,
       });
+
       if (!requestId) {
         throw new Error('Failed to save request to database');
       }
@@ -249,7 +254,8 @@ export default function RestfulPage() {
         responseWeight,
         duration,
         response.status,
-        response.ok ? 'ok' : 'error'
+        response.ok ? 'ok' : 'error',
+        response.ok ? '' : `HTTP ${response.status}: ${statusText}`
       );
 
       setResponseData({
@@ -259,9 +265,12 @@ export default function RestfulPage() {
         body: responseBody,
       });
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      const errorDetails = `Network Error: ${errorMessage}`;
+
       toastError('Request failed', {
-        additionalMessage:
-          error instanceof Error ? error.message : 'Check your URL',
+        additionalMessage: errorMessage,
         duration: 3000,
       });
 
@@ -269,7 +278,7 @@ export default function RestfulPage() {
         status: 0,
         statusText: 'Network Error',
         headers: {},
-        body: error instanceof Error ? error.message : 'Unknown error',
+        body: errorDetails,
       });
     } finally {
       setIsLoading(false);

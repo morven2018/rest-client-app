@@ -1,10 +1,9 @@
 'use client';
+import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useCallback } from 'react';
 import { toastError, toastNote, toastSuccess } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 import { db } from '@/firebase/config';
-
-import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 
 export interface RequestData {
   id: string;
@@ -22,6 +21,8 @@ export interface RequestData {
   Response: string;
   Headers: Record<string, string>;
   Body: string;
+  errorDetails: string;
+  base64Url: string;
 }
 
 export interface SaveRequestParams {
@@ -37,6 +38,8 @@ export interface SaveRequestParams {
   headers: Record<string, string>;
   body?: string;
   variables?: Record<string, string>;
+  errorDetails?: string;
+  base64Url: string;
 }
 
 export const useSaveRequest = () => {
@@ -134,7 +137,8 @@ export const useSaveRequest = () => {
       responseWeight: string,
       duration: number,
       code: number,
-      status: RequestData['status'] = 'ok'
+      status: RequestData['status'] = 'ok',
+      errorDetails: string
     ) => {
       const updates: Partial<RequestData> = {
         Response: response,
@@ -142,6 +146,7 @@ export const useSaveRequest = () => {
         Duration: duration,
         code,
         status,
+        errorDetails,
       };
 
       return await updateRequest(requestId, updates);
@@ -180,6 +185,8 @@ export const useRequestHistory = () => {
         headers,
         body = '',
         variables = {},
+        errorDetails = '',
+        base64Url,
       } = params;
 
       const now = new Date();
@@ -201,6 +208,8 @@ export const useRequestHistory = () => {
         Response: response,
         Headers: headers,
         Body: body,
+        errorDetails,
+        base64Url,
       };
 
       return await saveRequest(requestData);
