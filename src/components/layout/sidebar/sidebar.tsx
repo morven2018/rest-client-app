@@ -13,7 +13,7 @@ export default function CustomSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex">
       <div className="p-4 relative max-[380px]:px-1">
         <SidebarProvider>
           <Sidebar
