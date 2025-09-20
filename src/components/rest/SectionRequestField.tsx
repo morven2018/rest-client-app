@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
+import { RequestData } from '@/app/[locale]/restful/[[...rest]]/content';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toastError } from '@/components/ui/sonner';

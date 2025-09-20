@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
 import HeadersTable from './HeadersTable';
-import { useTranslations } from 'next-intl';
-import type { Header } from '@/app/[locale]/restful/[[...rest]]/page';
 import { Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import type { Header } from '@/app/[locale]/restful/[[...rest]]/content';
+import { Button } from '@/components/ui/button';
 
 interface SectionHeadersProps {
   readonly headers: Header[];

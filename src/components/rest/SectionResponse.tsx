@@ -1,7 +1,7 @@
 import { ClipboardList, Copy, Save } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-import type { ResponseData } from '@/app/[locale]/restful/[[...rest]]/page';
+import type { ResponseData } from '@/app/[locale]/restful/[[...rest]]/content';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 

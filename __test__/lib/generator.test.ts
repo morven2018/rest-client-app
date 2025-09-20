@@ -1,5 +1,5 @@
 import generateCode, { escapeString, formatHeaders } from '@/lib/generator';
-import type { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
+import type { RequestData } from '@/app/[locale]/restful/[[...rest]]/content';
 
 const baseRequestData: RequestData = {
   method: 'GET',
