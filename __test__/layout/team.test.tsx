@@ -206,7 +206,7 @@ describe('Team', () => {
     const checkmarks = screen.getAllByText('✓');
     expect(checkmarks.length).toBeGreaterThan(0);
     checkmarks.forEach((checkmark) => {
-      expect(checkmark).toHaveClass('text-green-500');
+      expect(checkmark).toHaveClass('text-black dark:text-white mr-2 mt-1');
     });
   });
 });

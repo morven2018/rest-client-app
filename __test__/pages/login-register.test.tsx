@@ -1,5 +1,6 @@
 import LogInPage from '@/app/[locale]/login/page';
-import { render, screen } from '@testing-library/react';
+import RegisterPage from '@/app/[locale]/register/page';
+import { cleanup, render, screen } from '@testing-library/react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -29,7 +30,7 @@ jest.mock('@/components/layout/form/tabs', () => ({
   )),
 }));
 
-describe('LogInPage', () => {
+describe('Auth Pages', () => {
   const mockCookies = {
     get: jest.fn(),
   };
@@ -39,35 +40,113 @@ describe('LogInPage', () => {
     (cookies as jest.Mock).mockReturnValue(mockCookies);
   });
 
-  it('redirect to home page if authToken exists', async () => {
-    mockCookies.get.mockImplementation((key: string) => {
-      if (key === 'authToken') return { value: 'existing-token' };
-      return undefined;
+  describe('LogInPage', () => {
+    it('redirect to home page if authToken exists', async () => {
+      mockCookies.get.mockImplementation((key: string) => {
+        if (key === 'authToken') return { value: 'existing-token' };
+        return undefined;
+      });
+
+      await expect(LogInPage()).rejects.toThrow('NEXT_REDIRECT');
+      expect(redirect).toHaveBeenCalledWith('/');
     });
 
-    await expect(LogInPage()).rejects.toThrow('NEXT_REDIRECT');
-    expect(redirect).toHaveBeenCalledWith('/');
+    it('render login form if no authToken', async () => {
+      mockCookies.get.mockImplementation((key: string) => {
+        if (key === 'authToken') return { value: undefined };
+        return undefined;
+      });
+
+      const result = await LogInPage();
+      render(result);
+
+      expect(redirect).not.toHaveBeenCalled();
+      expect(screen.getByTestId('form-wrapper')).toBeInTheDocument();
+      expect(screen.getByTestId('form-wrapper')).toHaveAttribute(
+        'data-require-unauth',
+        'true'
+      );
+      expect(screen.getByTestId('form-tab')).toBeInTheDocument();
+      expect(screen.getByTestId('form-tab')).toHaveAttribute(
+        'data-search-params',
+        'login'
+      );
+    });
   });
 
-  it('render login form if no authToken', async () => {
-    mockCookies.get.mockImplementation((key: string) => {
-      if (key === 'authToken') return { value: undefined };
-      return undefined;
+  describe('RegisterPage', () => {
+    it('redirect to home if authToken exists', async () => {
+      mockCookies.get.mockImplementation((key: string) => {
+        if (key === 'authToken') return { value: 'existing-token' };
+        return undefined;
+      });
+
+      await expect(RegisterPage()).rejects.toThrow('NEXT_REDIRECT');
+      expect(redirect).toHaveBeenCalledWith('/');
     });
 
-    const result = await LogInPage();
-    render(result);
+    it('register form if no authToken', async () => {
+      mockCookies.get.mockImplementation((key: string) => {
+        if (key === 'authToken') return { value: undefined };
+        return undefined;
+      });
 
-    expect(redirect).not.toHaveBeenCalled();
-    expect(screen.getByTestId('form-wrapper')).toBeInTheDocument();
-    expect(screen.getByTestId('form-wrapper')).toHaveAttribute(
-      'data-require-unauth',
-      'true'
-    );
-    expect(screen.getByTestId('form-tab')).toBeInTheDocument();
-    expect(screen.getByTestId('form-tab')).toHaveAttribute(
-      'data-search-params',
-      'login'
-    );
+      const result = await RegisterPage();
+      render(result);
+
+      expect(redirect).not.toHaveBeenCalled();
+      expect(screen.getByTestId('form-wrapper')).toBeInTheDocument();
+      expect(screen.getByTestId('form-wrapper')).toHaveAttribute(
+        'data-require-unauth',
+        'true'
+      );
+      expect(screen.getByTestId('form-tab')).toBeInTheDocument();
+      expect(screen.getByTestId('form-tab')).toHaveAttribute(
+        'data-search-params',
+        'register'
+      );
+    });
+
+    it('register form if authToken cookie is not present', async () => {
+      mockCookies.get.mockImplementation((key: string) => {
+        if (key === 'authToken') return undefined;
+        return undefined;
+      });
+
+      const result = await RegisterPage();
+      render(result);
+
+      expect(redirect).not.toHaveBeenCalled();
+      expect(screen.getByTestId('form-wrapper')).toBeInTheDocument();
+      expect(screen.getByTestId('form-tab')).toHaveAttribute(
+        'data-search-params',
+        'register'
+      );
+    });
+  });
+  describe('Common page behavior', () => {
+    it('render FormWrapper if requireUnauth=true for both pages', async () => {
+      mockCookies.get.mockImplementation((key: string) => {
+        if (key === 'authToken') return { value: undefined };
+        return undefined;
+      });
+
+      const loginResult = await LogInPage();
+      const registerResult = await RegisterPage();
+
+      render(loginResult);
+      expect(screen.getByTestId('form-wrapper')).toHaveAttribute(
+        'data-require-unauth',
+        'true'
+      );
+
+      cleanup();
+
+      render(registerResult);
+      expect(screen.getByTestId('form-wrapper')).toHaveAttribute(
+        'data-require-unauth',
+        'true'
+      );
+    });
   });
 });
