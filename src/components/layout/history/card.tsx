@@ -103,7 +103,7 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
               <AccordionContent>
                 <div className="p-3 rounded-md">
                   <pre className="text-xs overflow-auto">
-                    {request.Response}
+                    {request.errorDetails}
                   </pre>
                 </div>
               </AccordionContent>

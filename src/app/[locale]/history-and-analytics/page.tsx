@@ -31,7 +31,6 @@ export default async function HistoryAndAnalyticsPage({
   if (!authToken || !userId) redirect('/');
 
   const requests = await getRequests(userId);
-  console.log(requests);
 
   return (
     <main>
