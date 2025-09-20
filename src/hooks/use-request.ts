@@ -1,5 +1,11 @@
 'use client';
-import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { useCallback } from 'react';
 import { toastError, toastNote, toastSuccess } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
@@ -44,6 +50,38 @@ export interface SaveRequestParams {
 
 export const useSaveRequest = () => {
   const { currentUser } = useAuth();
+
+  const getRequestById = useCallback(
+    async (requestId: string): Promise<RequestData | null> => {
+      if (!currentUser) {
+        toastNote('User not authenticated. Cannot get request.');
+        return null;
+      }
+
+      try {
+        const requestRef = doc(
+          db,
+          'users',
+          currentUser.uid,
+          'requests',
+          requestId
+        );
+        const requestDoc = await getDoc(requestRef);
+
+        if (requestDoc.exists()) {
+          return { id: requestDoc.id, ...requestDoc.data() } as RequestData;
+        } else {
+          toastError('Request not found');
+          return null;
+        }
+      } catch (error) {
+        console.error('Error getting request:', error);
+        toastError('Failed to get request');
+        return null;
+      }
+    },
+    [currentUser]
+  );
 
   const saveRequest = useCallback(
     async (requestData: Omit<RequestData, 'id'> & { id?: string }) => {
@@ -159,6 +197,7 @@ export const useSaveRequest = () => {
     updateRequest,
     updateRequestStatus,
     updateRequestResponse,
+    getRequestById,
   };
 };
 

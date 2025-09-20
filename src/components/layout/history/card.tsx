@@ -88,7 +88,7 @@ export async function RequestCard({ request }: Readonly<RequestCardProps>) {
         </ul>
 
         <Link
-          href={request.base64Url}
+          href={`${request.base64Url}?id=${request.id}`}
           className="flex w-full  text-center mt-4 inline-block text-base font-medium bg-violet-200 hover:bg-violet-300 dark:bg-violet-900 dark:hover:bg-violet-800 px-4 py-2 rounded-lg"
         >
           {t('view-details')}

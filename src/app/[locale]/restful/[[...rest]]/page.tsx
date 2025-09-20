@@ -144,7 +144,8 @@ export default function RestfulPage() {
   const router = useRouter();
   const { hasValidToken } = useAuthToken();
   const { variables, variableExists, variableValue } = useEnvVariables();
-  const { saveApiRequest, updateRequestResponse } = useRequestHistory();
+  const { saveApiRequest, updateRequestResponse, getRequestById } =
+    useRequestHistory();
 
   useEffect(() => {
     if (!hasValidToken) {
