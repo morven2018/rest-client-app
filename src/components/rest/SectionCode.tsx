@@ -81,7 +81,7 @@ export default function SectionCode({ requestData }: SectionCodeProps) {
             <div className="flex flex-col gap-2 mb-4 w-full sm:justify-end sm:flex-row">
               <Select value={generator} onValueChange={handleGeneratorChange}>
                 <SelectTrigger
-                  className="w-[200px] cursor-pointer dark:bg-neutral-400 hover:dark:bg-neutral-400"
+                  className="w-[200px] cursor-pointer dark:bg-neutral-400 hover:dark:bg-neutral-400 [&_.lucide-chevron-down]:dark:text-white"
                   aria-label="Code generators Selector"
                 >
                   <SelectValue />
@@ -107,7 +107,7 @@ export default function SectionCode({ requestData }: SectionCodeProps) {
             </div>
             <Button
               onClick={handleCopy}
-              className="block border rounded-lg mb-4 p-2 ml-auto bg-white text-black dark:bg-neutral-600 dark:text-white cursor-pointer"
+              className="block border rounded-lg mb-4 p-2 ml-auto bg-white hover:bg-gray-300 text-black dark:bg-neutral-600 hover:dark:bg-neutral-500 dark:text-white cursor-pointer"
             >
               {copied ? <Copy /> : <ClipboardList />}
             </Button>

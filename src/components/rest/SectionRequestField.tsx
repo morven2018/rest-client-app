@@ -99,7 +99,7 @@ export default function SectionRequestField({
           variant="outline"
           onClick={handleSend}
           disabled={isLoading || !requestData.url.trim()}
-          className="bg-purple-900  text-white dark:bg-violet-200 dark:text-zinc-950 dark:hover:bg-violet-800 hover:bg-purple-800 cursor-pointer"
+          className="bg-purple-900  text-white hover:text-white dark:bg-violet-200 dark:text-zinc-950 dark:hover:bg-violet-800 hover:bg-purple-800 cursor-pointer"
         >
           {t('buttonSend')}
         </Button>
