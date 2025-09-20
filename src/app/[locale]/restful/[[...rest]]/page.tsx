@@ -1,5 +1,4 @@
 import RestfulContent from './content';
-import { getTranslations } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 

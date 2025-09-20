@@ -51,14 +51,18 @@ describe('NotFound', () => {
     (useRouter as jest.Mock).mockReturnValue({ back: mockBack });
   });
 
-  it('renders correctly with translations', () => {
+  it('renders correct structure and calls translations', () => {
+    const mockT = jest.fn((key: string) => key);
+    (useTranslations as jest.Mock).mockReturnValue(mockT);
+
     render(<NotFound />);
 
-    expect(screen.getByText('Page Not Found')).toBeInTheDocument();
-    expect(screen.getByText('Go Back')).toBeInTheDocument();
-    expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByTestId('house-icon')).toBeInTheDocument();
     expect(screen.getByTestId('rotate-icon')).toBeInTheDocument();
+
+    expect(mockT).toHaveBeenCalledWith('title');
+    expect(mockT).toHaveBeenCalledWith('back');
+    expect(mockT).toHaveBeenCalledWith('home');
   });
 
   it('calls router.back when Go Back button is clicked', () => {
