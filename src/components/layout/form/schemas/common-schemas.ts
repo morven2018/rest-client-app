@@ -35,9 +35,9 @@ export const passwordSchema = (t: (key: string) => string) =>
     .string()
     .min(1, t('required'))
     .regex(/\d/, t('digit'))
-    .regex(/[A-Z]/, t('uppercase'))
-    .regex(/[a-z]/, t('lowercase'))
-    .regex(/[^A-Za-z0-9]/, t('special'))
+    .regex(/[\p{Lu}]/u, t('uppercase'))
+    .regex(/[\p{Ll}]/u, t('lowercase'))
+    .regex(/[^\p{L}\d]/u, t('special'))
     .min(8, t('min'));
 
 export const emailSchema = (t: (key: string) => string) =>
