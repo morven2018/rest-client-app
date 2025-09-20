@@ -8,10 +8,10 @@ import SectionRequestField from '@/components/rest/SectionRequestField';
 import SectionResponse from '@/components/rest/SectionResponse';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import { toastError, toastNote } from '@/components/ui/sonner';
+import { toastError } from '@/components/ui/sonner';
 import { useAuthToken } from '@/hooks/use-auth-token';
 import { useEnvVariables } from '@/hooks/use-env-variables';
-import { useRequestHistory } from '@/hooks/use-request';
+import { useRequestHistory, useSaveRequest } from '@/hooks/use-request';
 import { useRouter } from '@/i18n/navigation';
 
 export interface Header {
@@ -27,10 +27,30 @@ export interface RequestData {
 }
 
 export interface ResponseData {
-  status: number;
+  status: number | string;
   statusText: string;
   headers: Record<string, string>;
   body: string;
+}
+
+export interface ApiRequest {
+  id: string;
+  method: string;
+  path: string;
+  url_with_vars?: string;
+  status: string;
+  code?: number;
+  duration?: number;
+  requestWeight?: string;
+  responseWeight?: string;
+  response?: string;
+  headers: Record<string, string>;
+  body?: string;
+  variables?: Record<string, string>;
+  errorDetails?: string;
+  base64Url?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const safeAtob = (encoded: string): string => {
@@ -41,7 +61,6 @@ const safeAtob = (encoded: string): string => {
         encoded
       )
     ) {
-      toastNote('Invalid base64 format');
       return '';
     }
     return decodeURIComponent(
@@ -144,8 +163,8 @@ export default function RestfulPage() {
   const router = useRouter();
   const { hasValidToken } = useAuthToken();
   const { variables, variableExists, variableValue } = useEnvVariables();
-  const { saveApiRequest, updateRequestResponse, getRequestById } =
-    useRequestHistory();
+  const { saveApiRequest, updateRequestResponse } = useRequestHistory();
+  const { getRequestById } = useSaveRequest();
 
   useEffect(() => {
     if (!hasValidToken) {
@@ -155,6 +174,27 @@ export default function RestfulPage() {
 
   const params = useParams();
   const searchParams = useSearchParams();
+  const requestId = searchParams.get('requestId');
+
+  const [requestData, setRequestData] = useState<RequestData>(() => {
+    const rest = Array.isArray(params.rest) ? params.rest : [];
+    const method = rest[0] || 'GET';
+    const url = rest[1] ? safeAtob(rest[1]) : '';
+    const body = rest[2] ? safeAtob(rest[2]) : '';
+    const headers: Header[] = [];
+
+    searchParams.forEach((value, key) => {
+      if (key !== 'RequestId' && !key.match(/^h\d+_(key|value)$/)) {
+        headers.push({ key, value });
+      }
+    });
+
+    return { method, url, body, headers };
+  });
+
+  const [responseData, setResponseData] = useState<ResponseData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadedRequest, setLoadedRequest] = useState<ApiRequest | null>(null);
 
   const substituteVariables = useCallback(
     (text: string): string => {
@@ -167,28 +207,37 @@ export default function RestfulPage() {
     [variables, variableExists, variableValue]
   );
 
-  const [requestData, setRequestData] = useState<RequestData>(() => {
-    const rest = Array.isArray(params.rest) ? params.rest : [];
-    const method = rest[0] || 'GET';
-    const url = rest[1] ? safeAtob(rest[1]) : '';
-    const body = rest[2] ? safeAtob(rest[2]) : '';
+  useEffect(() => {
+    const loadIfNeeded = async () => {
+      const requestId = searchParams.get('RequestId');
+      if (!requestId) return;
 
-    const headers: Header[] = [];
-    searchParams.forEach((value, key) => {
-      if (!key.match(/^h\d+_(key|value)$/)) {
-        headers.push({ key, value });
+      try {
+        const historyData = await getRequestById(requestId);
+        if (historyData) {
+          if (historyData.Response) {
+            setResponseData({
+              status: historyData.code || 100,
+              statusText: historyData.status.toUpperCase(),
+              headers: historyData.Headers || {},
+              body: historyData.Response,
+            });
+          }
+        }
+      } catch (error) {
+        toastError('Failed to load request', {
+          additionalMessage: error instanceof Error ? error.message : '',
+          duration: 3000,
+        });
       }
-    });
+    };
 
-    return { method, url, body, headers };
-  });
-
-  const [responseData, setResponseData] = useState<ResponseData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+    loadIfNeeded();
+  }, [searchParams, getRequestById]);
 
   const sendRequest = async () => {
     setIsLoading(true);
-    let requestId: string | null = null;
+    let dbRequestId: string | null = null;
     try {
       const substitutedUrl = substituteVariables(requestData.url);
       const substitutedBody = substituteVariables(requestData.body);
@@ -204,7 +253,7 @@ export default function RestfulPage() {
 
       const base64Url = window.location.href;
 
-      requestId = await saveApiRequest({
+      dbRequestId = await saveApiRequest({
         method: requestData.method as
           | 'GET'
           | 'HEAD'
@@ -228,7 +277,7 @@ export default function RestfulPage() {
         base64Url: base64Url,
       });
 
-      if (!requestId) {
+      if (!dbRequestId) {
         throw new Error('Failed to save request to database');
       }
 
@@ -250,7 +299,7 @@ export default function RestfulPage() {
       const responseWeight = `${responseSize} bytes`;
 
       await updateRequestResponse(
-        requestId,
+        dbRequestId,
         responseBody,
         responseWeight,
         duration,
@@ -265,6 +314,22 @@ export default function RestfulPage() {
         headers: Object.fromEntries(response.headers.entries()),
         body: responseBody,
       });
+
+      if (loadedRequest && loadedRequest.id === dbRequestId) {
+        setLoadedRequest((prev) =>
+          prev
+            ? {
+                ...prev,
+                code: response.status,
+                status: response.ok ? 'ok' : 'error',
+                response: responseBody,
+                duration,
+                responseWeight,
+                updatedAt: new Date(),
+              }
+            : null
+        );
+      }
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
@@ -281,6 +346,18 @@ export default function RestfulPage() {
         headers: {},
         body: errorDetails,
       });
+
+      if (dbRequestId) {
+        await updateRequestResponse(
+          dbRequestId,
+          errorDetails,
+          '0 bytes',
+          0,
+          0,
+          'error',
+          errorDetails
+        );
+      }
     } finally {
       setIsLoading(false);
     }
@@ -308,6 +385,10 @@ export default function RestfulPage() {
           }
         });
 
+        if (requestId) {
+          queryParams.append('requestId', requestId);
+        }
+
         const queryString = queryParams.toString();
         const fullUrl = queryString ? `${path}?${queryString}` : path;
 
@@ -322,7 +403,7 @@ export default function RestfulPage() {
         });
       }
     },
-    [params.locale]
+    [params.locale, requestId]
   );
 
   useEffect(() => {
@@ -336,12 +417,25 @@ export default function RestfulPage() {
   const handleRequestDataChange = useCallback(
     (newData: Partial<RequestData>) => {
       setRequestData((prev) => ({ ...prev, ...newData }));
+      if (loadedRequest) {
+        setLoadedRequest(null);
+      }
     },
-    []
+    [loadedRequest]
   );
 
-  const handleBodyChange = useCallback((body: string) => {
-    setRequestData((prev) => ({ ...prev, body }));
+  const handleBodyChange = useCallback(
+    (body: string) => {
+      setRequestData((prev) => ({ ...prev, body }));
+      if (loadedRequest) {
+        setLoadedRequest(null);
+      }
+    },
+    [loadedRequest]
+  );
+
+  const clearLoadedRequest = useCallback(() => {
+    setLoadedRequest(null);
   }, []);
 
   return (
