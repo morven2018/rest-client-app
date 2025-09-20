@@ -1,3 +1,10 @@
+import { useTranslations } from 'next-intl';
+import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { toastError } from '@/components/ui/sonner';
+import { useEnvVariables } from '@/hooks/use-env-variables';
+
 import {
   Select,
   SelectContent,
@@ -5,12 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useTranslations } from 'next-intl';
-import { useEnvVariables } from '@/hooks/use-env-variables';
-import { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
-import { toastError } from '@/components/ui/sonner';
 
 interface SectionRequestFieldProps {
   readonly requestData: RequestData;
@@ -26,7 +27,7 @@ export default function SectionRequestField({
   isLoading = false,
 }: SectionRequestFieldProps) {
   const t = useTranslations('RestClient');
-  const { variables, variableExists, variableValue } = useEnvVariables();
+  const { variableExists, variableValue } = useEnvVariables();
 
   const methods = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'];
 

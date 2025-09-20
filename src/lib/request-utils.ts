@@ -53,3 +53,18 @@ export function filterRequests(
     return matchesMethod && matchesStatus && matchesDate;
   });
 }
+
+export interface RequestMetrics {
+  startTime: number;
+  endTime: number;
+  duration: number;
+  requestSize: number;
+  responseSize: number;
+}
+
+export interface PreparedRequest {
+  url: string;
+  body: string;
+  headers: Record<string, string>;
+  shouldSendBody: boolean;
+}

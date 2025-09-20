@@ -2,10 +2,10 @@
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { AuthContext } from './auth-context';
+import { toastError } from '@/components/ui/sonner';
 import { auth, db } from '@/firebase/config';
 import { compressImage } from '@/lib/compressor';
 import { convertFileToBase64 } from '@/lib/converter';
-import { toastError } from '@/components/ui/sonner';
 
 import {
   User,
@@ -18,6 +18,7 @@ import {
 } from 'firebase/auth';
 
 const AUTH_TOKEN_KEY = 'authToken';
+const USER_ID_KEY = 'userId';
 const CHECK_FREQUENCY = 30000;
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -25,6 +26,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [userRegistrationDate, setUserRegistrationDate] = useState<Date | null>(
     null
@@ -49,12 +51,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     document.cookie = `authToken=${token}; path=/; max-age=3600; SameSite=Lax`;
   };
 
-  const removeToken = () => {
+  const saveUserId = (id: string) => {
+    localStorage.setItem(USER_ID_KEY, id);
+    setUserId(id);
+    document.cookie = `userId=${id}; path=/; max-age=3600; SameSite=Lax`;
+  };
+
+  const removeToken = useCallback(() => {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     setAuthToken(null);
     document.cookie =
       'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
-  };
+  }, []);
+
+  const removeUserId = useCallback(() => {
+    localStorage.removeItem(USER_ID_KEY);
+    setUserId(null);
+    document.cookie =
+      'userId=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax';
+  }, []);
+
+  const clearAuthData = useCallback(() => {
+    removeToken();
+    removeUserId();
+  }, [removeToken, removeUserId]);
+
   const getAvatar = useCallback(async (userId: string): Promise<string> => {
     try {
       const docRef = doc(db, 'userAvatars', userId);
@@ -119,6 +140,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       setUserRegistrationDate(registrationDate);
       const token = await userCredential.user.getIdToken();
       saveToken(token);
+      saveUserId(userId);
 
       return { token, avatarUrl: avatarBase64 };
     },
@@ -134,6 +156,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       );
       const token = await userCredential.user.getIdToken();
       saveToken(token);
+      saveUserId(userCredential.user.uid);
 
       if (userCredential.user) {
         await setDoc(
@@ -149,10 +172,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     },
     []
   );
+
   const logout = useCallback(async () => {
     await signOut(auth);
-    removeToken();
-  }, []);
+    clearAuthData();
+  }, [clearAuthData]);
 
   const resetPassword = useCallback(async (email: string) => {
     await sendPasswordResetEmail(auth, email);
@@ -231,10 +255,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     const storedToken = localStorage.getItem(AUTH_TOKEN_KEY);
+    const storedUserId = localStorage.getItem(USER_ID_KEY);
+
     if (storedToken && isTokenValid(storedToken)) {
       setAuthToken(storedToken);
     } else {
       removeToken();
+    }
+
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else {
+      removeUserId();
     }
 
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -243,6 +275,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       if (user) {
         const token = await user.getIdToken();
         saveToken(token);
+        saveUserId(user.uid);
 
         try {
           const userDoc = await getDoc(doc(db, 'userMetadata', user.uid));
@@ -262,7 +295,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
           });
         }
       } else {
-        removeToken();
+        clearAuthData();
         setUserRegistrationDate(null);
       }
 
@@ -277,12 +310,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       unsubscribe();
       clearInterval(tokenCheckInterval);
     };
-  }, [authToken, forceLogoutIfTokenExpired, isTokenValid]);
+  }, [
+    authToken,
+    forceLogoutIfTokenExpired,
+    isTokenValid,
+    clearAuthData,
+    removeUserId,
+    removeToken,
+  ]);
 
   const value = useMemo(
     () => ({
       currentUser,
       authToken,
+      userId,
       login,
       register,
       getAvatar,
@@ -296,6 +337,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [
       currentUser,
       authToken,
+      userId,
       loading,
       login,
       logout,

@@ -1,9 +1,10 @@
 'use client';
-import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import { useCallback } from 'react';
+import { toastError, toastNote, toastSuccess } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 import { db } from '@/firebase/config';
-import { toastError, toastNote } from '@/components/ui/sonner';
+
+import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 
 export interface RequestData {
   id: string;
@@ -70,8 +71,11 @@ export const useSaveRequest = () => {
           updatedAt: serverTimestamp(),
         });
 
+        toastSuccess('Request saved successfully!');
         return requestId;
-      } catch {
+      } catch (error) {
+        console.error('Error saving request:', error);
+        toastError('Failed to save request');
         return null;
       }
     },
@@ -100,15 +104,11 @@ export const useSaveRequest = () => {
           ...updates,
           updatedAt: serverTimestamp(),
         });
+
         return true;
       } catch (error) {
-        toastError('Error updating request in Firestore:', {
-          additionalMessage:
-            error instanceof Error
-              ? error.message
-              : "Can't updating request in Firestore",
-          duration: 3000,
-        });
+        console.error('Error updating request:', error);
+        toastError('Error updating request');
         return false;
       }
     },

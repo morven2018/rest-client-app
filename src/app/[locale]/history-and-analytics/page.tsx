@@ -26,10 +26,12 @@ export default async function HistoryAndAnalyticsPage({
   const searchParamsObj = await searchParams;
   const cookieStore = cookies();
   const authToken = (await cookieStore).get('authToken')?.value;
+  const userId = (await cookieStore).get('userId')?.value;
 
-  if (!authToken) redirect('/');
+  if (!authToken || !userId) redirect('/');
 
-  const requests = await getRequests(authToken);
+  const requests = await getRequests(userId);
+  console.log(requests);
 
   return (
     <main>
