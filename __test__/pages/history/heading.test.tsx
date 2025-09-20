@@ -2,12 +2,10 @@ import HistoryHeading from '@/components/layout/history/history-heading';
 import { render, screen } from '@testing-library/react';
 import { getTranslations } from 'next-intl/server';
 
-// Mock next-intl
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn(),
 }));
 
-// Mock next/link
 jest.mock('@/i18n/navigation', () => ({
   Link: jest.fn(({ children, href, title, className }) => (
     <a href={href} title={title} className={className} data-testid="link">
@@ -24,7 +22,7 @@ describe('HistoryHeading', () => {
     (getTranslations as jest.Mock).mockResolvedValue(mockT);
   });
 
-  it('renders title and link with correct translations', async () => {
+  it('render title and link with correct translations', async () => {
     mockT.mockImplementation((key: string) => {
       const translations: Record<string, string> = {
         title: 'Request History',
@@ -46,7 +44,7 @@ describe('HistoryHeading', () => {
     expect(screen.getByTestId('link')).toHaveAttribute('href', '/restful');
   });
 
-  it('applies correct CSS classes', async () => {
+  it('apply correct CSS classes', async () => {
     mockT.mockImplementation((key: string) => {
       if (key === 'title') return 'History';
       if (key === 'to-rest') return 'To REST';
@@ -68,7 +66,7 @@ describe('HistoryHeading', () => {
     expect(link).toHaveClass('rounded-lg');
   });
 
-  it('has correct layout structure', async () => {
+  it('have correct layout structure', async () => {
     mockT.mockImplementation((key: string) => {
       if (key === 'title') return 'History';
       if (key === 'to-rest') return 'To REST';
@@ -86,7 +84,7 @@ describe('HistoryHeading', () => {
     expect(wrapper).toHaveClass('items-center');
   });
 
-  it('calls getTranslations with correct namespace', async () => {
+  it('call getTranslations with correct namespace', async () => {
     mockT.mockImplementation((key: string) => {
       if (key === 'title') return 'History';
       if (key === 'to-rest') return 'To REST';
@@ -98,7 +96,7 @@ describe('HistoryHeading', () => {
     expect(getTranslations).toHaveBeenCalledWith('history');
   });
 
-  it('uses translations correctly for both title and link', async () => {
+  it('use translations correctly for both title and link', async () => {
     mockT.mockImplementation((key: string) => {
       if (key === 'title') return 'История запросов';
       if (key === 'to-rest') return 'Перейти к REST';
