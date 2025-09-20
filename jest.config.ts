@@ -31,6 +31,8 @@ const config: Config = {
     '!src/**/types.ts',
     '!src/**/index.ts',
     '!src/**/layout.tsx',
+    '!src/**/form-types.ts',
+    '!src/firebase/config.ts',
   ],
 
   coverageThreshold: {
