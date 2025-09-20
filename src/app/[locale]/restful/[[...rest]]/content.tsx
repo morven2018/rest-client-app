@@ -14,6 +14,7 @@ import { useEnvVariables } from '@/hooks/use-env-variables';
 import { useRequestHistory, useSaveRequest } from '@/hooks/use-request';
 import { useRouter } from '@/i18n/navigation';
 
+
 export interface Header {
   key: string;
   value: string;
@@ -160,17 +161,9 @@ const HTTP_STATUS_TEXTS: Record<number, string> = {
 };
 
 export default function RestfulContent() {
-  const router = useRouter();
-  const { hasValidToken } = useAuthToken();
   const { variables, variableExists, variableValue } = useEnvVariables();
   const { saveApiRequest, updateRequestResponse } = useRequestHistory();
   const { getRequestById } = useSaveRequest();
-
-  useEffect(() => {
-    if (!hasValidToken) {
-      router.push('/');
-    }
-  }, [hasValidToken, router]);
 
   const params = useParams();
   const searchParams = useSearchParams();

@@ -25,9 +25,9 @@ export default function SectionResponse({
   const t = useTranslations('RestClient');
 
   const getStatusColor = (status: number) => {
-    if (status >= 200 && status < 300) return 'bg-green-500';
+    if (status >= 200 && status < 300) return 'bg-teal-600';
     if (status >= 300 && status < 400) return 'bg-yellow-500';
-    if (status >= 400) return 'bg-red-500';
+    if (status >= 400) return 'bg-red-700';
     return 'bg-gray-500';
   };
 
@@ -105,7 +105,7 @@ export default function SectionResponse({
               </Button>
             </div>
             <pre
-              className={`${getStatusColor(responseData.status)} w-full max-w-full min-h-75 rounded-[8px] mt-4 p-3 overflow-auto whitespace-pre-wrap break-all font-mono`}
+              className={`${getStatusColor(responseData.status)} w-full max-w-full min-h-75 rounded-[8px] mt-4 p-3 overflow-auto whitespace-pre-wrap break-all font-mono text-white`}
             >
               {responseData.body}
             </pre>
