@@ -11,6 +11,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { toastError, toastNote } from '@/components/ui/sonner';
 import { useAuthToken } from '@/hooks/use-auth-token';
 import { useEnvVariables } from '@/hooks/use-env-variables';
+import { useRequestHistory } from '@/hooks/use-request';
 import { useRouter } from '@/i18n/navigation';
 
 export interface Header {
@@ -143,6 +144,8 @@ export default function RestfulPage() {
   const router = useRouter();
   const { hasValidToken } = useAuthToken();
   const { variables, variableExists, variableValue } = useEnvVariables();
+  const { saveApiRequest, updateRequestResponse, getRequestById } =
+    useRequestHistory();
 
   useEffect(() => {
     if (!hasValidToken) {
@@ -161,7 +164,7 @@ export default function RestfulPage() {
         return variableExists(varName) ? variableValue(varName) : match;
       });
     },
-    [variables]
+    [variables, variableExists, variableValue]
   );
 
   const [requestData, setRequestData] = useState<RequestData>(() => {
@@ -185,9 +188,9 @@ export default function RestfulPage() {
 
   const sendRequest = async () => {
     setIsLoading(true);
+    let requestId: string | null = null;
     try {
       const substitutedUrl = substituteVariables(requestData.url);
-
       const substitutedBody = substituteVariables(requestData.body);
       const headers = Object.fromEntries(
         requestData.headers
@@ -197,17 +200,64 @@ export default function RestfulPage() {
 
       const shouldSendBody = !['GET', 'HEAD'].includes(requestData.method);
 
+      const requestWeight = `${new Blob([substitutedBody]).size} bytes`;
+
+      const base64Url = window.location.href;
+
+      requestId = await saveApiRequest({
+        method: requestData.method as
+          | 'GET'
+          | 'HEAD'
+          | 'POST'
+          | 'PUT'
+          | 'PATCH'
+          | 'DELETE'
+          | 'OPTIONS',
+        path: substitutedUrl,
+        url_with_vars: substitutedUrl,
+        status: 'in process',
+        code: 0,
+        duration: 0,
+        requestWeight: requestWeight,
+        responseWeight: '0 bytes',
+        response: '',
+        headers: headers,
+        body: substitutedBody,
+        variables: {},
+        errorDetails: '',
+        base64Url: base64Url,
+      });
+
+      if (!requestId) {
+        throw new Error('Failed to save request to database');
+      }
+
+      const startTime = Date.now();
       const response = await fetch(substitutedUrl, {
         method: requestData.method,
         headers,
         body: shouldSendBody ? substitutedBody : undefined,
       });
+      const endTime = Date.now();
+      const duration = endTime - startTime;
 
       const responseBody = await response.text();
       const statusText =
         response.statusText ||
         HTTP_STATUS_TEXTS[response.status] ||
         'Unknown Status';
+      const responseSize = new Blob([responseBody]).size;
+      const responseWeight = `${responseSize} bytes`;
+
+      await updateRequestResponse(
+        requestId,
+        responseBody,
+        responseWeight,
+        duration,
+        response.status,
+        response.ok ? 'ok' : 'error',
+        response.ok ? '' : `HTTP ${response.status}: ${statusText}`
+      );
 
       setResponseData({
         status: response.status,
@@ -216,9 +266,12 @@ export default function RestfulPage() {
         body: responseBody,
       });
     } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      const errorDetails = `Network Error: ${errorMessage}`;
+
       toastError('Request failed', {
-        additionalMessage:
-          error instanceof Error ? error.message : 'Check your URL',
+        additionalMessage: errorMessage,
         duration: 3000,
       });
 
@@ -226,7 +279,7 @@ export default function RestfulPage() {
         status: 0,
         statusText: 'Network Error',
         headers: {},
-        body: error instanceof Error ? error.message : 'Unknown error',
+        body: errorDetails,
       });
     } finally {
       setIsLoading(false);

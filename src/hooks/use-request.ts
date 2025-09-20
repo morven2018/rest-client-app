@@ -1,9 +1,15 @@
 'use client';
-import { doc, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import { useCallback } from 'react';
+import { toastError, toastNote, toastSuccess } from '@/components/ui/sonner';
 import { useAuth } from '@/context/auth/auth-context';
 import { db } from '@/firebase/config';
-import { toastError, toastNote } from '@/components/ui/sonner';
 
 export interface RequestData {
   id: string;
@@ -21,6 +27,8 @@ export interface RequestData {
   Response: string;
   Headers: Record<string, string>;
   Body: string;
+  errorDetails: string;
+  base64Url: string;
 }
 
 export interface SaveRequestParams {
@@ -36,10 +44,44 @@ export interface SaveRequestParams {
   headers: Record<string, string>;
   body?: string;
   variables?: Record<string, string>;
+  errorDetails?: string;
+  base64Url: string;
 }
 
 export const useSaveRequest = () => {
   const { currentUser } = useAuth();
+
+  const getRequestById = useCallback(
+    async (requestId: string): Promise<RequestData | null> => {
+      if (!currentUser) {
+        toastNote('User not authenticated. Cannot get request.');
+        return null;
+      }
+
+      try {
+        const requestRef = doc(
+          db,
+          'users',
+          currentUser.uid,
+          'requests',
+          requestId
+        );
+        const requestDoc = await getDoc(requestRef);
+
+        if (requestDoc.exists()) {
+          return { id: requestDoc.id, ...requestDoc.data() } as RequestData;
+        } else {
+          toastError('Request not found');
+          return null;
+        }
+      } catch (error) {
+        console.error('Error getting request:', error);
+        toastError('Failed to get request');
+        return null;
+      }
+    },
+    [currentUser]
+  );
 
   const saveRequest = useCallback(
     async (requestData: Omit<RequestData, 'id'> & { id?: string }) => {
@@ -70,8 +112,11 @@ export const useSaveRequest = () => {
           updatedAt: serverTimestamp(),
         });
 
+        toastSuccess('Request saved successfully!');
         return requestId;
-      } catch {
+      } catch (error) {
+        console.error('Error saving request:', error);
+        toastError('Failed to save request');
         return null;
       }
     },
@@ -100,15 +145,11 @@ export const useSaveRequest = () => {
           ...updates,
           updatedAt: serverTimestamp(),
         });
+
         return true;
       } catch (error) {
-        toastError('Error updating request in Firestore:', {
-          additionalMessage:
-            error instanceof Error
-              ? error.message
-              : "Can't updating request in Firestore",
-          duration: 3000,
-        });
+        console.error('Error updating request:', error);
+        toastError('Error updating request');
         return false;
       }
     },
@@ -134,7 +175,8 @@ export const useSaveRequest = () => {
       responseWeight: string,
       duration: number,
       code: number,
-      status: RequestData['status'] = 'ok'
+      status: RequestData['status'] = 'ok',
+      errorDetails: string
     ) => {
       const updates: Partial<RequestData> = {
         Response: response,
@@ -142,6 +184,7 @@ export const useSaveRequest = () => {
         Duration: duration,
         code,
         status,
+        errorDetails,
       };
 
       return await updateRequest(requestId, updates);
@@ -154,6 +197,7 @@ export const useSaveRequest = () => {
     updateRequest,
     updateRequestStatus,
     updateRequestResponse,
+    getRequestById,
   };
 };
 
@@ -180,6 +224,8 @@ export const useRequestHistory = () => {
         headers,
         body = '',
         variables = {},
+        errorDetails = '',
+        base64Url,
       } = params;
 
       const now = new Date();
@@ -201,6 +247,8 @@ export const useRequestHistory = () => {
         Response: response,
         Headers: headers,
         Body: body,
+        errorDetails,
+        base64Url,
       };
 
       return await saveRequest(requestData);
