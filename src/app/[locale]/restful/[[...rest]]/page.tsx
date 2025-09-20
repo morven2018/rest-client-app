@@ -7,7 +7,6 @@ export default async function RestfulPage() {
   const cookieStore = cookies();
   const authToken = (await cookieStore).get('authToken')?.value;
   if (!authToken) redirect('/');
-  const t = await getTranslations('variables');
 
   return <RestfulContent />;
 }
