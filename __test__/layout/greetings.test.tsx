@@ -32,7 +32,7 @@ jest.mock('@/i18n/navigation', () => ({
 }));
 
 jest.mock('@/components/ui/button', () => ({
-  Button: jest.fn(({ children, asChild, variant, className, ...props }) => {
+  Button: jest.fn(({ children, asChild, className, ...props }) => {
     if (asChild) {
       return <div className={className}>{children}</div>;
     }
@@ -49,7 +49,7 @@ describe('GreetingsSection', () => {
     jest.clearAllMocks();
   });
 
-  it('render greetings for authenticated user with display name', () => {
+  it('renders greetings for authenticated user with display name', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: {
         displayName: 'John Doe',
@@ -65,7 +65,7 @@ describe('GreetingsSection', () => {
     expect(screen.getByText('Variables')).toBeInTheDocument();
   });
 
-  it('render greetings for authenticated user without display name', () => {
+  it('renders greetings for authenticated user without display name', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: {
         displayName: null,
@@ -78,7 +78,7 @@ describe('GreetingsSection', () => {
     expect(screen.getByText('Start your journey with us')).toBeInTheDocument();
   });
 
-  it('render login/register buttons for unauthenticated user', () => {
+  it('renders login/register buttons for unauthenticated user', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: null,
     });
@@ -91,7 +91,7 @@ describe('GreetingsSection', () => {
     expect(screen.getByText('Sign Up')).toBeInTheDocument();
   });
 
-  it('render correct links for authenticated user', () => {
+  it('renders correct links for authenticated user', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: {
         displayName: 'John Doe',
@@ -109,7 +109,7 @@ describe('GreetingsSection', () => {
     expect(variablesLink).toHaveAttribute('href', '/variables');
   });
 
-  it('render correct links for unauthenticated user', () => {
+  it('renders correct links for unauthenticated user', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: null,
     });
@@ -123,7 +123,7 @@ describe('GreetingsSection', () => {
     expect(registerLink).toHaveAttribute('href', '/register');
   });
 
-  it('apply correct CSS classes to button containers', () => {
+  it('applies correct CSS classes to button containers', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: {
         displayName: 'John Doe',
@@ -146,7 +146,7 @@ describe('GreetingsSection', () => {
     });
   });
 
-  it('render with correct container classes', () => {
+  it('renders with correct container classes', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: {
         displayName: 'John Doe',
@@ -163,7 +163,7 @@ describe('GreetingsSection', () => {
     expect(section).toHaveClass('px-4');
   });
 
-  it('render inner content with correct styling', () => {
+  it('renders inner content with correct styling', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: {
         displayName: 'John Doe',
@@ -180,7 +180,7 @@ describe('GreetingsSection', () => {
     expect(innerDiv).toHaveClass('rounded-[8px]');
   });
 
-  it('handle empty currentUser object gracefully', () => {
+  it('handles empty currentUser object gracefully', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: undefined,
     });
@@ -192,7 +192,7 @@ describe('GreetingsSection', () => {
     expect(screen.getByText('Sign Up')).toBeInTheDocument();
   });
 
-  it('apply correct flex layout for buttons', () => {
+  it('applies correct flex layout for buttons', () => {
     (useAuth as jest.Mock).mockReturnValue({
       currentUser: {
         displayName: 'John Doe',
