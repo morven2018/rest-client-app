@@ -85,7 +85,7 @@ export function UserMenu() {
 
           <button
             onClick={handleLogout}
-            className="p-2 hover:bg-violet-950 rounded-lg transition-colors bg-black text-white dark:text-black dark:bg-white dark:hover:text-violet-900"
+            className="p-2 hover:bg-violet-950 rounded-lg transition-colors bg-black text-white dark:text-black dark:bg-white dark:hover:text-violet-900 cursor-pointer"
             title={t('logout')}
           >
             <LogOut className="h-4 w-4" />

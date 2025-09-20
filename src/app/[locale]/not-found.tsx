@@ -25,7 +25,7 @@ export default function NotFound() {
         >
           <Button
             variant="outline"
-            className="bg-chart-3 dark:bg-chart-3 w-[200px]"
+            className="bg-chart-3 dark:bg-chart-3 w-[200px] cursor-pointer"
             onClick={handleGoBack}
           >
             <RotateCcw />
@@ -35,7 +35,7 @@ export default function NotFound() {
           <Button
             asChild
             variant="outline"
-            className="bg-chart-3 dark:bg-chart-3 w-[200px]"
+            className="bg-chart-3 dark:bg-chart-3 w-[200px] cursor-pointer"
           >
             <Link href="/">
               <House />

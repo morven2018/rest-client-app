@@ -101,7 +101,9 @@ const Team = () => {
                           key={contribution + i}
                           className="flex items-start text-left"
                         >
-                          <span className="text-green-500 mr-2 mt-1">✓</span>
+                          <span className="text-black dark:text-white mr-2 mt-1">
+                            ✓
+                          </span>
                           <span>{contribution}</span>
                         </li>
                       ))}

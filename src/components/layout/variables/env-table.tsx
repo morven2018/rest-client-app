@@ -87,7 +87,7 @@ export default function EnvTable({
 
         <button
           onClick={() => onSort('name')}
-          className="flex items-center justify-between text-left hover:bg-muted-foreground/10 px-4"
+          className="flex items-center justify-between text-left hover:bg-muted-foreground/10 px-4 cursor-pointer"
           title={sortOrder === 'asc' ? t('sort-up') : t('sort-down')}
         >
           <span>{t('variable')}</span>
@@ -145,7 +145,7 @@ export default function EnvTable({
               variant="ghost"
               size="icon"
               onClick={() => onDeleteVariable(name)}
-              className="p-2"
+              className="p-2 cursor-pointer"
               title={t('delete')}
             >
               <Trash2 className="h-4 w-4" />
