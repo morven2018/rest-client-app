@@ -1,4 +1,9 @@
 'use client';
+import { useCallback } from 'react';
+import { toastError, toastNote, toastSuccess } from '@/components/ui/sonner';
+import { useAuth } from '@/context/auth/auth-context';
+import { db } from '@/firebase/config';
+
 import {
   doc,
   getDoc,
@@ -6,10 +11,6 @@ import {
   setDoc,
   updateDoc,
 } from 'firebase/firestore';
-import { useCallback } from 'react';
-import { toastError, toastNote, toastSuccess } from '@/components/ui/sonner';
-import { useAuth } from '@/context/auth/auth-context';
-import { db } from '@/firebase/config';
 
 export interface RequestData {
   id: string;
@@ -175,8 +176,9 @@ export const useSaveRequest = () => {
       responseWeight: string,
       duration: number,
       code: number,
-      status: RequestData['status'] = 'ok',
-      errorDetails: string
+
+      errorDetails: string,
+      status: RequestData['status'] = 'ok'
     ) => {
       const updates: Partial<RequestData> = {
         Response: response,
