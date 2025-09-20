@@ -27,7 +27,7 @@ export interface RequestData {
 }
 
 export interface ResponseData {
-  status: number | string;
+  status: number;
   statusText: string;
   headers: Record<string, string>;
   body: string;
@@ -217,7 +217,7 @@ export default function RestfulPage() {
         if (historyData) {
           if (historyData.Response) {
             setResponseData({
-              status: historyData.code || 100,
+              status: Number(historyData.code) || 100,
               statusText: historyData.status.toUpperCase(),
               headers: historyData.Headers || {},
               body: historyData.Response,
@@ -433,10 +433,6 @@ export default function RestfulPage() {
     },
     [loadedRequest]
   );
-
-  const clearLoadedRequest = useCallback(() => {
-    setLoadedRequest(null);
-  }, []);
 
   return (
     <main>

@@ -1,15 +1,16 @@
+import { ClipboardList, Copy, Save } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
+import type { ResponseData } from '@/app/[locale]/restful/[[...rest]]/page';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { useTranslations } from 'next-intl';
-import { Save, ClipboardList, Copy } from 'lucide-react';
-import type { ResponseData } from '@/app/[locale]/restful/[[...rest]]/page';
 
 interface SectionResponseProps {
   readonly responseData: ResponseData | null;
