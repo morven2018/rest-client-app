@@ -72,7 +72,7 @@ describe('NotFound', () => {
     const backButton = rotateIcon.closest('button');
 
     expect(backButton).toBeInTheDocument();
-    fireEvent.click(backButton!);
+    if (backButton) fireEvent.click(backButton);
 
     expect(mockBack).toHaveBeenCalledTimes(1);
   });
