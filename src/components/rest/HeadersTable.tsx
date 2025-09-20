@@ -71,7 +71,7 @@ export default function HeadersTable({
               <Button
                 variant="ghost"
                 size="icon"
-                className="p-2 cursor-pointer"
+                className="p-2 cursor-pointer cursor-pointer"
                 onClick={() => onRemove(header.id)}
               >
                 <Trash2 className="h-4 w-4 text-black" />

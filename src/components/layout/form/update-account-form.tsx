@@ -87,7 +87,7 @@ export const UpdateAccountForm = ({ onSuccess }: UpdateAccountFormProps) => {
       <Button
         type="submit"
         disabled={isSubmitting || !isValid}
-        className="bg-black disabled:bg-gray-300 dark:text-white"
+        className="bg-black disabled:bg-gray-300 dark:text-white cursor-pointer"
       >
         {t('btn')}
       </Button>

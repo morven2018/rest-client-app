@@ -25,9 +25,9 @@ export default function SectionResponse({
   const t = useTranslations('RestClient');
 
   const getStatusColor = (status: number) => {
-    if (status >= 200 && status < 300) return 'bg-green-500';
+    if (status >= 200 && status < 300) return 'bg-teal-600';
     if (status >= 300 && status < 400) return 'bg-yellow-500';
-    if (status >= 400) return 'bg-red-500';
+    if (status >= 400) return 'bg-red-700';
     return 'bg-gray-500';
   };
 

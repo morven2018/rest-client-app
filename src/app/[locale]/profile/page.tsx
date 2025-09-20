@@ -30,7 +30,13 @@ export default function ProfilePage() {
     <AuthWrapper>
       <main className="container mx-auto pt-4 pb-10 max-w-md">
         <div className="p-4">
-          <Button variant="ghost" size="icon" asChild title={t('home-btn')}>
+          <Button
+            className="cursor-pointer"
+            variant="ghost"
+            size="icon"
+            asChild
+            title={t('home-btn')}
+          >
             <Link href="/">
               <Home width="20px" />
             </Link>
