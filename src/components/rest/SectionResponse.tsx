@@ -91,13 +91,13 @@ export default function SectionResponse({
           <AccordionContent className="py-2">
             <div className="flex justify-end gap-2">
               <Button
-                className="p-2 bg-white text-black dark:bg-neutral-600 dark:text-white cursor-pointer"
+                className="p-2 bg-white hover:bg-gray-300 text-black dark:bg-neutral-600 hover:dark:bg-neutral-500 dark:text-white cursor-pointer"
                 onClick={handleSaveRequestBody}
               >
                 <Save />
               </Button>
               <Button
-                className="p-2 bg-white text-black dark:bg-neutral-600 dark:text-white cursor-pointer"
+                className="p-2 bg-white hover:bg-gray-300 text-black dark:bg-neutral-600 hover:dark:bg-neutral-500 dark:text-white cursor-pointer"
                 onClick={handleCopy}
               >
                 {copied ? <Copy /> : <ClipboardList />}

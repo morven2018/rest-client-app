@@ -1,20 +1,14 @@
 import Home from '@/app/[locale]/page';
 import { render } from '@testing-library/react';
 
-jest.mock('@/components/layout/sidebar/sidebar', () => ({
-  __esModule: true,
-  default: ({
-    className,
-    children,
-  }: {
-    className?: string;
-    children?: React.ReactNode;
-  }) => <div className={className}>Sidebar Mock {children}</div>,
-}));
-
 jest.mock('@/components/layout/team/team', () => ({
   __esModule: true,
-  default: () => <div>Team Mock</div>,
+  default: () => <div data-testid="team-mock">Team Mock</div>,
+}));
+
+jest.mock('@/components/layout/greetings/Greetings', () => ({
+  __esModule: true,
+  default: () => <div data-testid="greetings-mock">Greetings Mock</div>,
 }));
 
 describe('Home', () => {
@@ -22,17 +16,26 @@ describe('Home', () => {
     expect(() => render(<Home />)).not.toThrow();
   });
 
-  it('Should render both Sidebar and Team components', () => {
-    const { getByText } = render(<Home />);
+  it('Should render GreetingsSection and Team components', () => {
+    const { getByTestId } = render(<Home />);
 
-    expect(getByText('Sidebar Mock ввы')).toBeInTheDocument();
-    expect(getByText('Team Mock')).toBeInTheDocument();
+    expect(getByTestId('greetings-mock')).toBeInTheDocument();
+    expect(getByTestId('team-mock')).toBeInTheDocument();
   });
 
-  it('Should pass correct className to Sidebar', () => {
-    const { getByText } = render(<Home />);
-    const sidebar = getByText('Sidebar Mock ввы');
+  it('Should render GreetingsSection before Team', () => {
+    const { container } = render(<Home />);
 
-    expect(sidebar).toHaveClass('min-h-120');
+    const greetings = container.querySelector('[data-testid="greetings-mock"]');
+    const team = container.querySelector('[data-testid="team-mock"]');
+
+    if (!greetings || !team) {
+      throw new Error('Expected both components to be rendered');
+    }
+
+    const greetingsIndex = Array.from(container.children).indexOf(greetings);
+    const teamIndex = Array.from(container.children).indexOf(team);
+
+    expect(greetingsIndex).toBeLessThan(teamIndex);
   });
 });

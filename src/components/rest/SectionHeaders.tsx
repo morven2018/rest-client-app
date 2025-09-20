@@ -71,7 +71,7 @@ export default function SectionHeaders({
         <Button
           variant="outline"
           onClick={addHeader}
-          className="bg-violet-200 dark:bg-violet-300 cursor-pointer"
+          className="bg-violet-200 hover:bg-violet-300 dark:bg-violet-300 hover:dark:bg-violet-400 cursor-pointer"
         >
           <Plus />
         </Button>
@@ -85,7 +85,7 @@ export default function SectionHeaders({
             <Button
               variant="default"
               onClick={addHeader}
-              className="mt-5 bg-purple-900 text-white cursor-pointer"
+              className="mt-5 bg-purple-900 hover:bg-purple-800 text-white cursor-pointer"
             >
               {t('buttonAddHeader')}
             </Button>

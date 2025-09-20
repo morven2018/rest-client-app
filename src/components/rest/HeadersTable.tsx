@@ -45,7 +45,11 @@ export default function HeadersTable({
         {headers.map((header, i) => (
           <TableRow
             key={header.id}
-            className={i % 2 === 0 ? 'bg-violet-50' : 'bg-white'}
+            className={
+              i % 2 === 0
+                ? 'bg-violet-50 hover:bg-violet-50'
+                : 'bg-white hover:bg-white'
+            }
           >
             <TableCell>
               <Input
