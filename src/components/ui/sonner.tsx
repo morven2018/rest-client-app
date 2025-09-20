@@ -124,7 +124,7 @@ export const showToast = (message: string, options?: ToastOptions) => {
               action.onClick();
               toast.dismiss(t);
             }}
-            className={`px-4 py-2 rounded-md text-xs font-medium transition-colors ${styles.actionClass} min-w-[100px]`}
+            className={`px-4 py-2 rounded-md text-xs font-medium transition-colors cursor-pointer ${styles.actionClass} min-w-[100px]`}
           >
             {action.label}
           </button>

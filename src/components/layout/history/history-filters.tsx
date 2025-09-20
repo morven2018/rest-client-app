@@ -111,18 +111,34 @@ export function HistoryFilters({
             value={searchParams?.method || 'all'}
             onValueChange={(value) => handleFilterChange('method', value)}
           >
-            <SelectTrigger className="w-full px-3 py-2 bg-white dark:bg-violet-950">
+            <SelectTrigger className="w-full px-3 py-2 bg-white dark:bg-violet-950 cursor-pointer">
               <SelectValue placeholder={t('all-method')} />
             </SelectTrigger>
             <SelectContent className="px-3 py-2 bg-white dark:bg-violet-950">
-              <SelectItem value="all">{t('all-method')}</SelectItem>
-              <SelectItem value="GET">GET</SelectItem>
-              <SelectItem value="POST">POST</SelectItem>
-              <SelectItem value="PUT">PUT</SelectItem>
-              <SelectItem value="PATCH">PATCH</SelectItem>
-              <SelectItem value="DELETE">DELETE</SelectItem>
-              <SelectItem value="HEAD">HEAD</SelectItem>
-              <SelectItem value="OPTIONS">OPTIONS</SelectItem>
+              <SelectItem className="cursor-pointer" value="all">
+                {t('all-method')}
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="GET">
+                GET
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="POST">
+                POST
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="PUT">
+                PUT
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="PATCH">
+                PATCH
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="DELETE">
+                DELETE
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="HEAD">
+                HEAD
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="OPTIONS">
+                OPTIONS
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -135,18 +151,28 @@ export function HistoryFilters({
             value={searchParams?.status || 'all'}
             onValueChange={(value) => handleFilterChange('status', value)}
           >
-            <SelectTrigger className="w-full px-3 py-2 bg-white dark:bg-violet-950">
+            <SelectTrigger className="w-full px-3 py-2 bg-white dark:bg-violet-950 cursor-pointer">
               <SelectValue
                 placeholder={t('all-status')}
                 className="px-3 py-2 bg-white"
               />
             </SelectTrigger>
             <SelectContent className="px-3 py-2 bg-white dark:bg-violet-950">
-              <SelectItem value="all">{t('all-status')}</SelectItem>
-              <SelectItem value="ok">{t('ok')}</SelectItem>
-              <SelectItem value="error">{t('error')}</SelectItem>
-              <SelectItem value="in process">{t('in-process')}</SelectItem>
-              <SelectItem value="not send">{t('not-send')}</SelectItem>
+              <SelectItem className="cursor-pointer" value="all">
+                {t('all-status')}
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="ok">
+                {t('ok')}
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="error">
+                {t('error')}
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="in process">
+                {t('in-process')}
+              </SelectItem>
+              <SelectItem className="cursor-pointer" value="not send">
+                {t('not-send')}
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -157,7 +183,7 @@ export function HistoryFilters({
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full justify-between font-normal h-9 dark:bg-violet-950"
+                  className="w-full justify-between font-normal h-9 dark:bg-violet-950 cursor-pointer"
                 >
                   {dateRange?.from && dateRange?.to
                     ? formatDateRange(dateRange.from, dateRange.to)
@@ -183,7 +209,7 @@ export function HistoryFilters({
               onClick={handleReset}
               variant="outline"
               title={t('reset')}
-              className="dark:bg-violet-950 dark:hover:bg-violet-900 "
+              className="dark:bg-violet-950 dark:hover:bg-violet-900 cursor-pointer"
             >
               <RotateCcw />
             </Button>

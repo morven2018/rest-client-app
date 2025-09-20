@@ -89,7 +89,7 @@ export const Navigate = () => {
         ) : (
           <Button
             variant="outline"
-            className="bg-zinc-200 hover:bg-zinc-100 dark:bg-neutral-600 dark:hover:bg-neutral-700"
+            className="bg-zinc-200 hover:bg-zinc-100 dark:bg-neutral-600 dark:hover:bg-neutral-700 cursor-pointer"
             onClick={handleLogoutSync}
           >
             <LogOut />
@@ -159,7 +159,7 @@ export const Navigate = () => {
                 ) : (
                   <Button
                     variant="outline"
-                    className="bg-zinc-200 dark:bg-neutral-600"
+                    className="bg-zinc-200 dark:bg-neutral-600 "
                     onClick={() => {
                       handleLogoutSync();
                       closeMenu();

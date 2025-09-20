@@ -16,7 +16,7 @@ export default function NoVariables({
       </div>
       <Button
         onClick={onAddVariable}
-        className="flex items-center mx-auto flex items-center h-12 bg-violet-800 hover:bg-violet-900 dark:bg-neutral-50 text-white dark:text-violet-800 dark:hover:bg-violet-200 text-xl px-9 py-2"
+        className="flex items-center mx-auto flex items-center h-12 bg-violet-800 hover:bg-violet-900 dark:bg-neutral-50 text-white dark:text-violet-800 dark:hover:bg-violet-200 text-xl px-9 py-2 cursor-pointer"
       >
         {t('add-variable')}
       </Button>

@@ -48,7 +48,12 @@ export function AvatarInput({
         className="hidden"
       />
 
-      <Button type="button" variant="outline" onClick={handleButtonClick}>
+      <Button
+        type="button"
+        variant="outline"
+        onClick={handleButtonClick}
+        className="cursor-pointer"
+      >
         {t('btn-avatar')}
       </Button>
     </div>
