@@ -1,11 +1,11 @@
-'use client';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { AuthContext } from './auth-context';
-import { toastError } from '@/components/ui/sonner';
-import { auth, db } from '@/firebase/config';
-import { compressImage } from '@/lib/compressor';
-import { convertFileToBase64 } from '@/lib/converter';
+"use client";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { AuthContext } from "./auth-context";
+import { toastError } from "@/components/ui/sonner";
+import { auth, db } from "@/firebase/config";
+import { compressImage } from "@/lib/compressor";
+import { convertFileToBase64 } from "@/lib/converter";
 
 import {
   User,
@@ -19,7 +19,7 @@ import {
 
 const AUTH_TOKEN_KEY = 'authToken';
 const USER_ID_KEY = 'userId';
-const CHECK_FREQUENCY = 30000;
+const CHECK_FREQUENCY = 100;
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -241,11 +241,43 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     [currentUser]
   );
 
+  const getCookie = useCallback((name: string): string | null => {
+    if (typeof document === 'undefined') return null;
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+    return null;
+  }, []);
+
+  const checkTokenConsistency = useCallback(async (): Promise<boolean> => {
+    try {
+      const localStorageToken = localStorage.getItem(AUTH_TOKEN_KEY);
+      const cookieToken = getCookie('authToken');
+
+      if (!localStorageToken) {
+        return false;
+      }
+
+      if (!isTokenValid(localStorageToken)) return false;
+
+      if (localStorageToken !== cookieToken) return false;
+
+      if (auth.currentUser && (!localStorageToken || !cookieToken))
+        return false;
+
+      return true;
+    } catch {
+      return false;
+    }
+  }, [getCookie, isTokenValid]);
+
   const forceLogoutIfTokenExpired = useCallback(async () => {
-    if (authToken && !isTokenValid(authToken)) {
+    const isConsistent = await checkTokenConsistency();
+
+    if (!isConsistent) {
       await logout();
     }
-  }, [authToken, isTokenValid, logout]);
+  }, [authToken, isTokenValid, logout, checkTokenConsistency]);
 
   const getTimeSinceSignUp = useCallback((): number => {
     if (!userRegistrationDate) return 0;

@@ -2,14 +2,14 @@
 
 ### Description
 
-This is a browser-based REST Client developed to simplify API workflows. Quickly send reswitch between setups instantly, and never lose results with automatic request history.
+This is a browser-based REST Client developed to simplify API workflows. Use variables in your requests instantly, and never lose results with automatic request history.
 
 ### ✨ Features
 
 - 🔐 Secure Authentication: Full user login and authorization powered by Firebase.
 - 🚀 Powerful REST Client: Craft requests with any method, URL, headers, and body. Dynamically inject values using environment variables and generate code snippets in various languages for any request.
 - 📊 History and analysis: Every request is automatically saved. Filter and search your history by date, HTTP method, or status code to quickly find and replay past requests.
-- 🌍 Environment Variables: Create multiple environments with custom variables to manage different configurations
+- 🌍 Environment Variables: Create multiple custom variables to manage configuration
 - 🇬🇧 Internationalization (i18n): Full support for both English and Russian languages.
 - 🌙 Themes: Switch between light and dark themes.
 
@@ -17,7 +17,7 @@ This is a browser-based REST Client developed to simplify API workflows. Quickly
 
 - Frontend: React 18, TypeScript, Next.js 14 (App Router), Tailwind CSS, shadcn/ui
 - Backend, Auth & Database: Firebase (Authentication, Firestore)
-- Deployment: Vercel
+- Deployment: Netlify
 - Testing: Jest & React Testing Library
 - Code Quality: ESLint, Prettier, Husky (for Git hooks)
 - Package Manager: pnpm
