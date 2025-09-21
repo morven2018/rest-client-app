@@ -146,7 +146,9 @@
     "title": "History and Analysis",
     "to-rest": "To REST Client",
     "no-request": "There are no requests with such parameters",
-    "please-reset": "Please reset the filters"
+    "please-reset": "Please reset the filters",
+    "no-history1": "Ready to make your first request?",
+    "no-history2": "Start by creating a new query:"
   },
   "request-card": {
     "duration": "Duration:",

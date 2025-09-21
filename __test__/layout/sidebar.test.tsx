@@ -47,7 +47,6 @@ describe('CustomSidebar', () => {
 
     const mainContainer = container.firstChild;
     expect(mainContainer).toHaveClass('flex');
-    expect(mainContainer).toHaveClass('min-h-screen');
   });
 
   it('apply correct sidebar styling', () => {

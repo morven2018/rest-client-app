@@ -72,7 +72,8 @@ describe('useRequestHistory', () => {
         Authorization: 'Bearer token',
       },
       body: '{"name": "John"}',
-      variables: { production: { API_URL: 'https://api.example.com' } },
+      variables: { production: 'https://api.example.com' },
+      base64Url: '',
     };
 
     let requestId: string | null = null;
@@ -99,6 +100,7 @@ describe('useRequestHistory', () => {
       responseWeight: '1.2KB',
       response: '{"data": []}',
       headers: { 'Content-Type': 'application/json' },
+      base64Url: '',
     };
 
     let requestId: string | null = null;

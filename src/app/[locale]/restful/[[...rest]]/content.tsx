@@ -9,8 +9,11 @@ import SectionResponse from '@/components/rest/SectionResponse';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { toastError } from '@/components/ui/sonner';
+import { useAuthToken } from '@/hooks/use-auth-token';
 import { useEnvVariables } from '@/hooks/use-env-variables';
 import { useRequestHistory, useSaveRequest } from '@/hooks/use-request';
+import { useRouter } from '@/i18n/navigation';
+
 
 export interface Header {
   key: string;

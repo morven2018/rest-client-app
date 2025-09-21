@@ -1,3 +1,11 @@
+import generateCode from '@/lib/generator';
+import { ClipboardList, Copy } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useState } from 'react';
+import type { RequestData } from '@/app/[locale]/restful/[[...rest]]/content';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+
 import {
   Accordion,
   AccordionContent,
@@ -11,13 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { useState } from 'react';
-import { ClipboardList, Copy } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-import type { RequestData } from '@/app/[locale]/restful/[[...rest]]/page';
-import generateCode from '@/lib/generator';
 
 interface SectionCodeProps {
   readonly requestData: RequestData;

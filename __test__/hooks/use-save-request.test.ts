@@ -1,12 +1,13 @@
 import { act, renderHook } from '@testing-library/react';
-import { doc, setDoc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useAuth } from '@/context/auth/auth-context';
 import { db } from '@/firebase/config';
-import { useSaveRequest } from '@/hooks/use-request';
+import { RequestData, useSaveRequest } from '@/hooks/use-request';
 
 jest.mock('firebase/firestore', () => ({
   doc: jest.fn(),
   setDoc: jest.fn(),
+  getDoc: jest.fn(),
   updateDoc: jest.fn(),
   serverTimestamp: jest.fn(() => 'SERVER_TIMESTAMP'),
 }));
@@ -28,7 +29,7 @@ describe('useSaveRequest', () => {
     method: 'GET' as const,
     status: 'ok' as const,
     code: 200,
-    variables: { env: { API_URL: 'http://localhost:3000' } },
+    variables: JSON.stringify({ env: { API_URL: 'http://localhost:3000' } }),
     path: '/api/test',
     url_with_vars: 'http://localhost:3000/api/test',
     Duration: 100,
@@ -39,6 +40,8 @@ describe('useSaveRequest', () => {
     Response: '{"data": "test"}',
     Headers: { 'Content-Type': 'application/json' },
     Body: '{"test": "data"}',
+    errorDetails: '',
+    base64Url: '',
   };
 
   beforeEach(() => {
@@ -274,6 +277,132 @@ describe('useSaveRequest', () => {
       expect(data.code).toBe(201);
       expect(data.status).toBe('ok');
       expect(data.updatedAt).toBe('SERVER_TIMESTAMP');
+    });
+  });
+
+  describe('getRequestById', () => {
+    const mockRequestData = {
+      id: 'test-request-123',
+      method: 'GET' as const,
+      status: 'ok' as const,
+      code: 200,
+      variables: JSON.stringify({ env: { API_URL: 'http://localhost:3000' } }),
+      path: '/api/test',
+      url_with_vars: 'http://localhost:3000/api/test',
+      Duration: 100,
+      Date: '2024-01-01',
+      Time: '12:00:00',
+      Request_weight: '1.2KB',
+      Response_weight: '2.5KB',
+      Response: '{"data": "test"}',
+      Headers: { 'Content-Type': 'application/json' },
+      Body: '{"test": "data"}',
+      errorDetails: '',
+      base64Url: 'base64-encoded-url',
+    };
+
+    beforeEach(() => {
+      (useAuth as jest.Mock).mockReturnValue({ currentUser: mockCurrentUser });
+      (doc as jest.Mock).mockImplementation((...path) => ({ path }));
+      (getDoc as jest.Mock).mockResolvedValue({
+        exists: () => true,
+        data: () => mockRequestData,
+        id: mockRequestData.id,
+      });
+    });
+
+    afterEach(() => {
+      jest.clearAllMocks();
+    });
+
+    it('return request data if request exists', async () => {
+      const mockDoc = {
+        exists: () => true,
+        data: () => mockRequestData,
+        id: mockRequestData.id,
+      };
+
+      (getDoc as jest.Mock).mockResolvedValue(mockDoc);
+
+      const { result } = renderHook(() => useSaveRequest());
+
+      let request: RequestData | null = null;
+      await act(async () => {
+        request = await result.current.getRequestById('test-request-123');
+      });
+
+      expect(request).toEqual(mockRequestData);
+      expect(getDoc).toHaveBeenCalledWith({
+        path: [
+          db,
+          'users',
+          mockCurrentUser.uid,
+          'requests',
+          'test-request-123',
+        ],
+      });
+    });
+
+    it('return null and show error toast if request does not exist', async () => {
+      const mockDoc = {
+        exists: () => false,
+      };
+
+      (getDoc as jest.Mock).mockResolvedValue(mockDoc);
+
+      const { result } = renderHook(() => useSaveRequest());
+
+      let request: RequestData | null = null;
+      await act(async () => {
+        request = await result.current.getRequestById('non-existent-request');
+      });
+
+      expect(request).toBeNull();
+      expect(getDoc).toHaveBeenCalledWith({
+        path: [
+          db,
+          'users',
+          mockCurrentUser.uid,
+          'requests',
+          'non-existent-request',
+        ],
+      });
+    });
+
+    it('return null if user is not authenticated', async () => {
+      (useAuth as jest.Mock).mockReturnValue({ currentUser: null });
+
+      const { result } = renderHook(() => useSaveRequest());
+
+      let request: RequestData | null = null;
+      await act(async () => {
+        request = await result.current.getRequestById('test-request-123');
+      });
+
+      expect(request).toBeNull();
+      expect(getDoc).not.toHaveBeenCalled();
+    });
+
+    it('handle errors gracefully and return null', async () => {
+      (getDoc as jest.Mock).mockRejectedValue(new Error('Firestore error'));
+
+      const { result } = renderHook(() => useSaveRequest());
+
+      let request: RequestData | null = null;
+      await act(async () => {
+        request = await result.current.getRequestById('test-request-123');
+      });
+
+      expect(request).toBeNull();
+      expect(getDoc).toHaveBeenCalledWith({
+        path: [
+          db,
+          'users',
+          mockCurrentUser.uid,
+          'requests',
+          'test-request-123',
+        ],
+      });
     });
   });
 });

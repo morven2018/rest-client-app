@@ -1,6 +1,7 @@
 import CustomSidebar from '@/components/layout/sidebar/sidebar';
 import Heading from '@/components/layout/breadcrumb-and-heading/heading';
 import HistoryHeading from '@/components/layout/history/history-heading';
+import NoHistory from '@/components/layout/history/no-history';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { HistoryList } from '@/components/layout/history/history-content';
@@ -30,20 +31,23 @@ export default async function HistoryAndAnalyticsPage({
 
   if (!authToken || !userId) redirect('/');
 
-  const requests = await getRequests(userId);
+  const requests = (await getRequests(userId)) || [];
 
   return (
     <main>
-      <CustomSidebar className="min-h-120">
-        <Heading>
-          <HistoryHeading />
-          <HistoryFilters searchParams={searchParamsObj} locale={locale} />
-          <HistoryList
-            initialRequests={requests}
-            locale={locale}
-            searchParams={searchParamsObj}
-          />
-        </Heading>
+      <CustomSidebar className={!requests.length ? 'max-h-40' : 'min-h-120'}>
+        {!requests.length && <NoHistory />}
+        {!!requests.length && (
+          <Heading>
+            <HistoryHeading />
+            <HistoryFilters searchParams={searchParamsObj} locale={locale} />
+            <HistoryList
+              initialRequests={requests}
+              locale={locale}
+              searchParams={searchParamsObj}
+            />
+          </Heading>
+        )}
       </CustomSidebar>
     </main>
   );
