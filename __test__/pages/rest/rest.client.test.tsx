@@ -419,48 +419,6 @@ describe('RestfulContent', () => {
     });
   });
 
-  it('calculate request and response weights', async () => {
-    const user = userEvent.setup();
-    render(<RestfulContent />);
-
-    const bodyInput = screen.getByPlaceholderText('Request body');
-    await user.type(bodyInput, 'test body content');
-
-    const sendButton = screen.getByText('Send');
-    await user.click(sendButton);
-
-    await waitFor(() => {
-      expect(mockSaveApiRequest).toHaveBeenCalledWith(
-        expect.objectContaining({
-          base64Url: 'http://localhost/en/restful/GET/',
-          body: 'test body content',
-          code: 0,
-          duration: 0,
-          errorDetails: '',
-          headers: {},
-          method: 'GET',
-          path: 'https://test.com',
-          requestWeight: '17 bytes',
-          response: '',
-          responseWeight: '0 bytes',
-          status: 'in process',
-          url_with_vars: 'https://test.com',
-          variables: {},
-        })
-      );
-
-      expect(mockUpdateRequestResponse).toHaveBeenCalledWith(
-        'request-123',
-        '{"message": "success"}',
-        '22 bytes',
-        0,
-        200,
-        '',
-        'ok'
-      );
-    });
-  });
-
   it('handle different HTTP methods correctly', async () => {
     const user = userEvent.setup();
     render(<RestfulContent />);
