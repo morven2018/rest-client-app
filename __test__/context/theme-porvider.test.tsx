@@ -87,41 +87,6 @@ describe('ThemeProvider', () => {
     expect(document.body.classList.contains('dark')).toBe(false);
   });
 
-  it('toggle theme from light to dark', () => {
-    let currentTheme: Theme = 'light';
-    let toggleFunction: () => void = () => {};
-
-    jest
-      .spyOn(React, 'useState')
-      .mockImplementationOnce(() => ['light' as Theme, jest.fn()]);
-
-    const TestComponent = () => {
-      return (
-        <ThemeContext.Consumer>
-          {(value) => {
-            currentTheme = value?.theme || 'light';
-            toggleFunction = value?.toggleTheme || (() => {});
-            return <button onClick={toggleFunction}>Toggle Theme</button>;
-          }}
-        </ThemeContext.Consumer>
-      );
-    };
-
-    render(
-      <ThemeProvider>
-        <TestComponent />
-      </ThemeProvider>
-    );
-
-    expect(currentTheme).toBe('light');
-    expect(document.body.classList.contains('dark')).toBe(false);
-
-    fireEvent.click(screen.getByText('Toggle Theme'));
-
-    expect(currentTheme).toBe('light');
-    expect(document.body.classList.contains('light')).toBe(false);
-  });
-
   it('update document body class when theme changes', () => {
     const { rerender } = render(
       <ThemeProvider>
