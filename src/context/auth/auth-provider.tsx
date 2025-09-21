@@ -1,11 +1,11 @@
-"use client";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { AuthContext } from "./auth-context";
-import { toastError } from "@/components/ui/sonner";
-import { auth, db } from "@/firebase/config";
-import { compressImage } from "@/lib/compressor";
-import { convertFileToBase64 } from "@/lib/converter";
+'use client';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { AuthContext } from './auth-context';
+import { toastError } from '@/components/ui/sonner';
+import { auth, db } from '@/firebase/config';
+import { compressImage } from '@/lib/compressor';
+import { convertFileToBase64 } from '@/lib/converter';
 
 import {
   User,
