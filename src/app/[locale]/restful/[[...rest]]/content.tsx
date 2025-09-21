@@ -236,6 +236,14 @@ export default function RestfulContent() {
           .filter((h) => h.key && h.value)
           .map((h) => [h.key, substituteVariables(h.value)])
       );
+      const url = new URL(substitutedUrl);
+      requestData.headers
+        .filter((h) => h.key && h.value)
+        .forEach((h) => {
+          url.searchParams.append(h.key, substituteVariables(h.value));
+        });
+
+      const finalUrl = url.toString();
 
       const shouldSendBody = !['GET', 'HEAD'].includes(requestData.method);
 
@@ -252,8 +260,8 @@ export default function RestfulContent() {
           | 'PATCH'
           | 'DELETE'
           | 'OPTIONS',
-        path: substitutedUrl,
-        url_with_vars: substitutedUrl,
+        path: finalUrl,
+        url_with_vars: finalUrl,
         status: 'in process',
         code: 0,
         duration: 0,
@@ -272,7 +280,7 @@ export default function RestfulContent() {
       }
 
       const startTime = Date.now();
-      const response = await fetch(substitutedUrl, {
+      const response = await fetch(finalUrl, {
         method: requestData.method,
         headers,
         body: shouldSendBody ? substitutedBody : undefined,
