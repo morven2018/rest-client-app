@@ -54,15 +54,17 @@ export interface ApiRequest {
 const safeAtob = (encoded: string): string => {
   if (!encoded) return '';
   try {
+    const urlDecoded = decodeURIComponent(encoded);
+
     if (
       !/^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(
-        encoded
+        urlDecoded
       )
     ) {
       return '';
     }
     return decodeURIComponent(
-      Array.from(atob(encoded))
+      Array.from(atob(urlDecoded))
         .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
         .join('')
     );
