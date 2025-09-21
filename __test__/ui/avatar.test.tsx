@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 jest.mock('@/lib/utils', () => ({
   cn: (...classes: (string | undefined)[]) => classes.filter(Boolean).join(' '),
 }));
 
-// Mock @radix-ui/react-avatar
 jest.mock('@radix-ui/react-avatar', () => {
   const originalModule = jest.requireActual('@radix-ui/react-avatar');
   return {
