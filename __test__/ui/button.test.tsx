@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import * as utils from '@/lib/utils';
-import React from 'react';
+import React, { act } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { render, screen } from '@testing-library/react';
 import { Button } from '@/components/ui/button';
@@ -108,7 +108,10 @@ describe('Button', () => {
     render(<Button onClick={onClick}>Click me</Button>);
 
     const button = screen.getByRole('button', { name: 'Click me' });
-    button.click();
+
+    act(() => {
+      button.click();
+    });
 
     expect(onClick).toHaveBeenCalledTimes(1);
   });

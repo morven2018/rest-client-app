@@ -7,11 +7,18 @@ jest.mock('react-day-picker', () => {
   const originalModule = jest.requireActual('react-day-picker');
   return {
     ...originalModule,
-    DayPicker: jest.fn(({ children, ...props }) => (
-      <div data-testid="day-picker" {...props}>
-        {children}
-      </div>
-    )),
+    DayPicker: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.captionLayout;
+      delete domProps.classNames;
+      delete domProps.showOutsideDays;
+
+      return (
+        <div data-testid="day-picker" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
     DayButton: jest.fn(({ children, ...props }) => (
       <button data-testid="day-button" {...props}>
         {children}
@@ -19,7 +26,6 @@ jest.mock('react-day-picker', () => {
     )),
   };
 });
-
 jest.mock('@/components/ui/button', () => ({
   Button: jest.fn(({ children, ...props }) => (
     <button {...props}>{children}</button>
@@ -135,6 +141,7 @@ describe('CalendarDayButton', () => {
     expect(button).toHaveAttribute('data-range-start', 'false');
     expect(button).toHaveAttribute('data-range-end', 'false');
     expect(button).toHaveAttribute('data-range-middle', 'false');
+
     rerender(
       <CalendarDayButton
         {...defaultProps}
@@ -144,6 +151,7 @@ describe('CalendarDayButton', () => {
 
     button = screen.getByRole('button');
     expect(button).toHaveAttribute('data-selected-single', 'true');
+
     rerender(
       <CalendarDayButton
         {...defaultProps}
@@ -153,6 +161,7 @@ describe('CalendarDayButton', () => {
 
     button = screen.getByRole('button');
     expect(button).toHaveAttribute('data-range-start', 'true');
+
     rerender(
       <CalendarDayButton
         {...defaultProps}
@@ -162,6 +171,7 @@ describe('CalendarDayButton', () => {
 
     button = screen.getByRole('button');
     expect(button).toHaveAttribute('data-range-end', 'true');
+
     rerender(
       <CalendarDayButton
         {...defaultProps}
