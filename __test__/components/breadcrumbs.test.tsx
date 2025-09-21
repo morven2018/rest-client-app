@@ -123,8 +123,8 @@ describe('CustomBreadcrumb', () => {
     );
 
     const links = screen.getAllByTestId('link');
-    expect(links[0]).toHaveAttribute('href', '/'); 
-    expect(links[1]).toHaveAttribute('href', '/variables'); 
+    expect(links[0]).toHaveAttribute('href', '/');
+    expect(links[1]).toHaveAttribute('href', '/variables');
   });
 
   it('call formatBreadcrumbName for each segment', () => {
