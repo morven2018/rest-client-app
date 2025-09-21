@@ -9,9 +9,10 @@ jest.mock('next-intl', () => ({
   useTranslations: jest.fn(),
 }));
 
+let uuidCounter = 0;
 Object.defineProperty(global, 'crypto', {
   value: {
-    randomUUID: jest.fn(() => 'test-uuid-123'),
+    randomUUID: jest.fn(() => `test-uuid-${uuidCounter++}`),
   },
 });
 
@@ -22,12 +23,15 @@ describe('SectionHeaders', () => {
       headersTitle: 'Headers',
       noHeadersText: 'No headers added',
       buttonAddHeader: 'Add Header',
+      placeholderKey: 'Key',
+      placeholderValue: 'Value',
     };
     return translations[key] || key;
   });
 
   beforeEach(() => {
     jest.clearAllMocks();
+    uuidCounter = 0;
     (useTranslations as jest.Mock).mockReturnValue(mockT);
   });
 
@@ -77,7 +81,7 @@ describe('SectionHeaders', () => {
       <SectionHeaders headers={headers} onHeadersChange={mockOnHeadersChange} />
     );
 
-    const keyInput = screen.getByPlaceholderText('placeholderKey');
+    const keyInput = screen.getByPlaceholderText('Key');
     await user.type(keyInput, 'Content-Type');
 
     expect(mockOnHeadersChange).toHaveBeenCalledWith([
@@ -93,7 +97,7 @@ describe('SectionHeaders', () => {
       <SectionHeaders headers={headers} onHeadersChange={mockOnHeadersChange} />
     );
 
-    const valueInput = screen.getByPlaceholderText('placeholderValue');
+    const valueInput = screen.getByPlaceholderText('Value');
     await user.type(valueInput, 'application/json');
 
     expect(mockOnHeadersChange).toHaveBeenCalledWith([
@@ -125,7 +129,7 @@ describe('SectionHeaders', () => {
       <SectionHeaders headers={headers} onHeadersChange={mockOnHeadersChange} />
     );
 
-    const keyInputs = screen.getAllByPlaceholderText('placeholderKey');
+    const keyInputs = screen.getAllByPlaceholderText('Key');
     await user.type(keyInputs[0], '-updated');
 
     expect(mockOnHeadersChange).toHaveBeenCalledWith([
