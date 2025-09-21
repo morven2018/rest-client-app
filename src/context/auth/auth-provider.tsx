@@ -277,7 +277,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     if (!isConsistent) {
       await logout();
     }
-  }, [authToken, isTokenValid, logout, checkTokenConsistency]);
+  }, [logout, checkTokenConsistency]);
 
   const getTimeSinceSignUp = useCallback((): number => {
     if (!userRegistrationDate) return 0;
