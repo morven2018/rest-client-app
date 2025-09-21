@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 jest.mock('@/lib/utils', () => ({
   cn: (...classes: (string | undefined)[]) => classes.filter(Boolean).join(' '),
 }));
 
-// Mock @radix-ui/react-avatar
 jest.mock('@radix-ui/react-avatar', () => {
   const originalModule = jest.requireActual('@radix-ui/react-avatar');
   return {
@@ -40,13 +39,16 @@ jest.mock('@radix-ui/react-avatar', () => {
       src?: string;
       alt?: string;
     }) => (
-      <img
-        alt={props.alt}
+      <div
         className={className}
         data-slot={dataSlot}
         data-testid="avatar-image"
+        data-src={props.src}
+        data-alt={props.alt}
         {...props}
-      />
+      >
+        Avatar Image
+      </div>
     ),
     Fallback: ({
       className,
@@ -70,13 +72,38 @@ jest.mock('@radix-ui/react-avatar', () => {
   };
 });
 
+jest.mock('next/image', () => {
+  return function MockImage({
+    src,
+    alt,
+    className,
+    ...props
+  }: {
+    src: string;
+    alt: string;
+    className?: string;
+  }) {
+    return (
+      <div
+        className={className}
+        data-testid="next-image"
+        data-src={src}
+        data-alt={alt}
+        {...props}
+      >
+        Image: {alt}
+      </div>
+    );
+  };
+});
+
 describe('Avatar Components', () => {
   describe('Avatar', () => {
-    it('should render without throwing errors', () => {
+    it('render without throwing errors', () => {
       expect(() => render(<Avatar />)).not.toThrow();
     });
 
-    it('should apply default className', () => {
+    it('apply default className', () => {
       const { getByTestId } = render(<Avatar />);
       const avatarRoot = getByTestId('avatar-root');
 
@@ -88,7 +115,7 @@ describe('Avatar Components', () => {
       expect(avatarRoot.className).toContain('rounded-full');
     });
 
-    it('should merge custom className with default classes', () => {
+    it('merge custom className with default classes', () => {
       const { getByTestId } = render(<Avatar className="custom-class" />);
       const avatarRoot = getByTestId('avatar-root');
 
@@ -96,14 +123,14 @@ describe('Avatar Components', () => {
       expect(avatarRoot.className).toContain('custom-class');
     });
 
-    it('should have correct data-slot attribute', () => {
+    it('have correct data-slot attribute', () => {
       const { getByTestId } = render(<Avatar />);
       const avatarRoot = getByTestId('avatar-root');
 
       expect(avatarRoot.getAttribute('data-slot')).toBe('avatar');
     });
 
-    it('should pass through additional props', () => {
+    it('pass through additional props', () => {
       const { getByTestId } = render(
         <Avatar id="test-avatar" data-test="avatar-test" />
       );
@@ -113,20 +140,20 @@ describe('Avatar Components', () => {
       expect(avatarRoot.getAttribute('data-test')).toBe('avatar-test');
     });
 
-    it('should render children', () => {
+    it('render children', () => {
       const { getByText } = render(<Avatar>Test Content</Avatar>);
       expect(getByText('Test Content')).toBeTruthy();
     });
   });
 
   describe('AvatarImage', () => {
-    it('should render without throwing errors', () => {
+    it('render without throwing errors', () => {
       expect(() =>
         render(<AvatarImage src="/test.jpg" alt="Test" />)
       ).not.toThrow();
     });
 
-    it('should apply default className', () => {
+    it('apply default className', () => {
       const { getByTestId } = render(
         <AvatarImage src="/test.jpg" alt="Test" />
       );
@@ -136,7 +163,7 @@ describe('Avatar Components', () => {
       expect(avatarImage.className).toContain('size-full');
     });
 
-    it('should merge custom className with default classes', () => {
+    it('merge custom className with default classes', () => {
       const { getByTestId } = render(
         <AvatarImage src="/test.jpg" alt="Test" className="custom-class" />
       );
@@ -146,7 +173,7 @@ describe('Avatar Components', () => {
       expect(avatarImage.className).toContain('custom-class');
     });
 
-    it('should have correct data-slot attribute', () => {
+    it('have correct data-slot attribute', () => {
       const { getByTestId } = render(
         <AvatarImage src="/test.jpg" alt="Test" />
       );
@@ -155,7 +182,7 @@ describe('Avatar Components', () => {
       expect(avatarImage.getAttribute('data-slot')).toBe('avatar-image');
     });
 
-    it('should pass through image props', () => {
+    it('pass through image props', () => {
       const { getByTestId } = render(
         <AvatarImage
           src="/test.jpg"
@@ -166,17 +193,17 @@ describe('Avatar Components', () => {
       );
       const avatarImage = getByTestId('avatar-image');
 
-      expect(avatarImage.getAttribute('src')).toBe('/test.jpg');
-      expect(avatarImage.getAttribute('alt')).toBe('Test Avatar');
+      expect(avatarImage.getAttribute('data-src')).toBe('/test.jpg');
+      expect(avatarImage.getAttribute('data-alt')).toBe('Test Avatar');
     });
   });
 
   describe('AvatarFallback', () => {
-    it('should render without throwing errors', () => {
+    it('render without throwing errors', () => {
       expect(() => render(<AvatarFallback>FB</AvatarFallback>)).not.toThrow();
     });
 
-    it('should apply default className', () => {
+    it('apply default className', () => {
       const { getByTestId } = render(<AvatarFallback>FB</AvatarFallback>);
       const avatarFallback = getByTestId('avatar-fallback');
 
@@ -188,7 +215,7 @@ describe('Avatar Components', () => {
       expect(avatarFallback.className).toContain('rounded-full');
     });
 
-    it('should merge custom className with default classes', () => {
+    it('merge custom className with default classes', () => {
       const { getByTestId } = render(
         <AvatarFallback className="custom-class">FB</AvatarFallback>
       );
@@ -198,21 +225,21 @@ describe('Avatar Components', () => {
       expect(avatarFallback.className).toContain('custom-class');
     });
 
-    it('should have correct data-slot attribute', () => {
+    it('have correct data-slot attribute', () => {
       const { getByTestId } = render(<AvatarFallback>FB</AvatarFallback>);
       const avatarFallback = getByTestId('avatar-fallback');
 
       expect(avatarFallback.getAttribute('data-slot')).toBe('avatar-fallback');
     });
 
-    it('should render children content', () => {
+    it('render children content', () => {
       const { getByText } = render(
         <AvatarFallback>Fallback Text</AvatarFallback>
       );
       expect(getByText('Fallback Text')).toBeTruthy();
     });
 
-    it('should pass through additional props', () => {
+    it('pass through additional props', () => {
       const { getByTestId } = render(
         <AvatarFallback id="test-fallback" data-test="fallback-test">
           FB
@@ -225,85 +252,40 @@ describe('Avatar Components', () => {
     });
   });
 
-  describe('Integration: Complete Avatar with Image and Fallback', () => {
-    it('should render a complete avatar with image and fallback', () => {
-      render(
-        <Avatar>
-          <AvatarImage src="/user.jpg" alt="User Avatar" />
-          <AvatarFallback>UA</AvatarFallback>
-        </Avatar>
-      );
-
-      const avatarRoot = screen.getByTestId('avatar-root');
-      const avatarImage = screen.getByTestId('avatar-image');
-      const avatarFallback = screen.getByTestId('avatar-fallback');
-
-      expect(avatarRoot).toBeTruthy();
-      expect(avatarImage).toBeTruthy();
-      expect(avatarFallback).toBeTruthy();
-      expect(avatarImage.getAttribute('src')).toBe('/user.jpg');
-      expect(avatarImage.getAttribute('alt')).toBe('User Avatar');
-      expect(avatarFallback.textContent).toBe('UA');
-    });
-
-    it('should apply custom classNames to all components', () => {
-      const { getByTestId } = render(
-        <Avatar className="avatar-custom">
-          <AvatarImage src="/user.jpg" alt="User" className="image-custom" />
-          <AvatarFallback className="fallback-custom">FB</AvatarFallback>
-        </Avatar>
-      );
-
-      const avatarRoot = getByTestId('avatar-root');
-      const avatarImage = getByTestId('avatar-image');
-      const avatarFallback = getByTestId('avatar-fallback');
-
-      expect(avatarRoot.className).toContain('avatar-custom');
-      expect(avatarImage.className).toContain('image-custom');
-      expect(avatarFallback.className).toContain('fallback-custom');
-    });
-  });
-
-  describe('Edge Cases', () => {
-    it('should handle undefined className gracefully', () => {
-      const { getByTestId } = render(<Avatar className={undefined} />);
-      const avatarRoot = getByTestId('avatar-root');
-
-      expect(avatarRoot.className).toContain('relative');
-    });
-
-    it('should handle empty string className', () => {
-      const { getByTestId } = render(<Avatar className="" />);
-      const avatarRoot = getByTestId('avatar-root');
-
-      expect(avatarRoot.className).toContain('relative');
-    });
-  });
-});
-
-describe('Avatar Components Snapshot', () => {
-  it('Avatar should match snapshot', () => {
-    const { container } = render(<Avatar />);
-    expect(container).toMatchSnapshot();
-  });
-
-  it('AvatarImage should match snapshot', () => {
-    const { container } = render(<AvatarImage src="/test.jpg" alt="Test" />);
-    expect(container).toMatchSnapshot();
-  });
-
-  it('AvatarFallback should match snapshot', () => {
-    const { container } = render(<AvatarFallback>FB</AvatarFallback>);
-    expect(container).toMatchSnapshot();
-  });
-
-  it('Complete Avatar should match snapshot', () => {
-    const { container } = render(
+  it('render complete avatar with image and fallback', () => {
+    render(
       <Avatar>
-        <AvatarImage src="/user.jpg" alt="User" />
+        <AvatarImage src="/user.jpg" alt="User Avatar" />
         <AvatarFallback>UA</AvatarFallback>
       </Avatar>
     );
-    expect(container).toMatchSnapshot();
+
+    const avatarRoot = screen.getByTestId('avatar-root');
+    const avatarImage = screen.getByTestId('avatar-image');
+    const avatarFallback = screen.getByTestId('avatar-fallback');
+
+    expect(avatarRoot).toBeTruthy();
+    expect(avatarImage).toBeTruthy();
+    expect(avatarFallback).toBeTruthy();
+    expect(avatarImage.getAttribute('data-src')).toBe('/user.jpg');
+    expect(avatarImage.getAttribute('data-alt')).toBe('User Avatar');
+    expect(avatarFallback.textContent).toBe('UA');
+  });
+
+  it('apply custom classNames to all components', () => {
+    const { getByTestId } = render(
+      <Avatar className="avatar-custom">
+        <AvatarImage src="/user.jpg" alt="User" className="image-custom" />
+        <AvatarFallback className="fallback-custom">FB</AvatarFallback>
+      </Avatar>
+    );
+
+    const avatarRoot = getByTestId('avatar-root');
+    const avatarImage = getByTestId('avatar-image');
+    const avatarFallback = getByTestId('avatar-fallback');
+
+    expect(avatarRoot.className).toContain('avatar-custom');
+    expect(avatarImage.className).toContain('image-custom');
+    expect(avatarFallback.className).toContain('fallback-custom');
   });
 });

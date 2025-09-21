@@ -51,22 +51,4 @@ describe('Tooltip', () => {
       </TooltipProvider>
     );
   });
-
-  it('try click instead of hover', async () => {
-    const tooltipText = 'This is a tooltip';
-    render(
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger>Click me</TooltipTrigger>
-          <TooltipContent>{tooltipText}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    );
-
-    const trigger = screen.getByText('Click me');
-    fireEvent.click(trigger);
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    screen.debug(document.body);
-  });
 });

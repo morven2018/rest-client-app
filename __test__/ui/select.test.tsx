@@ -15,79 +15,154 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-jest.mock('@radix-ui/react-select', () => ({
-  Root: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-root" {...props}>
-      {children}
-    </div>
-  )),
-  Group: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-group" {...props}>
-      {children}
-    </div>
-  )),
-  Value: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-value" {...props}>
-      {children}
-    </div>
-  )),
-  Trigger: jest.fn(({ children, ...props }) => (
-    <button data-testid="select-trigger" {...props}>
-      {children}
-    </button>
-  )),
-  Content: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-content" {...props}>
-      {children}
-    </div>
-  )),
-  Label: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-label" {...props}>
-      {children}
-    </div>
-  )),
-  Item: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-item" {...props}>
-      {children}
-    </div>
-  )),
-  Separator: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-separator" {...props}>
-      {children}
-    </div>
-  )),
-  ScrollUpButton: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-scroll-up" {...props}>
-      {children}
-    </div>
-  )),
-  ScrollDownButton: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-scroll-down" {...props}>
-      {children}
-    </div>
-  )),
-  Icon: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-icon" {...props}>
-      {children}
-    </div>
-  )),
-  Portal: jest.fn(({ children }) => <>{children}</>),
-  Viewport: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-viewport" {...props}>
-      {children}
-    </div>
-  )),
-  ItemText: jest.fn(({ children, ...props }) => (
-    <span data-testid="select-item-text" {...props}>
-      {children}
-    </span>
-  )),
-  ItemIndicator: jest.fn(({ children, ...props }) => (
-    <div data-testid="select-item-indicator" {...props}>
-      {children}
-    </div>
-  )),
-}));
+jest.mock('@radix-ui/react-select', () => {
+  const originalModule = jest.requireActual('@radix-ui/react-select');
+
+  return {
+    ...originalModule,
+    Root: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-root" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    Group: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-group" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    Value: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-value" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    Trigger: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <button data-testid="select-trigger" {...domProps}>
+          {children}
+        </button>
+      );
+    }),
+    Content: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-content" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    Label: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-label" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    Item: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-item" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    Separator: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-separator" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    ScrollUpButton: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-scroll-up" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    ScrollDownButton: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-scroll-down" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    Icon: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-icon" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    Portal: jest.fn(({ children }) => <>{children}</>),
+    Viewport: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-viewport" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+    ItemText: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <span data-testid="select-item-text" {...domProps}>
+          {children}
+        </span>
+      );
+    }),
+    ItemIndicator: jest.fn(({ children, ...props }) => {
+      const domProps = { ...props };
+      delete domProps.asChild;
+
+      return (
+        <div data-testid="select-item-indicator" {...domProps}>
+          {children}
+        </div>
+      );
+    }),
+  };
+});
 
 jest.mock('lucide-react', () => ({
   ChevronDownIcon: jest.fn(({ className, ...props }) => (

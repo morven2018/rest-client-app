@@ -21,64 +21,123 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 jest.mock('@radix-ui/react-dropdown-menu', () => ({
-  Root: jest.fn(({ children, ...props }) => (
-    <div data-testid="dropdown-root" {...props}>
-      {children}
-    </div>
-  )),
+  Root: jest.fn(({ children, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div data-testid="dropdown-root" {...domProps}>
+        {children}
+      </div>
+    );
+  }),
   Portal: jest.fn(({ children }) => <>{children}</>),
-  Trigger: jest.fn(({ children, ...props }) => (
-    <button data-testid="dropdown-trigger" {...props}>
-      {children}
-    </button>
-  )),
-  Content: jest.fn(({ className, children, ...props }) => (
-    <div data-testid="dropdown-content" className={className} {...props}>
-      {children}
-    </div>
-  )),
-  Group: jest.fn(({ children, ...props }) => (
-    <div data-testid="dropdown-group" {...props}>
-      {children}
-    </div>
-  )),
-  Label: jest.fn(({ className, ...props }) => (
-    <div data-testid="dropdown-label" className={className} {...props} />
-  )),
-  Item: jest.fn(({ className, ...props }) => (
-    <div data-testid="dropdown-item" className={className} {...props} />
-  )),
-  CheckboxItem: jest.fn(({ className, children, ...props }) => (
-    <div data-testid="dropdown-checkbox-item" className={className} {...props}>
-      {children}
-    </div>
-  )),
-  RadioGroup: jest.fn(({ children, ...props }) => (
-    <div data-testid="dropdown-radio-group" {...props}>
-      {children}
-    </div>
-  )),
-  RadioItem: jest.fn(({ className, children, ...props }) => (
-    <div data-testid="dropdown-radio-item" className={className} {...props}>
-      {children}
-    </div>
-  )),
-  Separator: jest.fn(({ className, ...props }) => (
-    <div data-testid="dropdown-separator" className={className} {...props} />
-  )),
-  Sub: jest.fn(({ children, ...props }) => (
-    <div data-testid="dropdown-sub" {...props}>
-      {children}
-    </div>
-  )),
-  SubTrigger: jest.fn(({ className, children, ...props }) => (
-    <div data-testid="dropdown-sub-trigger" className={className} {...props}>
-      {children}
-    </div>
-  )),
-  SubContent: jest.fn(({ className, ...props }) => (
-    <div data-testid="dropdown-sub-content" className={className} {...props} />
-  )),
+  Trigger: jest.fn(({ children, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <button data-testid="dropdown-trigger" {...domProps}>
+        {children}
+      </button>
+    );
+  }),
+  Content: jest.fn(({ className, children, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div data-testid="dropdown-content" className={className} {...domProps}>
+        {children}
+      </div>
+    );
+  }),
+  Group: jest.fn(({ children, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div data-testid="dropdown-group" {...domProps}>
+        {children}
+      </div>
+    );
+  }),
+  Label: jest.fn(({ className, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div data-testid="dropdown-label" className={className} {...domProps} />
+    );
+  }),
+  Item: jest.fn(({ className, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div data-testid="dropdown-item" className={className} {...domProps} />
+    );
+  }),
+  CheckboxItem: jest.fn(({ className, children, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div
+        data-testid="dropdown-checkbox-item"
+        className={className}
+        {...domProps}
+      >
+        {children}
+      </div>
+    );
+  }),
+  RadioGroup: jest.fn(({ children, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div data-testid="dropdown-radio-group" {...domProps}>
+        {children}
+      </div>
+    );
+  }),
+  RadioItem: jest.fn(({ className, children, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div
+        data-testid="dropdown-radio-item"
+        className={className}
+        {...domProps}
+      >
+        {children}
+      </div>
+    );
+  }),
+  Separator: jest.fn(({ className, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div
+        data-testid="dropdown-separator"
+        className={className}
+        {...domProps}
+      />
+    );
+  }),
+  Sub: jest.fn(({ children, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div data-testid="dropdown-sub" {...domProps}>
+        {children}
+      </div>
+    );
+  }),
+  SubTrigger: jest.fn(({ className, children, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div
+        data-testid="dropdown-sub-trigger"
+        className={className}
+        {...domProps}
+      >
+        {children}
+      </div>
+    );
+  }),
+  SubContent: jest.fn(({ className, ...props }) => {
+    const { ...domProps } = props;
+    return (
+      <div
+        data-testid="dropdown-sub-content"
+        className={className}
+        {...domProps}
+      />
+    );
+  }),
   ItemIndicator: jest.fn(({ children }) => <>{children}</>),
 }));
 

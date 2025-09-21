@@ -4,6 +4,11 @@ import { useAuth } from '@/context/auth/auth-context';
 import { db } from '@/firebase/config';
 import { RequestData, useSaveRequest } from '@/hooks/use-request';
 
+jest.mock('@/lib/utils', () => ({
+  toastError: jest.fn(),
+  cn: jest.fn((...classes) => classes.filter(Boolean).join(' ')),
+}));
+
 jest.mock('firebase/firestore', () => ({
   doc: jest.fn(),
   setDoc: jest.fn(),
@@ -20,16 +25,25 @@ jest.mock('@/firebase/config', () => ({
   db: {},
 }));
 
+const originalConsoleError = console.error;
+beforeAll(() => {
+  console.error = jest.fn();
+});
+
+afterAll(() => {
+  console.error = originalConsoleError;
+});
+
 describe('useSaveRequest', () => {
   const mockCurrentUser = {
     uid: 'test-user-123',
   };
 
-  const mockRequestData = {
+  const mockRequestData: Omit<RequestData, 'id'> & { id?: string } = {
     method: 'GET' as const,
     status: 'ok' as const,
     code: 200,
-    variables: JSON.stringify({ env: { API_URL: 'http://localhost:3000' } }),
+    variables: { env: { API_URL: 'http://localhost:3000' } },
     path: '/api/test',
     url_with_vars: 'http://localhost:3000/api/test',
     Duration: 100,
@@ -49,6 +63,7 @@ describe('useSaveRequest', () => {
     (setDoc as jest.Mock).mockResolvedValue(undefined);
     (updateDoc as jest.Mock).mockResolvedValue(undefined);
     (doc as jest.Mock).mockImplementation((...path) => ({ path }));
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
@@ -116,7 +131,6 @@ describe('useSaveRequest', () => {
         'custom-id'
       );
     });
-
     it('handle save errors gracefully', async () => {
       (setDoc as jest.Mock).mockRejectedValue(new Error('Firestore error'));
 
@@ -128,6 +142,7 @@ describe('useSaveRequest', () => {
       });
 
       expect(requestId).toBeNull();
+      expect(console.error).toHaveBeenCalled();
     });
   });
 
@@ -175,7 +190,8 @@ describe('useSaveRequest', () => {
     });
 
     it('handle update errors', async () => {
-      (updateDoc as jest.Mock).mockRejectedValue(new Error('Update error'));
+      const error = new Error('Update error');
+      (updateDoc as jest.Mock).mockRejectedValue(error);
 
       const { result } = renderHook(() => useSaveRequest());
 
@@ -187,6 +203,10 @@ describe('useSaveRequest', () => {
       });
 
       expect(success).toBe(false);
+      expect(console.error).toHaveBeenCalledWith(
+        'Error updating request:',
+        error
+      );
     });
   });
 
@@ -281,12 +301,12 @@ describe('useSaveRequest', () => {
   });
 
   describe('getRequestById', () => {
-    const mockRequestData = {
+    const mockRequestDocData: RequestData = {
       id: 'test-request-123',
       method: 'GET' as const,
       status: 'ok' as const,
       code: 200,
-      variables: JSON.stringify({ env: { API_URL: 'http://localhost:3000' } }),
+      variables: { env: { API_URL: 'http://localhost:3000' } },
       path: '/api/test',
       url_with_vars: 'http://localhost:3000/api/test',
       Duration: 100,
@@ -306,8 +326,8 @@ describe('useSaveRequest', () => {
       (doc as jest.Mock).mockImplementation((...path) => ({ path }));
       (getDoc as jest.Mock).mockResolvedValue({
         exists: () => true,
-        data: () => mockRequestData,
-        id: mockRequestData.id,
+        data: () => mockRequestDocData,
+        id: mockRequestDocData.id,
       });
     });
 
@@ -318,8 +338,8 @@ describe('useSaveRequest', () => {
     it('return request data if request exists', async () => {
       const mockDoc = {
         exists: () => true,
-        data: () => mockRequestData,
-        id: mockRequestData.id,
+        data: () => mockRequestDocData,
+        id: mockRequestDocData.id,
       };
 
       (getDoc as jest.Mock).mockResolvedValue(mockDoc);
@@ -331,7 +351,7 @@ describe('useSaveRequest', () => {
         request = await result.current.getRequestById('test-request-123');
       });
 
-      expect(request).toEqual(mockRequestData);
+      expect(request).toEqual(mockRequestDocData);
       expect(getDoc).toHaveBeenCalledWith({
         path: [
           db,
@@ -384,7 +404,8 @@ describe('useSaveRequest', () => {
     });
 
     it('handle errors gracefully and return null', async () => {
-      (getDoc as jest.Mock).mockRejectedValue(new Error('Firestore error'));
+      const error = new Error('Firestore error');
+      (getDoc as jest.Mock).mockRejectedValue(error);
 
       const { result } = renderHook(() => useSaveRequest());
 
@@ -403,6 +424,10 @@ describe('useSaveRequest', () => {
           'test-request-123',
         ],
       });
+      expect(console.error).toHaveBeenCalledWith(
+        'Error getting request:',
+        error
+      );
     });
   });
 });

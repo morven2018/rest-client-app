@@ -10,7 +10,15 @@ jest.mock('@/lib/utils', () => ({
 }));
 
 jest.mock('@radix-ui/react-separator', () => ({
-  Root: jest.fn(({ children, ...props }) => <div {...props}>{children}</div>),
+  Root: jest.fn(({ children, ...props }) => {
+    const domProps = Object.fromEntries(
+      Object.entries(props).map(([key, value]) => [
+        key,
+        typeof value === 'boolean' ? value.toString() : value,
+      ])
+    );
+    return <div {...domProps}>{children}</div>;
+  }),
 }));
 
 describe('Separator', () => {

@@ -53,6 +53,8 @@ jest.mock('@/components/ui/button', () => ({
   ),
 }));
 
+const onChange = jest.fn();
+
 const MockInput = React.forwardRef<
   HTMLInputElement,
   React.InputHTMLAttributes<HTMLInputElement>
@@ -76,7 +78,7 @@ describe('PasswordInput', () => {
   });
 
   it('render correctly with default props', () => {
-    render(<PasswordInput />);
+    render(<PasswordInput onChange={onChange} />);
 
     const input =
       document.querySelector('input[data-slot="input"]') ||
@@ -97,7 +99,7 @@ describe('PasswordInput', () => {
   });
 
   it('toggle password visibility when button is clicked', () => {
-    render(<PasswordInput />);
+    render(<PasswordInput onChange={onChange} />);
 
     const input =
       document.querySelector('input[data-slot="input"]') ||
@@ -123,7 +125,7 @@ describe('PasswordInput', () => {
 
   it('forward ref to the input element', () => {
     const ref = React.createRef<HTMLInputElement>();
-    render(<PasswordInput ref={ref} />);
+    render(<PasswordInput ref={ref} onChange={onChange} />);
 
     expect(ref.current).toBeInstanceOf(HTMLInputElement);
   });
@@ -135,6 +137,7 @@ describe('PasswordInput', () => {
         disabled
         className="custom-class"
         id="password-field"
+        onChange={onChange}
       />
     );
 
@@ -154,7 +157,7 @@ describe('PasswordInput', () => {
       args.join(' ')
     );
 
-    render(<PasswordInput className="my-custom-class" />);
+    render(<PasswordInput className="my-custom-class" onChange={onChange} />);
 
     const input =
       document.querySelector('input[data-slot="input"]') ||
@@ -164,7 +167,7 @@ describe('PasswordInput', () => {
   });
 
   it('render with correct accessibility labels', () => {
-    render(<PasswordInput />);
+    render(<PasswordInput onChange={onChange} />);
 
     const button = screen.getByTestId('toggle-button');
 
@@ -178,7 +181,7 @@ describe('PasswordInput', () => {
   });
 
   it('apply correct styles to the toggle button', () => {
-    render(<PasswordInput />);
+    render(<PasswordInput onChange={onChange} />);
 
     const button = screen.getByTestId('toggle-button');
 
@@ -192,7 +195,7 @@ describe('PasswordInput', () => {
   });
 
   it('handle multiple rapid toggles correctly', () => {
-    render(<PasswordInput />);
+    render(<PasswordInput onChange={onChange} />);
 
     const input =
       document.querySelector('input[data-slot="input"]') ||
@@ -231,7 +234,13 @@ describe('PasswordInput', () => {
     const handleBlur = jest.fn();
     const handleFocus = jest.fn();
 
-    render(<PasswordInput onBlur={handleBlur} onFocus={handleFocus} />);
+    render(
+      <PasswordInput
+        onBlur={handleBlur}
+        onFocus={handleFocus}
+        onChange={onChange}
+      />
+    );
 
     const input =
       document.querySelector('input[data-slot="input"]') ||
