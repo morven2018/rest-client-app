@@ -196,7 +196,7 @@ describe('HistoryFilters', () => {
 
     (useSearchParams as jest.Mock).mockImplementation(() => mockSearchParams);
 
-    (useTranslations as jest.Mock).mockImplementation((namespace: string) => {
+    (useTranslations as jest.Mock).mockImplementation(() => {
       const translations: Record<string, string> = {
         'filters.method': 'method',
         'filters.status': 'status',
